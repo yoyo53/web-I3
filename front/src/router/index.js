@@ -1,9 +1,9 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import { config } from '../../config.js'
 
 const router = createRouter({
-  history: createWebHistory(process.env.NODE_ENV === 'production' ? config.base_url : '/'),
+  history: createWebHashHistory(process.env.NODE_ENV === 'production' ? config.base_url : '/'),
   routes: [
     {
       path: '/',
