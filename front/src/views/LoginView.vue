@@ -1,4 +1,39 @@
-
+<script>
+export default {
+	data() {
+		return {
+			email: '',
+			password: ''
+		};
+	},
+	methods: {
+		async login() {
+			try {
+				const response = await fetch(`${this.$api_url}auth/login`, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						email: this.email,
+						password: this.password
+					})
+				});
+				const data = await response.json();
+				if (response.ok) {
+					// Handle successful login
+					console.log('Login successful:', data);
+				} else {
+					// Handle login error
+					console.error('Login failed:', data);
+				}
+			} catch (error) {
+				console.error('Error:', error);
+			}
+		}
+	}
+};
+</script>
 
 <template>
 	<!--
@@ -16,11 +51,11 @@
 	  </div>
   
 	  <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-		<form class="space-y-6" action="#" method="POST">
+		<form class="space-y-6" @submit.prevent="login">
 		  <div>
 			<label for="email" class="block text-sm/6 font-medium text-gray-900">Email address</label>
 			<div class="mt-2">
-			  <input id="email" name="email" type="email" autocomplete="email" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6" />
+			  <input id="email" name="email" type="email" v-model="email" autocomplete="email" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6" />
 			</div>
 		  </div>
   
@@ -32,7 +67,7 @@
 			  </div>
 			</div>
 			<div class="mt-2">
-			  <input id="password" name="password" type="password" autocomplete="current-password" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6" />
+			  <input id="password" name="password" type="password" v-model="password" autocomplete="current-password" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6" />
 			</div>
 		  </div>
   
@@ -48,4 +83,4 @@
 		</p>
 	  </div>
 	</div>
-  </template>
+</template>
