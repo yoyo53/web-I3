@@ -14,6 +14,14 @@ pool.query('SELECT NOW()', (err, res) => {
     }
 )
 
+const cors = require('cors')
+
+app.use(cors({
+  "origin": "*",
+  "methods": "GET,POST,PUT,DELETE,OPTIONS",
+  "allowedHeaders": "X-Requested-With,Content-Type,Authorization"
+}))
+
 // Middleware for parsing application/json
 app.use(json());
 app.use(express.urlencoded({ extended: true }));
