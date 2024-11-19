@@ -1,8 +1,10 @@
 const express = require('express');
+const { json } = require('express');
 
 const app = express();
 
 const { pool } = require('./database/db_connection.js');
+
 pool.query('SELECT NOW()', (err, res) => {
     if (err) {
         console.error('Erreur de connexion à la base de données', err.stack)
@@ -12,6 +14,18 @@ pool.query('SELECT NOW()', (err, res) => {
     }
 )
 
+// Middleware for parsing application/json
+app.use(json());
+app.use(express.urlencoded({ extended: true }));
+
+// Middleware for handling JSON errors
+app.use((err, req, res, next) => {
+    if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
+      console.error('Bad JSON format:', err.message);
+      return res.status(400).send({ error: 'Bad JSON format' });
+    }
+    next();
+});
 
 app.get('/', (req, res) => {
     res.send('Hello World');
