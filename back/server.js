@@ -1,4 +1,5 @@
 const express = require('express');
+const adminRouter = require('./routes/admin.js');
 
 const app = express();
 
@@ -12,6 +13,7 @@ pool.query('SELECT NOW()', (err, res) => {
     }
 )
 
+app.use('/admin', adminRouter);
 
 app.get('/', (req, res) => {
     res.send('Hello World');
