@@ -17,6 +17,8 @@ app.get('/', (req, res) => {
     res.send('Hello World');
 });
 
+app.use('/auth', require('./routes/auth.routes'));
+
 app.listen(3000, () => {
     console.log('Server is running on http://localhost:3000');
 });

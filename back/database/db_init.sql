@@ -6,14 +6,15 @@
 -- DROP TABLE IF EXISTS question_type CASCADE;
 -- DROP TABLE IF EXISTS surveys CASCADE;
 -- DROP TABLE IF EXISTS survey_templates CASCADE;
--- DROP TABLE IF EXISTS students_classes CASCADE;
--- DROP TABLE IF EXISTS classes CASCADE;
+-- DROP TABLE IF EXISTS students_groups CASCADE;
+-- DROP TABLE IF EXISTS groups CASCADE;
 -- DROP TABLE IF EXISTS teachers CASCADE;
 -- DROP TABLE IF EXISTS students CASCADE;
 -- DROP TABLE IF EXISTS admins CASCADE;
 -- DROP TABLE IF EXISTS users CASCADE;
 -- DROP TABLE IF EXISTS modules CASCADE;
 -- DROP TABLE IF EXISTS subjects CASCADE;
+-- DROP TABLE IF EXISTS classes CASCADE;
 
 -- Création de la table users
 CREATE TABLE IF NOT EXISTS users (
@@ -21,7 +22,7 @@ CREATE TABLE IF NOT EXISTS users (
     name VARCHAR(25) NOT NULL,
     firstname VARCHAR(25) NOT NULL,
     email VARCHAR(50) UNIQUE NOT NULL,
-    hashed_password VARCHAR(255) NOT NULL
+    hashed_password VARCHAR(255)
 );
 
 -- Création de la table admins, héritant de users
@@ -44,18 +45,18 @@ CREATE TABLE IF NOT EXISTS teachers (
     FOREIGN KEY (teacherID) REFERENCES users(userID)
 );
 
--- Création de la table classes
-CREATE TABLE IF NOT EXISTS classes (
-    classID SERIAL PRIMARY KEY,
+-- Création de la table groups
+CREATE TABLE IF NOT EXISTS groups (
+    groupID SERIAL PRIMARY KEY,
     name VARCHAR(50)
 );
 
--- Création de la table students_classes pour la relation entre les étudiants et les classes
-CREATE TABLE IF NOT EXISTS students_classes (
+-- Création de la table students_groups pour la relation entre les étudiants et les groups
+CREATE TABLE IF NOT EXISTS students_groups (
     studentID INT NOT NULL,
-    classID INT NOT NULL,
+    groupID INT NOT NULL,
     FOREIGN KEY (studentID) REFERENCES students(studentID),
-    FOREIGN KEY (classID) REFERENCES classes(classID)
+    FOREIGN KEY (groupID) REFERENCES groups(groupID)
 );
 
 -- Création de la table subjects
@@ -68,12 +69,12 @@ CREATE TABLE IF NOT EXISTS subjects (
 CREATE TABLE IF NOT EXISTS modules (
     moduleID SERIAL PRIMARY KEY,
     teacherID INT NOT NULL,
-    classID INT NOT NULL,
+    groupID INT NOT NULL,
     subjectID INT NOT NULL,
     FOREIGN KEY (teacherID) REFERENCES teachers(teacherID),
-    FOREIGN KEY (classID) REFERENCES classes(classID),
+    FOREIGN KEY (groupID) REFERENCES groups(groupID),
     FOREIGN KEY (subjectID) REFERENCES subjects(subjectID),
-    UNIQUE (teacherID, classID, subjectID)
+    UNIQUE (teacherID, groupID, subjectID)
 );
 
 -- Création de la table survey_templates
