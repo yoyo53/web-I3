@@ -23,6 +23,8 @@ export default {
 				if (response.ok) {
 					// Handle successful login
 					console.log('Login successful:', data);
+					// Save the token to local storage
+					localStorage.setItem('token', data.token);
 				} else {
 					// Handle login error
 					console.error('Login failed:', data);

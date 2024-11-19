@@ -34,7 +34,6 @@ async function getUserById(id) {
 
 async function createUser(name, email, firstname, hashed_password) {
     try {
-        console.log(name, email, firstname, hashed_password);
         const query = await pool.query('INSERT INTO users (name, email, firstname, hashed_password) VALUES ($1, $2, $3, $4) RETURNING userID', [name, email, firstname, hashed_password]);
         return query.rows[0]?.userid ?? null;        
     }
@@ -44,6 +43,14 @@ async function createUser(name, email, firstname, hashed_password) {
 async function updateUser(userid, {name, email, firstname, hashed_password}) {
     try {
         const query = await pool.query('UPDATE users SET name = $1, email = $2, firstname = $3, hashed_password = $4 WHERE userID = $5 RETURNING userID', [name, email, firstname, hashed_password, userid]);
+        return query.rows[0]?.userID ?? null;        
+    }
+    catch {return null}
+}
+
+async function updatePassword(userid, hashed_password) {
+    try {
+        const query = await pool.query('UPDATE users SET hashed_password = $1 WHERE userID = $2 RETURNING userID', [hashed_password, userid]);
         return query.rows[0]?.userID ?? null;        
     }
     catch {return null}
@@ -64,5 +71,6 @@ module.exports = {
     getUserById,
     createUser,
     updateUser,
+    updatePassword,
     deleteUser
 }
