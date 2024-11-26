@@ -1,63 +1,96 @@
-const { pool } = require('../db_connection')
+const { prisma } = require('../db.connection')
 
-async function checkExistsStudent(studentid) {
+async function checkExistsStudent(studentID) {
     try {
-        const query = await pool.query('SELECT count(*) FROM students WHERE studentid = $1', [studentid]);
-        return query.rows[0]?.count > 0;
+        return await prisma.students.count({where: {studentID}}) > 0;
     }
     catch {return false}
 }
 
 async function checkExistsStudentNumber(student_number) {
     try {
-        const query = await pool.query('SELECT count(*) FROM students WHERE student_number = $1', [student_number]);
-        return query.rows[0]?.count > 0;
+        return await prisma.students.count({where: {student_number}}) > 0;
     }
     catch {return false}
 }
 
 async function getUserByStudentNumber(student_number) {
     try {
-        const query = await pool.query(`SELECT users.userID, users.name, users.firstname, users.email, students.studentid, students.student_number FROM users 
-            JOIN students ON users.userID = students.studentid 
-            WHERE students.student_number = $1`, [student_number]);
-        return query.rows[0] ?? null;
+        return await prisma.students.findUnique({
+            where: {student_number},
+            select: {
+                studentID: true,
+                student_number: true,
+                user: {
+                    select: {
+                        userID: true,
+                        firstname: true,
+                        lastname: true,
+                        email: true
+                    }
+                }
+            }
+        });
     }
     catch {return null}
 }
 
 async function getUserByStudentID(id) {
     try {
-        const query = await pool.query(`SELECT users.userID, users.name, users.firstname, users.email, students.studentid, students.student_number FROM users 
-            JOIN students ON users.userID = students.studentid 
-            WHERE students.studentid = $1`, [id]);
-        return query.rows[0] ?? null;
+        return await prisma.students.findUnique({
+            where: {studentID: id},
+            select: {
+                studentID: true,
+                student_number: true,
+                user: {
+                    select: {
+                        userID: true,
+                        firstname: true,
+                        lastname: true,
+                        email: true
+                    }
+                }
+            }
+        });
     }
     catch {return null}
 }
 
 async function createStudent(userID, student_number) {
     try {
-        const query = await pool.query('INSERT INTO students (studentid, student_number) VALUES ($1, $2) RETURNING studentid', [userID, student_number]);
-        return query.rows[0]?.studentid ?? null;
+        const query = await prisma.students.create({
+            data: {
+                student_number,
+                user: {connect: {userID}}
+            },
+            select: {studentID: true}
+        });
+        return query.studentID;
     }
     catch {return null}
 }
 
 async function updateStudent(id, student_number) {
     try {
-        const query = await pool.query('UPDATE students SET student_number = $2 WHERE studentid = $1 RETURNING studentid', [id, student_number]);
-        return query.rows[0]?.studentid ?? null;
+        const query = await prisma.students.update({
+            where: {studentID: id},
+            data: {student_number},
+            select: {studentID: true}
+        });
+        return query.studentID;
     }
     catch {return null}
 }
 
 async function deleteStudent(id) {
     try {
-        await pool.query('DELETE FROM students WHERE studentid = $1', [id]);
-        return true;
+        const query = await prisma.students.delete({
+            where: {studentID: id},
+            select: {studentID: true}
+        });
+        return query.studentID;
     }
-    catch {return false}
+    catch {return null}
 }
 
 module.exports = {

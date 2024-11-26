@@ -1,65 +1,84 @@
-const { pool } = require('../db_connection')
+const { prisma } = require('../db.connection')
 
 async function checkExistsUser(email) {
     try {
-        const query = await pool.query('SELECT count(*) FROM users WHERE email = $1', [email]);
-        return query.rows[0]?.count > 0;
+        return await prisma.users.count({where: {email}}) > 0;
     }
     catch {return false}
 }
 
 async function getUserByEmailwithPassword(email) {
     try {
-        const query = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
-        return query.rows[0] ?? null;
+        return await prisma.users.findUnique({
+            where: {email},
+            select: {userID: true, firstname: true, lastname: true, email: true, hashed_password: true}
+        });
     }
     catch {return null}
 }
 
 async function getUserByEmail(email) {
     try {
-        const query = await pool.query('SELECT name, firstname, email FROM users WHERE email = $1', [email]);
-        return query.rows[0] ?? null;
+        return await prisma.users.findUnique({
+            where: {email},
+            select: {userID: true, firstname: true, lastname: true, email: true}
+        });
     }
     catch {return null}
 }
 
 async function getUserById(id) {
     try {
-        const query = await pool.query('SELECT name, firstname, email FROM users WHERE userID = $1', [id]);
-        return query.rows[0] ?? null;
+        return await prisma.users.findUnique({
+            where: {userID: id},
+            select: {userID: true, firstname: true, lastname: true, email: true}
+        });
     }
     catch {return null}
 }
 
-async function createUser(name, email, firstname, hashed_password) {
+async function createUser(firstname, lastname, email, hashed_password) {
     try {
-        const query = await pool.query('INSERT INTO users (name, email, firstname, hashed_password) VALUES ($1, $2, $3, $4) RETURNING userID', [name, email, firstname, hashed_password]);
-        return query.rows[0]?.userid ?? null;        
+        const query = await prisma.users.create({
+            data: {firstname, lastname, email, hashed_password},
+            select: {userID: true}
+        });
+        return query.userID;
     }
     catch {return null}
 }
 
-async function updateUser(userid, {name, email, firstname, hashed_password}) {
+async function updateUser(userID, {firstname, lastname, email, hashed_password}) {
     try {
-        const query = await pool.query('UPDATE users SET name = $1, email = $2, firstname = $3, hashed_password = $4 WHERE userID = $5 RETURNING userID', [name, email, firstname, hashed_password, userid]);
-        return query.rows[0]?.userID ?? null;        
+        const query = await prisma.users.update({
+            where: {userID: userID},
+            data: {firstname, lastname, email, hashed_password},
+            select: {userID: true}
+        });
+        return query.userID;     
     }
     catch {return null}
 }
 
-async function updatePassword(userid, hashed_password) {
+async function updatePassword(userID, hashed_password) {
     try {
-        const query = await pool.query('UPDATE users SET hashed_password = $1 WHERE userID = $2 RETURNING userID', [hashed_password, userid]);
-        return query.rows[0]?.userID ?? null;        
+        const query = await prisma.users.update({
+            where: {userID: userID},
+            data: {hashed_password},
+            select: {userID: true}
+        });
+        return query.userID;    
     }
     catch {return null}
 }
 
 async function deleteUser(id) {
     try {
-        await pool.query('DELETE FROM users WHERE userID = $1', [id]);
-        return userID;
+        const query = await prisma.users.delete({
+            where: {userID: id},
+            select: {userID: true}
+        });
+        return query.userID;
     }
     catch {return null}
 }

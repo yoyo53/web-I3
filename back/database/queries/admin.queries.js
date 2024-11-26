@@ -1,9 +1,8 @@
-const { pool } = require('../db_connection')
+const { prisma } = require('../db.connection')
 
-async function checkExistsAdmin(adminid) {
+async function checkExistsAdmin(adminID) {
     try {
-        const query = await pool.query('SELECT count(*) FROM admins WHERE adminid = $1', [adminid]);
-        return query.rows[0]?.count > 0;
+        return await prisma.admins.count({where: {adminID}}) > 0;
     }
     catch {return false}
 }

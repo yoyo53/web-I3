@@ -11,9 +11,9 @@ async function createUserAction(request, response) {
     if (!await userQueries.checkExistsUser(request.body.email)) {
         // Do not delete await here, it is necessary to wait for the hashed password to be generated
         const hashed_password = await hash(process.env.DEFAULT_PASSWORD, 10);
-        // const userid = await userQueries.createUser(request.body.lastName, request.body.email, request.body.firstName, hashed_password);
-        // if (userid != null) {
-        //     console.log('[',request.ip,'] CREATED User: ', userid);
+        // const userID = await userQueries.createUser(request.body.firstName, request.body.lastName, request.body.email, hashed_password);
+        // if (userID != null) {
+        //     console.log('[',request.ip,'] CREATED User: ', userID);
         // } else {
         //     response.status(400).json({error: "invalid request"});
         //     return;
@@ -22,13 +22,13 @@ async function createUserAction(request, response) {
         const userType = request.body.accountType === 'Teacher' ? 'Teacher' : 'Student';
         if (userType === 'Teacher') {
             if (! await teacherQueries.checkExistsTeacherNumber(request.body.accountNumber)) {
-                const userid = await userQueries.createUser(request.body.lastName, request.body.email, request.body.firstName, hashed_password);
-                if (userid != null) {
-                    console.log('[',request.ip,'] CREATED User: ', userid);
-                    const teacherid = await teacherQueries.createTeacher(userid, request.body.accountNumber);
-                    if (teacherid != null) {
-                        console.log('[',request.ip,'] CREATED Teacher: ', teacherid);
-                        response.status(200).json({info: "user created successfully", created_user: await userQueries.getUserById(userid)});
+                const userID = await userQueries.createUser(request.body.firstName, request.body.lastName, request.body.email, hashed_password);
+                if (userID != null) {
+                    console.log('[',request.ip,'] CREATED User: ', userID);
+                    const teacherID = await teacherQueries.createTeacher(userID, request.body.accountNumber);
+                    if (teacherID != null) {
+                        console.log('[',request.ip,'] CREATED Teacher: ', teacherID);
+                        response.status(200).json({info: "user created successfully", created_user: await userQueries.getUserById(userID)});
                     } else {
                         response.status(400).json({error: "Impossible to create teacher"});
                         return;
@@ -43,13 +43,13 @@ async function createUserAction(request, response) {
             }
         } else {
             if (! await studentQueries.checkExistsStudentNumber(request.body.accountNumber)) {
-                const userid = await userQueries.createUser(request.body.lastName, request.body.email, request.body.firstName, hashed_password);
-                if (userid != null) {
-                    console.log('[',request.ip,'] CREATED User: ', userid);
-                    const studentid = await studentQueries.createStudent(userid, request.body.accountNumber);
-                    if (studentid != null) {
-                        console.log('[',request.ip,'] CREATED Student: ', studentid);
-                        response.status(200).json({info: "user created successfully", created_user: await userQueries.getUserById(userid)});
+                const userID = await userQueries.createUser(request.body.firstName, request.body.lastName, request.body.email, hashed_password);
+                if (userID != null) {
+                    console.log('[',request.ip,'] CREATED User: ', userID);
+                    const studentID = await studentQueries.createStudent(userID, request.body.accountNumber);
+                    if (studentID != null) {
+                        console.log('[',request.ip,'] CREATED Student: ', studentID);
+                        response.status(200).json({info: "user created successfully", created_user: await userQueries.getUserById(userID)});
                     } else {
                         response.status(400).json({error: "Impossible to create student"});
                         return;
@@ -71,9 +71,9 @@ async function createUserAction(request, response) {
 
 async function changePasswordAction(request, response) {
     const hashed_password = await hash(request.body.password, 10);
-    const userid = await userQueries.updatePassword(request.user_id, hashed_password);
-    if (userid != null) {
-        console.log('[',request.ip,'] UPDATED User: ', userid);
+    const userID = await userQueries.updatePassword(request.user_id, hashed_password);
+    if (userID != null) {
+        console.log('[',request.ip,'] UPDATED User: ', userID);
         response.status(200).json({info: "password updated successfully"});
     }
     else {
@@ -85,11 +85,11 @@ async function loginUserAction(request, response) {
     const user = await userQueries.getUserByEmailwithPassword(request.body.email);
     if (user != null && await compare(request.body.password, user.hashed_password)) {
         // Check if the user is a teacher or a student or admin
-        if (await teacherQueries.checkExistsTeacher(user.userid)){
+        if (await teacherQueries.checkExistsTeacher(user.userID)){
             user.type = 'Teacher';
-        } else if (await studentQueries.checkExistsStudent(user.userid)){
+        } else if (await studentQueries.checkExistsStudent(user.userID)){
             user.type = 'Student';
-        } else if (await adminQueries.checkExistsAdmin(user.userid)){
+        } else if (await adminQueries.checkExistsAdmin(user.userID)){
             user.type = 'Admin';
         } else {
             response.status(400).json({error: "invalid request"});
@@ -97,10 +97,10 @@ async function loginUserAction(request, response) {
         }
 
         // Generate token
-        const token = jwt.sign({user_id: user.userid, type: user.type}, process.env.SECRET_KEY, {expiresIn: '1h'});
+        const token = jwt.sign({user_id: user.userID, type: user.type}, process.env.SECRET_KEY, {expiresIn: '1h'});
         if (token != null) {
-            console.log('[',request.ip,'] LOGGED IN User: ', user.userid, ' as ', user.type);
-            response.status(200).json({info: "user logged in successfully", token: token, user_id: user.userid, type: user.type});
+            console.log('[',request.ip,'] LOGGED IN User: ', user.userID, ' as ', user.type);
+            response.status(200).json({info: "user logged in successfully", token: token, user_id: user.userID, type: user.type});
         }
         else {
             response.status(400).json({error: "invalid request"});
