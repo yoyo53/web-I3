@@ -14,13 +14,15 @@
         <p class="mt-1 text-xs/5 text-gray-500">{{ survey.group }}</p>
     </div>
 </template>
+
 <script>
-export default {
-    props: {
-        survey: {
-            type: Object,
-            required: true,
+
+    export default {
+        props: {
+            survey: {
+                type: Object,
+                required: true,
+            },
         },
-    },
-};
+    };
 </script>

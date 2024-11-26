@@ -25,7 +25,7 @@
         },
         beforeMount(){
             this.fetchAllSurveys();
-            console.log(this.surveys);
+            
         }
     }
 </script>

@@ -13,13 +13,13 @@
     import SurveyComponent from '@/components/surveys/SurveyComponent.vue';
 
     export default{
+        components: {
+            SurveyComponent,
+        },
         props: {
         surveys: {
             type: Array,
             required: true,
-        },
-        components: {
-            SurveyComponent,
         },
     },
     }
