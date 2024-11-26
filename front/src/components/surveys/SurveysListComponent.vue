@@ -7,7 +7,7 @@
           :key="survey.id" 
           class="border border-gray-300 rounded-lg p-4 bg-gray-50 transition-transform duration-200 ease-in-out hover:bg-gray-100 hover:-translate-y-1 hover:shadow-md cursor-pointer"
           >
-          <SurveyComponent v-on:click="open(survey)" :survey="survey" />
+          <SurveyComponent :survey="survey" />
         </li>
       </ul>
     </div>
@@ -18,12 +18,6 @@
 <script>
     import SurveyComponent from '@/components/surveys/SurveyComponent.vue';
     export default{
-        methods: {
-            handleClick: function(survey){
-                console.log(survey)
-                console.log('clicked on survey number ' + survey.surveyid); 
-            }
-        },
         components: {
             SurveyComponent,
         },

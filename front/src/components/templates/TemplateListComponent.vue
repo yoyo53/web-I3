@@ -6,7 +6,7 @@
           :key="template.id" 
           class="border border-gray-300 rounded-lg p-4 bg-gray-50 transition-transform duration-200 ease-in-out hover:bg-gray-100 hover:-translate-y-1 hover:shadow-md cursor-pointer"
         >
-          <TemplateComponent :template="template" />
+          <TemplateComponent v-on:click="openTemplate(template)" :template="template" />
         </li>
       </ul>
     </div>
@@ -18,6 +18,11 @@
     import TemplateComponent from '@/components/templates/TemplateComponent.vue';
 
     export default{
+        methods: {
+            openTemplate(template){
+                this.$router.push({ path: `/template/${template.survey_templateid}` });
+            }
+        },
         components: {
             TemplateComponent,
         },

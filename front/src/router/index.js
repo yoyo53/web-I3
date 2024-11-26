@@ -33,6 +33,12 @@ const router = createRouter({
       path: '/admin/templates',
       name: 'templates',
       component: () => import('../views/TemplateView.vue')
+    },
+    {
+      path: '/admin/templates/:id',
+      name: 'templateDetail',
+      component: () => import('../views/TemplateDetailView.vue'),
+      props: true,
     }
   ],
 })
