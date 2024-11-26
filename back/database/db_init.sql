@@ -139,4 +139,7 @@ CREATE TABLE IF NOT EXISTS answer_questions (
 
 INSERT INTO users (name, firstname, email, hashed_password) VALUES ('Augustin', 'Jacques', 'jacques.augustin@efrei.net','password');
 INSERT INTO teachers (teacherid, teacher_number) VALUES ('9', '123');
+INSERT INTO surveys (moduleid, survey_templateid) VALUES ('4','1');
 SELECT users.name AS lastname, users.firstname AS firstname,subjects.name AS subject,groups.name AS group FROM surveys JOIN modules USING (moduleid) JOIN subjects USING (subjectid) JOIN groups USING (groupid) JOIN teachers USING (teacherid) JOIN users ON users.userid = teachers.teacherid;
+SELECT question_type.question_type AS type, questions.question_text AS question, survey_templates.survey_templateid AS template_name FROM questions JOIN survey_templates USING (survey_templateid) JOIN question_type USING (question_typeid) WHERE survey_templates.survey_templateid = 1;
+SELECT * FROM survey_templates;
