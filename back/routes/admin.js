@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
+const controller = require('../controllers/admin.controller');
 
 router.get('/', (req, res) => {
-  res.send('hello admin');
+  controller.getAdminSurveys(req, res); 
 });
 
 

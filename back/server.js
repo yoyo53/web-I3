@@ -13,6 +13,14 @@ pool.query('SELECT NOW()', (err, res) => {
     }
 )
 
+const cors = require('cors')
+
+app.use(cors({
+  "origin": "*",
+  "methods": "GET,POST,PUT,DELETE,OPTIONS",
+  "allowedHeaders": "X-Requested-With,Content-Type,Authorization"
+}))
+
 app.use('/admin', adminRouter);
 
 app.get('/', (req, res) => {

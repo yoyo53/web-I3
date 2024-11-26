@@ -136,3 +136,7 @@ CREATE TABLE IF NOT EXISTS answer_questions (
     FOREIGN KEY (survey_answerID) REFERENCES survey_answers(survey_answerID),
     PRIMARY KEY (survey_answerID, questionID)
 );
+
+INSERT INTO users (name, firstname, email, hashed_password) VALUES ('Augustin', 'Jacques', 'jacques.augustin@efrei.net','password');
+INSERT INTO teachers (teacherid, teacher_number) VALUES ('9', '123');
+SELECT users.name AS lastname, users.firstname AS firstname,subjects.name AS subject,groups.name AS group FROM surveys JOIN modules USING (moduleid) JOIN subjects USING (subjectid) JOIN groups USING (groupid) JOIN teachers USING (teacherid) JOIN users ON users.userid = teachers.teacherid;
