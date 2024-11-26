@@ -1,6 +1,8 @@
 const express = require('express');
 const adminRouter = require('./routes/admin.js');
 
+const teacherRouter = require('./routes/teacher.routes.js');
+
 const app = express();
 
 const { pool } = require('./database/db_connection.js');
@@ -22,6 +24,7 @@ app.use(cors({
 }))
 
 app.use('/admin', adminRouter);
+app.use('/teacher', teacherRouter);
 
 app.get('/', (req, res) => {
     res.send('Hello World');
