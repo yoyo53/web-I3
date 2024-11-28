@@ -1,9 +1,25 @@
+const { prisma } = require("./database/db.connection");
+const { app } = require("./app");
 const express = require('express');
 const adminRouter = require('./routes/admin.js');
+const cors = require('cors')
 
 const app = express();
-
 const { pool } = require('./database/db_connection.js');
+
+prisma
+  .$connect()
+  .then(() => {
+    console.log("Database connected");
+    app.listen(3000, () => {
+      console.log("Server is running on http://localhost:3000");
+    });
+  })
+  .catch((e) => {
+    console.error("Database connection failed:", e);
+  });
+
+
 pool.query('SELECT NOW()', (err, res) => {
     if (err) {
         console.error('Erreur de connexion à la base de données', err.stack)
@@ -13,7 +29,6 @@ pool.query('SELECT NOW()', (err, res) => {
     }
 )
 
-const cors = require('cors')
 
 app.use(cors({
   "origin": "*",
