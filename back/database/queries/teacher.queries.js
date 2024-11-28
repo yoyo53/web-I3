@@ -91,6 +91,50 @@ async function deleteTeacher(id) {
     catch {return null}
 }
 
+async function getSurveysByTeacherID(id) {
+    try {
+        const query = await prisma.findMany({
+            where: {teacherID: id},
+            select: {
+            surveyid: true,
+            teachers: {
+                select: {
+                    users: {
+                        select: {
+                            lastname: true,
+                            firstname: true
+                        }
+                    }
+                }
+            },
+            modules: {
+                select: {
+                    subjects: {
+                        select: {
+                            name: true
+                        }
+                    },
+                    groups: {
+                        select: {
+                            name: true
+                        }
+                    }
+                }
+            }
+        }
+    });
+    return surveys.map(survey => ({
+        surveyid: survey.surveyid,
+        lastname: survey.teachers.users.lastname,
+        firstname: survey.teachers.users.firstname,
+        subject: survey.modules.subjects.name,
+        group: survey.modules.groups.name
+    }));
+    } catch {
+        return null;
+    }
+}
+
 module.exports = {
     checkExistsTeacher,
     checkExistsTeacherNumber,
@@ -98,5 +142,6 @@ module.exports = {
     getUserByTeacherID,
     createTeacher,
     updateTeacher,
-    deleteTeacher
+    deleteTeacher,
+    getSurveysByTeacherID
 }
