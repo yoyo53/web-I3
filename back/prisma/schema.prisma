@@ -67,6 +67,7 @@ model modules {
 
 model survey_templates {
   survey_templateID Int         @id @default(autoincrement())
+  name              String?     @db.VarChar(50)
   questions         questions[]
   surveys           surveys[]
 }
