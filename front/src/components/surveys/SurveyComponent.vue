@@ -8,11 +8,12 @@
                 Subject: {{ survey.subject }}
             </p>
         </div>
+        <div class="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
+            <p class="text-sm/6 text-gray-900">Group</p>
+            <p class="mt-1 text-xs/5 text-gray-500">{{ survey.group }}</p>
+        </div>
     </div>
-    <div class="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
-        <p class="text-sm/6 text-gray-900">Group</p>
-        <p class="mt-1 text-xs/5 text-gray-500">{{ survey.group }}</p>
-    </div>
+    
 </template>
 
 <script>

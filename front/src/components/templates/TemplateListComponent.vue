@@ -2,12 +2,11 @@
     <div class="stack-list">
       <ul class="flex flex-col gap-4"> 
         <li 
-          v-for="survey in surveys" 
-          
-          :key="survey.id" 
+          v-for="template in templates" 
+          :key="template.id" 
           class="border border-gray-300 rounded-lg p-4 bg-gray-50 transition-transform duration-200 ease-in-out hover:bg-gray-100 hover:-translate-y-1 hover:shadow-md cursor-pointer"
-          >
-          <SurveyComponent :survey="survey" />
+        >
+          <TemplateComponent v-on:click="openTemplate(template)" :template="template" />
         </li>
       </ul>
     </div>
@@ -16,17 +15,22 @@
   
   
 <script>
-    import SurveyComponent from '@/components/surveys/SurveyComponent.vue';
+    import TemplateComponent from '@/components/templates/TemplateComponent.vue';
+
     export default{
+        methods: {
+            openTemplate(template){
+                this.$router.push({ path: `/template/${template.survey_templateid}` });
+            }
+        },
         components: {
-            SurveyComponent,
+            TemplateComponent,
         },
         props: {
-        surveys: {
+        templates: {
             type: Array,
             required: true,
         },
-        
     },
     }
 

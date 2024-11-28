@@ -6,5 +6,9 @@ router.get('/', (req, res) => {
   controller.getAdminSurveys(req, res); 
 });
 
+router.get('/templates', (req, res) => {
+  controller.getSurveyTemplates(req, res); 
+});
+
 
 module.exports = router;
