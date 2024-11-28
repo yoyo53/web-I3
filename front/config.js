@@ -1,5 +1,5 @@
 let config = {
-    api_url: "http://localhost:3000/",
+    api_url: "https://web-i3-back.fly.dev/",
     base_url: "/web-I3/"
 };
 
