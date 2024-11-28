@@ -31,6 +31,8 @@ app.get("/", (req, res) => {
 
 app.use("/auth", require("./routes/auth.routes"));
 
+app.use('/admin', require('./routes/admin.js'));
+
 module.exports = {
   app,
 };
