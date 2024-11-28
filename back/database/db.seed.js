@@ -19,26 +19,29 @@ async function main() {
     });
 
     const hashedPassword = await hashPassword('admin');
-    const newUser = await prisma.admins.upsert({
-        where: { user: { email: 'admin@mail.com' } },
+    const newUser = await prisma.users.upsert({
+        where: { email: 'admin@mail.com' },
         update: {
-            user: {
-                update: {
-                    firstname: 'Admin',
-                    lastname: 'Admin',
-                    hashed_password: hashedPassword,
-                }
-            }
+            firstname: 'Admin',
+            lastname: 'Admin',
+            hashed_password: hashedPassword,
         },
         create: {
-            user: {
-                create: {
-                    firstname: 'Admin',
-                    lastname: 'Admin',
-                    email: 'admin@mail.com',
-                    hashed_password: hashedPassword,
-                }
-            }
+            firstname: 'Admin',
+            lastname: 'Admin',
+            email: 'admin@mail.com',
+            hashed_password: hashedPassword,
+        },
+        select: {
+            userID: true,
+        }
+    });
+
+    const newAdmin = await prisma.admins.upsert({
+        where: { userID: newUser.userID },
+        update: {},
+        create: {
+            userID: newUser.userID,
         }
     });
 
