@@ -62,7 +62,7 @@ model modules {
   teacher   teachers  @relation(fields: [teacherID], references: [teacherID], onDelete: Cascade, onUpdate: NoAction)
   surveys   surveys[]
 
-  @@unique([teacherID, groupID, subjectID])
+  @@unique(name: "moduleKey", [teacherID, groupID, subjectID])
 }
 
 model survey_templates {
