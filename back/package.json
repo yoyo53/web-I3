@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
+    "build": "npx prisma generate",
     "test:unit": "jest ./__tests__/unit -c ./__tests__/unit/jest.config.js",
     "test:integration": "jest ./__tests__/integration -c ./__tests__/integration/jest.config.js --runInBand",
     "test": "npm run test:unit && npm run test:integration",
