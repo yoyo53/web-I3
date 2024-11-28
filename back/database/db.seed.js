@@ -1,5 +1,11 @@
 const { prisma } = require('./db.connection');
 
+const { hash } = require('bcrypt');
+
+async function hashPassword(password) {
+    return await hash(password, 10);
+}
+
 async function main() {
     const questionTypes = await prisma.question_types.createMany({
         data: [
@@ -12,13 +18,27 @@ async function main() {
         skipDuplicates: true
     });
 
-    const newUser = await prisma.users.upsert({
-        where: { email: 'test@mail.com' },
-        update: {},
+    const hashedPassword = await hashPassword('admin');
+    const newUser = await prisma.admins.upsert({
+        where: { user: { email: 'admin@mail.com' } },
+        update: {
+            user: {
+                update: {
+                    firstname: 'Admin',
+                    lastname: 'Admin',
+                    hashed_password: hashedPassword,
+                }
+            }
+        },
         create: {
-            email: 'test@mail.com',
-            firstname: 'test',
-            lastname: 'test'
+            user: {
+                create: {
+                    firstname: 'Admin',
+                    lastname: 'Admin',
+                    email: 'admin@mail.com',
+                    hashed_password: hashedPassword,
+                }
+            }
         }
     });
 
