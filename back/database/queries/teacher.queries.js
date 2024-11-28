@@ -93,15 +93,43 @@ async function deleteTeacher(id) {
 
 async function getSurveysByTeacherID(id) {
     try {
-        const query = await pool.query(`SELECT users.name AS lastname, users.firstname AS firstname,subjects.name AS subject,groups.name AS group
-            FROM surveys 
-            JOIN modules USING (moduleid) 
-            JOIN subjects USING (subjectid) 
-            JOIN groups USING (groupid) 
-            JOIN teachers USING (teacherid) 
-            JOIN users ON users.userid = teachers.teacherid
-            WHERE userid = $1`, [id]);
-        return query.rows ?? [];
+        const query = await prisma.findMany({
+            where: {teacherID: id},
+            select: {
+            surveyid: true,
+            teachers: {
+                select: {
+                    users: {
+                        select: {
+                            lastname: true,
+                            firstname: true
+                        }
+                    }
+                }
+            },
+            modules: {
+                select: {
+                    subjects: {
+                        select: {
+                            name: true
+                        }
+                    },
+                    groups: {
+                        select: {
+                            name: true
+                        }
+                    }
+                }
+            }
+        }
+    });
+    return surveys.map(survey => ({
+        surveyid: survey.surveyid,
+        lastname: survey.teachers.users.lastname,
+        firstname: survey.teachers.users.firstname,
+        subject: survey.modules.subjects.name,
+        group: survey.modules.groups.name
+    }));
     } catch {
         return null;
     }
