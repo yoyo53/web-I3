@@ -14,6 +14,5 @@ RUN npm run build
 FROM base AS production
 
 COPY --from=build /app/node_modules /app/node_modules
-COPY --from=build /app/prisma /app/prisma
 
 CMD [ "npm", "run", "start" ]
