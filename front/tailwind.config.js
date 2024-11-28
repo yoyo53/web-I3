@@ -7,10 +7,10 @@ export default {
   theme: {
     extend: {},
     colors: {
-      'primary-blue-color': '#163767',
-      'secondary-blue-color': '#377fbc',
+      'primary-blue-color': '#3653a0',
+      'secondary-blue-color': '#163767',
+      'tertiary-blue-color': '#377fbc',
       'purple-color': '#95569e',
-      'tertiary-blue-color': '#3653a0',
       'orange-color': '#e7873b',
       'red-color': '#dd5555',
     },
