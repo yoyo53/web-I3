@@ -17,9 +17,9 @@ jobs:
     runs-on: ubuntu-latest
     environment: test
     env:
-      POSTGRES_URL: {{secrets.POSTGRES_URL}}
-      SECRET_KEY: {{secrets.SECRET_KEY}}
-      DEFAULT_PASSWORD: {{secrets.DEFAULT_PASSWORD}}
+      POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      DEFAULT_PASSWORD: ${{ secrets.DEFAULT_PASSWORD }}
 
     steps:
       - name: Checkout 🛎️
@@ -46,9 +46,9 @@ jobs:
     if: github.ref_name == 'main'
     environment: production
     env:
-      POSTGRES_URL: {{secrets.POSTGRES_URL}}
-      SECRET_KEY: {{secrets.SECRET_KEY}}
-      DEFAULT_PASSWORD: {{secrets.DEFAULT_PASSWORD}}
+      POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      DEFAULT_PASSWORD: ${{ secrets.DEFAULT_PASSWORD }}
 
     steps:
       - name: Checkout 🛎️
