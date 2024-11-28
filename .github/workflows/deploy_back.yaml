@@ -35,6 +35,9 @@ jobs:
 
       - name: Run migrations 🚀
         run: npm run db:migrate
+      
+      - name: Run seeds 🌱
+        run: npm run db:seed
 
       - name: Run tests 🧪
         run: npm test
@@ -64,6 +67,9 @@ jobs:
 
       - name: Run migrations 🚀
         run: npm run db:migrate
+
+      - name: Run seeds 🌱
+        run: npm run db:seed
 
       - name: Setup flyctl 🔧
         uses: superfly/flyctl-actions/setup-flyctl@master
