@@ -1,0 +1,127 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider          = "postgresql"
+  url               = env("POSTGRES_URL")
+  shadowDatabaseUrl = env("SHADOW_POSTGRES_URL")
+}
+
+model users {
+  userID          Int       @id @default(autoincrement())
+  firstname       String    @db.VarChar(25)
+  lastname        String    @db.VarChar(25)
+  email           String    @unique @db.VarChar(50)
+  hashed_password String?   @db.VarChar(255)
+  admin           admins?
+  student         students?
+  teacher         teachers?
+}
+
+model admins {
+  adminID Int   @id @default(autoincrement())
+  user    users @relation(fields: [adminID], references: [userID], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model students {
+  studentID      Int              @id @default(autoincrement())
+  student_number Int              @unique
+  user           users            @relation(fields: [studentID], references: [userID], onDelete: Cascade, onUpdate: NoAction)
+  groups         groups[]
+  survey_answers survey_answers[]
+}
+
+model teachers {
+  teacherID      Int       @id @default(autoincrement())
+  teacher_number Int       @unique
+  modules        modules[]
+  user           users     @relation(fields: [teacherID], references: [userID], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model groups {
+  groupID  Int        @id @default(autoincrement())
+  name     String?    @db.VarChar(50)
+  modules  modules[]
+  students students[]
+}
+
+model subjects {
+  subjectID Int       @id @default(autoincrement())
+  name      String?   @db.VarChar(50)
+  modules   modules[]
+}
+
+model modules {
+  moduleID  Int       @id @default(autoincrement())
+  teacherID Int
+  groupID   Int
+  subjectID Int
+  group     groups    @relation(fields: [groupID], references: [groupID], onDelete: Cascade, onUpdate: NoAction)
+  subject   subjects  @relation(fields: [subjectID], references: [subjectID], onDelete: Cascade, onUpdate: NoAction)
+  teacher   teachers  @relation(fields: [teacherID], references: [teacherID], onDelete: Cascade, onUpdate: NoAction)
+  surveys   surveys[]
+
+  @@unique(name: "moduleKey", [teacherID, groupID, subjectID])
+}
+
+model survey_templates {
+  survey_templateID Int         @id @default(autoincrement())
+  name              String?     @db.VarChar(50)
+  questions         questions[]
+  surveys           surveys[]
+}
+
+model surveys {
+  surveyID          Int              @id @default(autoincrement())
+  moduleID          Int
+  survey_templateID Int
+  survey_answers    survey_answers[]
+  module            modules          @relation(fields: [moduleID], references: [moduleID], onDelete: Cascade, onUpdate: NoAction)
+  survey_template   survey_templates @relation(fields: [survey_templateID], references: [survey_templateID], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model question_types {
+  question_typeID Int         @id @default(autoincrement())
+  question_type   String      @unique @db.VarChar(50)
+  questions       questions[]
+}
+
+model questions {
+  questionID        Int                @id @default(autoincrement())
+  question_typeID   Int
+  survey_templateID Int
+  question_text     String?
+  answer_questions  answer_questions[]
+  options           options[]
+  question_type     question_types      @relation(fields: [question_typeID], references: [question_typeID], onDelete: Cascade, onUpdate: NoAction)
+  survey_template   survey_templates   @relation(fields: [survey_templateID], references: [survey_templateID], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model options {
+  optionID    Int
+  questionID  Int
+  option_text String?
+  question    questions @relation(fields: [questionID], references: [questionID], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([optionID, questionID])
+}
+
+model survey_answers {
+  survey_answerID  Int                @id @default(autoincrement())
+  surveyID         Int
+  studentID        Int
+  answer_questions answer_questions[]
+  student          students           @relation(fields: [studentID], references: [studentID], onDelete: Cascade, onUpdate: NoAction)
+  survey           surveys            @relation(fields: [surveyID], references: [surveyID], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model answer_questions {
+  survey_answerID Int
+  questionID      Int
+  answer_text     String
+  question        questions      @relation(fields: [questionID], references: [questionID], onDelete: Cascade, onUpdate: NoAction)
+  survey_answer   survey_answers @relation(fields: [survey_answerID], references: [survey_answerID], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([survey_answerID, questionID])
+}

@@ -1,62 +1,94 @@
-const { get } = require('../../routes/admin');
-const { pool } = require('../db_connection')
+const { prisma } = require('../db.connection')
 
-async function checkExistsTeacher(teacherid) {
+async function checkExistsTeacher(teacherID) {
     try {
-        const query = await pool.query('SELECT count(*) FROM teachers WHERE teacherid = $1', [teacherid]);
-        return query.rows[0]?.count > 0;
+        return await prisma.teachers.count({where: {teacherID}}) > 0;
     }
     catch {return false}
 }
 
 async function checkExistsTeacherNumber(teacher_number) {
     try {
-        const query = await pool.query('SELECT count(*) FROM teachers WHERE teacher_number = $1', [teacher_number]);
-        return query.rows[0]?.count > 0;
+        return await prisma.teachers.count({where: {teacher_number}}) > 0;
     }
     catch {return false}
 }
 
 async function getUserByTeacherNumber(teacher_number) {
     try {
-        const query = await pool.query(`SELECT users.userID, users.name, users.firstname, users.email, teachers.teacherid, teachers.teacher_number FROM users 
-            JOIN teachers ON users.userID = teachers.teacherid 
-            WHERE teachers.teacher_number = $1`, [teacher_number]);
-        return query.rows[0] ?? null;
+        return await prisma.teachers.findUnique({
+            where: {teacher_number},
+            select: {
+                teacherID: true,
+                teacher_number: true,
+                user: {
+                    select: {
+                        userID: true,
+                        firstname: true,
+                        lastname: true,
+                        email: true
+                    }
+                }
+            }
+        });
     }
     catch {return null}
 }
 
 async function getUserByTeacherID(id) {
     try {
-        const query = await pool.query(`SELECT users.userID, users.name, users.firstname, users.email, teachers.teacherid, teachers.teacher_number FROM users 
-            JOIN teachers ON users.userID = teachers.teacherid 
-            WHERE teachers.teacherid = $1`, [id]);
-        return query.rows[0] ?? null;
+        return await prisma.teachers.findUnique({
+            where: {teacherID: id},
+            select: {
+                teacherID: true,
+                teacher_number: true,
+                user: {
+                    select: {
+                        userID: true,
+                        firstname: true,
+                        lastname: true,
+                        email: true
+                    }
+                }
+            }
+        });
     }
     catch {return null}
 }
 async function createTeacher(userID, teacher_number) {
     try {
-        const query = await pool.query('INSERT INTO teachers (teacherid, teacher_number) VALUES ($1, $2) RETURNING teacherid', [userID, teacher_number]);
-        return query.rows[0]?.teacherid ?? null;
+        const query = await prisma.teachers.create({
+            data: {
+                teacher_number,
+                user: {connect: {userID}}
+            },
+            select: {teacherID: true}
+        });
+        return query.teacherID;
     }
     catch {return null}
 }
 async function updateTeacher(id, teacher_number) {
     try {
-        const query = await pool.query('UPDATE teachers SET teacher_number = $2 WHERE teacherid = $1 RETURNING teacherid', [id, teacher_number]);
-        return query.rows[0]?.teacherid ?? null;
+        const query = await prisma.teachers.update({
+            where: {teacherID: id},
+            data: {teacher_number},
+            select: {teacherID: true}
+        });
+        return query.teacherID;
     }
     catch {return null}
 }
 
 async function deleteTeacher(id) {
     try {
-        await pool.query('DELETE FROM teachers WHERE teacherid = $1', [id]);
-        return true;
+        const response = await prisma.teachers.delete({
+            where: {teacherID: id},
+            select: {teacherID: true}
+        });
+        return response.teacherID;
     }
-    catch {return false}
+    catch {return null}
 }
 
 async function getSurveysByTeacherID(id) {

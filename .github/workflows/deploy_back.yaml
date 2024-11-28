@@ -3,25 +3,73 @@ name: Build and Deploy back
 on:
   workflow_dispatch:
   push:
-    branches:
-      - main
     paths:
       - back/**
+      - .github/workflows/deploy_back.yaml
 
 defaults:
   run:
     working-directory: back
 
 jobs:
-  deploy:
-    name: Deploy app
+  test:
+    name: Test app
     runs-on: ubuntu-latest
+    environment: test
+    env:
+      POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      DEFAULT_PASSWORD: ${{ secrets.DEFAULT_PASSWORD }}
+
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@main
 
+      - name: Setup Node.js 🔧
+        uses: actions/setup-node@v2
+        with:
+          node-version: '22'
+
+      - name: Install dependencies 📦
+        run: npm install
+
+      - name: Run migrations 🚀
+        run: npm run db:migrate
+
+      - name: Run tests 🧪
+        run: npm test
+
+  deploy:
+    name: Deploy app
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.ref_name == 'main'
+    environment: production
+    env:
+      POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      DEFAULT_PASSWORD: ${{ secrets.DEFAULT_PASSWORD }}
+
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@main
+
+      - name: Setup Node.js 🔧
+        uses: actions/setup-node@v2
+        with:
+          node-version: '22'
+
+      - name: Install dependencies 📦
+        run: npm install
+
+      - name: Run migrations 🚀
+        run: npm run db:migrate
+
       - name: Setup flyctl 🔧
         uses: superfly/flyctl-actions/setup-flyctl@master
+
+      - name: Configure Secrets 🔐
+        run: flyctl secrets set POSTGRES_URL=$POSTGRES_URL SECRET_KEY=$SECRET_KEY DEFAULT_PASSWORD=$DEFAULT_PASSWORD --stage
 
       - name: Deploy 🚀
         run: flyctl deploy --remote-only
