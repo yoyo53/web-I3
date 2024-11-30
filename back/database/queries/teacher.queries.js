@@ -93,7 +93,7 @@ async function deleteTeacher(id) {
 
 async function getSurveysByTeacherID(id) {
     try {
-        const query = await prisma.findMany({
+        const surveys = await prisma.findMany({
             where: {teacherID: id},
             select: {
             surveyid: true,
