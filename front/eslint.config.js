@@ -1,6 +1,7 @@
 import globals from "globals";
 import pluginJs from "@eslint/js";
 import pluginVue from "eslint-plugin-vue";
+import pluginPrettier from "eslint-config-prettier";
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
@@ -11,5 +12,6 @@ export default [
   {files: ["**/*.js"], languageOptions: {sourceType: "module"}},
   {rules: {"no-unused-vars": "warn"}},
   {languageOptions: { globals: { ...globals.browser, ...globals.node }}},
+  pluginPrettier,
 ];
 
