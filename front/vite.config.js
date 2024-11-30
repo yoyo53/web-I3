@@ -3,11 +3,13 @@ import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
-import { config } from './config.js'
+import { loadEnv } from 'vite'
 
 // https://vite.dev/config/
-export default defineConfig({
-  base: process.env.NODE_ENV === 'production' ? config.base_url : '/',
+export default defineConfig((mode) => {
+  process.env = {...process.env, ...loadEnv(mode, process.cwd())};
+  return {
+    base: process.env.VITE_BASE_PATH,
   plugins: [
     vue(),
     vueDevTools(),
@@ -17,4 +19,5 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     },
   },
+  }
 })

@@ -1,10 +1,9 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import AdminView from '../views/AdminView.vue'
-import { config } from '../../config.js'
 
 const router = createRouter({
-  history: createWebHashHistory(process.env.NODE_ENV === 'production' ? config.base_url : '/'),
+  history: createWebHashHistory(import.meta.env.VITE_BASE_PATH),
   routes: [
     {
       path: '/',
