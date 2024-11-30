@@ -1,17 +1,15 @@
-import js from '@eslint/js'
-import pluginVue from 'eslint-plugin-vue'
+import globals from "globals";
+import pluginJs from "@eslint/js";
+import pluginVue from "eslint-plugin-vue";
 
+/** @type {import('eslint').Linter.Config[]} */
 export default [
-  {
-    name: 'app/files-to-lint',
-    files: ['**/*.{js,mjs,jsx,vue}'],
-  },
+  pluginJs.configs.recommended,
+  ...pluginVue.configs["flat/essential"],
+  {files: ["**/*.{js,mjs,cjs,vue}"]},
+  {ignores: ["**/dist/**"]},
+  {files: ["**/*.js"], languageOptions: {sourceType: "module"}},
+  {rules: {"no-unused-vars": "warn"}},
+  {languageOptions: { globals: { ...globals.browser, ...globals.node }}},
+];
 
-  {
-    name: 'app/files-to-ignore',
-    ignores: ['**/dist/**', '**/dist-ssr/**', '**/coverage/**'],
-  },
-
-  js.configs.recommended,
-  ...pluginVue.configs['flat/essential'],
-]
