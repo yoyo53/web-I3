@@ -112,7 +112,7 @@ async function loginUserAction(request, response) {
 }
 
 async function verifyTokenAction(request, response) {
-    return response.status(200).json({info: 'Valid token', user_id: request.user_id});
+    return response.status(200).json({info: 'Valid token', user_id: request.user_id, user_type: request.user_type});
 }
 
 module.exports = {

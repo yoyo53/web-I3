@@ -3,8 +3,8 @@
         <div class="h-full px-3 py-8 overflow-y-auto bg-gray-50 dark:bg-gray-800">
             <ul class="space-y-4 font-medium">
                 <TabComponent :img=ProfileSVG text="Profile" link="/profile"/>
-                <TabComponent :img=surveySVG text="Surveys" :link="userType === 'Admin' ? '/admin/survey' : userType === 'Teacher' ? '/teacher/survey' : '/student/survey'"/>
-                <TabComponent v-if="userType === 'Admin'" :img=templateSVG text="Template" link="/admin/template"/>
+                <TabComponent :img=surveySVG text="Surveys" :link="userState.userType === 'Admin' ? '/admin/survey' : userState.userType === 'Teacher' ? '/teacher/survey' : '/student/survey'"/>
+                <TabComponent v-if="userState.userType === 'Admin'" :img=templateSVG text="Template" link="/admin/template"/>
             </ul>
         </div>
     </aside>
@@ -17,13 +17,8 @@ import surveySVG from '@/assets/survey.svg';
 import templateSVG from '@/assets/template.svg';
 
 export default {
+    inject: ['userState'],
     name: 'SideBarComponent',
-    props: {
-        userType: {
-            type: String,
-            required: true
-        }
-    },
     components: {
         TabComponent
     },
