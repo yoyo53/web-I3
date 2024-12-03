@@ -5,11 +5,13 @@
             No surveys yet
         </div>
         <SurveysListComponent :surveys="surveys"/>
+        <SideBarComponent/>
     </div>
 </template>
 
 <script>
     import SurveysListComponent from '@/components/surveys/SurveysListComponent.vue';
+    import SideBarComponent from '@/components/sidebar/SideBarComponent.vue';
 
     export default{
         data(){
@@ -19,6 +21,7 @@
         },
         components: {
             SurveysListComponent,
+            SideBarComponent,
         },
         methods: {
             async fetchAllSurveys(){
