@@ -105,16 +105,31 @@ router.beforeEach(async (to, from, next) => {
         }
       }
       else {
-        next('/login');
+        if (to.path === '/login') {
+          next();
+        }
+        else {
+          next('/login');
+        }
       }
     }
     catch (error) {
       console.error(error);
-      next('/login');
+      if (to.path === '/login') {
+        next();
+      }
+      else {
+        next('/login');
+      }
     }
   }
   else {
-    next('/login');
+    if (to.path === '/login') {
+      next();
+    }
+    else {
+      next('/login');
+    }
   }
 });
 
