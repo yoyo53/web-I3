@@ -1,7 +1,7 @@
 <template>
     <div class="min-h-screen p-8 flex justify-center items-start">
       <div class="bg-white shadow-md rounded-lg p-6 w-full max-w-3xl">
-        <h1 class="text-2xl font-semibold text-gray-800 mb-4">Create Template</h1>
+        <h1 class="text-2xl font-semibold text-[primary] mb-4">Create Template</h1>
 
         <!-- Template Name -->
         <div class="mb-6">
@@ -18,7 +18,7 @@
         </div>
   
         <!-- Dynamic Questions -->
-        <div v-for="(question, index) in questions" :key="index" class="mb-4">
+        <div v-for="(question, index) in questions" :key="index" class="mb-4 p-4 border-2 border-dashed border-transparent-hover rounded-lg">
           <label class="block text-sm font-medium text-gray-700 mb-2">Question {{ index + 1 }}</label>
           <input
             type="text"
@@ -49,15 +49,15 @@
         <!-- Add Question Button -->
         <button
           @click="addQuestion"
-          class="w-full py-2 px-4 bg-indigo-500 text-white rounded-md shadow-md hover:bg-indigo-600 transition duration-300"
-        >
-          Add Question
-        </button>
-  
-        <!-- Submit Form Button -->
-        <button
-          @click="submitTemplate"
-          class="mt-4 w-full py-2 px-4 bg-green-500 text-white rounded-md shadow-md hover:bg-green-600 transition duration-300"
+            class="w-full py-2 px-4 bg-primary font-semibold text-[white] rounded-md shadow-md hover:bg-primary-hover transition duration-300"
+          >
+            Add Question
+          </button>
+        
+          <!-- Submit Form Button -->
+          <button
+            @click="submitTemplate"
+            class="mt-4 w-full py-2 px-4 bg-transparent font-semibold text-[primary] rounded-md shadow-md hover:bg-transparent-hover transition duration-300"
         >
           Submit Template
         </button>
