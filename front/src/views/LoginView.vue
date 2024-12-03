@@ -26,6 +26,14 @@ export default {
 					// Save the token to local storage
 					localStorage.setItem('token', data.token);
 					localStorage.setItem('userType', data.type);
+					// Redirect depending on user type
+					if (data.type === 'admin') {
+						this.$router.push('/Admin');
+					} else if (data.type === 'Teacher') {
+						this.$router.push('/teacher');
+					} else {
+						this.$router.push('/student');
+					}
 				} else {
 					// Handle login error
 					console.error('Login failed:', data);
