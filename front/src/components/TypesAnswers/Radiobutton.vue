@@ -3,7 +3,7 @@
 
         <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
             <div class="space-y-4">
-                <div v-for="(radio, index) in radios" :key="index" class="flex items-center justify-between gap-4">
+                <div v-for="(radio, index) in localRadios" :key="index" class="flex items-center justify-between gap-4">
                     <!-- Radio button -->
                     <input type="radio" v-model="selectedRadio" :id="'radio-' + index" :value="index"
                         class="h-4 w-4 rounded-full border-gray-300 text-primary focus:ring-primary" />
@@ -28,25 +28,40 @@
 
 <script>
 export default {
-    data() {
-        return {
-            radios: [
-                { label: "Default Radio Button" },
-            ],
-            selectedRadio: null,  // To hold the selected radio button's index
-        };
+  props: {
+    questionId: {
+      type: [String, Number],
+      required: true,
     },
-    methods: {
-        addRadio() {
-            this.radios.push({ label: "" });
-        },
-        removeRadio(index) {
-            // Remove the selected radio if it's the one being deleted
-            if (this.selectedRadio === index) {
-                this.selectedRadio = null;
-            }
-            this.radios.splice(index, 1);
-        },
+    radios: {
+      type: Array,
+      default: () => [{ label: "Default Option" }], // Option par défaut
     },
+  },
+  data() {
+    return {
+      localRadios: [...this.radios],
+      selectedRadio: null, // Garde l'index de l'option sélectionnée
+    };
+  },
+  watch: {
+    localRadios: {
+      deep: true,
+      handler() {
+        this.$emit("update-options", this.questionId, this.localRadios);
+      },
+    },
+  },
+  methods: {
+    addRadio() {
+      this.localRadios.push({ label: "" });
+    },
+    removeRadio(index) {
+      if (this.selectedRadio === index) {
+        this.selectedRadio = null; 
+      }
+      this.localRadios.splice(index, 1);
+    },
+  },
 };
 </script>

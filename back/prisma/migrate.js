@@ -6,6 +6,7 @@ require("dotenv").config();
 let migrationName = "";
 const command = spawn("npx", ["prisma", "migrate", "dev", "--create-only"], {
     stdio: ["inherit", "pipe", "pipe"],
+    shell: true,
 });
 
 command.stdout.on("data", (data) => {

@@ -1,6 +1,8 @@
 const express = require("express");
 const { json } = require("express");
 const cors = require("cors");
+const swaggerUi = require("swagger-ui-express");
+const swaggerSpecs = require('./swagger');
 
 const app = express();
 
@@ -32,6 +34,8 @@ app.get("/", (req, res) => {
 app.use("/auth", require("./routes/auth.routes"));
 
 app.use('/admin', require('./routes/admin.js'));
+
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 
 module.exports = {
   app,

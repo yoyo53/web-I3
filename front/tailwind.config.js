@@ -5,7 +5,6 @@ export default {
     "./App.vue",
   ],
   theme: {
-    extend: {},
     colors: {
       'primary': '#163767', // Text
       'primary-hover':'#1e4885', //1e4885 040c3c
@@ -27,7 +26,7 @@ export default {
       'purple-color': '#95569e',
       'orange-color': '#e7873b',
       'red-color': '#dd5555',
-    },
+   },
   },
   plugins: [],
 }

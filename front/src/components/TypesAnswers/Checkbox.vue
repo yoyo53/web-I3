@@ -29,20 +29,36 @@
 
 <script>
 export default {
-    data() {
-        return {
-            checkboxes: [
-                { label: "Default Checkbox", checked: false },
-            ],
-        };
+  props: {
+    questionId: {
+      type: Number,
+      required: true,
     },
-    methods: {
-        addCheckbox() {
-            this.checkboxes.push({ label: "", checked: false });
-        },
-        removeCheckbox(index) {
-            this.checkboxes.splice(index, 1);
-        },
+    checkboxes: {
+      type: Array,
+      default: () => [{ label: "default answer", checked: false }],
     },
+  },
+  data() {
+    return {
+      localCheckboxes: [ ...this.checkboxes ],
+    };
+  },
+  watch: {
+    localCheckboxes: {
+      deep: true,
+      handler() {
+        this.$emit("update-options", this.questionId, this.localCheckboxes);
+      },
+    },
+  },
+  methods: {
+    addCheckbox() {
+      this.localCheckboxes.push({ label: "", checked: false });
+    },
+    removeCheckbox(index) {
+      this.localCheckboxes.splice(index, 1);
+    },
+  },
 };
 </script>

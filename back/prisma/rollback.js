@@ -2,6 +2,7 @@ const { execSync } = require('child_process');
 const readline = require('readline');
 const fs = require('fs');
 const path = require('path');
+require('dotenv').config();
 
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
