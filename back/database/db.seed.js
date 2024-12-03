@@ -415,7 +415,7 @@ async function main() {
         },
     });
 
-    console.log({ questionTypes, newUser });
+    console.log({ questionTypes, newUser, newAdmin, student1, student2, student3, student4, student5, teacher1, teacher2, teacher3, group1, group2, group3, subject1, subject2, subject3, module1, module2, module3 });
 }
 
 main()
