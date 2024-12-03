@@ -18,7 +18,7 @@
 
             <div class="mt-6">
                 <button @click="addCheckbox"
-                    class="flex w-full justify-center rounded-md bg-secondary-blue-color px-3 py-1.5 text-sm/6 font-semibold text-[black] shadow-sm hover:bg-tertiary-blue-color focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary-blue-color transition-colors duration-150">
+                    class="flex w-full justify-center rounded-md bg-secondary-blue-color px-3 py-1.5 text-sm/6 font-semibold text-[black] shadow-sm hover:bg-primary-blue-color focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary-blue-color transition-colors duration-150">
                     Add Checkbox
                 </button>
 
@@ -29,20 +29,36 @@
 
 <script>
 export default {
-    data() {
-        return {
-            checkboxes: [
-                { label: "Default Checkbox", checked: false },
-            ],
-        };
+  props: {
+    questionId: {
+      type: Number,
+      required: true,
     },
-    methods: {
-        addCheckbox() {
-            this.checkboxes.push({ label: "", checked: false });
-        },
-        removeCheckbox(index) {
-            this.checkboxes.splice(index, 1);
-        },
+    checkboxes: {
+      type: Array,
+      default: () => [{ label: "default answer", checked: false }],
     },
+  },
+  data() {
+    return {
+      localCheckboxes: [ ...this.checkboxes ],
+    };
+  },
+  watch: {
+    localCheckboxes: {
+      deep: true,
+      handler() {
+        this.$emit("update-options", this.questionId, this.localCheckboxes);
+      },
+    },
+  },
+  methods: {
+    addCheckbox() {
+      this.localCheckboxes.push({ label: "", checked: false });
+    },
+    removeCheckbox(index) {
+      this.localCheckboxes.splice(index, 1);
+    },
+  },
 };
 </script>

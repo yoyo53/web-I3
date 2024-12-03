@@ -5,8 +5,8 @@ export default {
     "./App.vue",
   ],
   theme: {
-    extend: {},
-    colors: {
+    extend: {
+      colors: {
       'primary-blue-color': '#163767',
       'secondary-blue-color': '#3653a0',
       'tertiary-blue-color': '#377fbc',
@@ -14,6 +14,7 @@ export default {
       'orange-color': '#e7873b',
       'red-color': '#dd5555',
     },
+   },
   },
   plugins: [],
 }
