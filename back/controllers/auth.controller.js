@@ -97,7 +97,7 @@ async function loginUserAction(request, response) {
         }
 
         // Generate token
-        const token = jwt.sign({user_id: user.userID, type: user.type}, process.env.SECRET_KEY, {expiresIn: '1h'});
+        const token = jwt.sign({user_id: user.userID, type: user.type}, process.env.SECRET_KEY, {expiresIn: process.env.TOKEN_EXPIRATION || '1h'});
         if (token != null) {
             console.log('[',request.ip,'] LOGGED IN User: ', user.userID, ' as ', user.type);
             response.status(200).json({info: "user logged in successfully", token: token, user_id: user.userID, type: user.type});
