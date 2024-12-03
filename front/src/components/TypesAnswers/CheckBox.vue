@@ -3,12 +3,14 @@
 
         <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
             <div class="space-y-4">
-                <div v-for="(checkbox, index) in checkboxes" :key="index"
+                <div v-for="(checkbox, index) in localCheckboxes" :key="index"
                     class="flex items-center justify-between gap-4">
                     <input type="checkbox" v-model="checkbox.checked" :id="'checkbox-' + index"
                         class="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary" />
                     <input type="text" v-model="checkbox.label" :placeholder="'Enter name for checkbox ' + (index + 1)"
-                        class="block w-full rounded-md border-0 py-1.5 pl-2 text-primary-blue-color shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-0 focus:ring-inset focus:ring-primary sm:text-sm/6" />
+                        class="block w-full rounded-md border-0 py-1.5 pl-2 text-primary-blue-color shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-0 focus:ring-inset focus:ring-primary sm:text-sm/6" 
+                        required
+                        />
                     <button @click="removeCheckbox(index)" type="button"
                         class="py-2.5 px-6 text-sm rounded-lg bg-red-50 text-red-500 cursor-pointer font-semibold text-center shadow-xs transition-all duration-300 hover:bg-red-100 hover:text-red-700">
                         Remove
@@ -36,14 +38,15 @@ export default {
     },
     checkboxes: {
       type: Array,
-      default: () => [{ label: "default answer", checked: false }],
     },
   },
   data() {
     return {
-      localCheckboxes: [ ...this.checkboxes ],
+      localCheckboxes: this.checkboxes.length
+        ? [...this.checkboxes]
+        : [{ label: "Default Answer", checked: false }],
     };
-  },
+},
   watch: {
     localCheckboxes: {
       deep: true,

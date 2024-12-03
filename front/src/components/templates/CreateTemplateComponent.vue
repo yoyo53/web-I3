@@ -1,4 +1,5 @@
 <template>
+  <form>
     <!-- Template Name -->
     <div class="mb-6">
           <label for="template-name" class="block text-sm font-medium text-gray-700 mb-2">
@@ -39,14 +40,14 @@
             <option value="checkbox">Checkbox</option>
           </select>
 
-            <Radiobutton 
+            <RadioButton 
                 v-if="question.responseType === 'radio'"
                 :questionId="question.id"
                 :checkboxes="question.options"
                 @update-options="updateOptions"
             />
 
-            <Checkbox 
+            <CheckBox 
                 v-if="question.responseType === 'checkbox'"
                 :questionId="question.id"
                 :checkboxes="question.options"
@@ -69,11 +70,13 @@
         >
           Submit Template
         </button>
+           
+  </form> 
 </template>
 
 <script>
-    import Radiobutton from '@/components/TypesAnswers/Radiobutton.vue';
-    import Checkbox from '@/components/TypesAnswers/Checkbox.vue';
+    import RadioButton from '@/components/TypesAnswers/RadioButton.vue';
+    import CheckBox from '@/components/TypesAnswers/CheckBox.vue';
 
   export default {
     data() {
@@ -85,8 +88,8 @@
       };
     },
     components: {
-      Radiobutton,
-      Checkbox,
+      RadioButton,
+      CheckBox,
     },
     methods: {
       addQuestion() {
