@@ -19,6 +19,7 @@
         },
         components: {
             SurveysListComponent,
+            SideBarComponent,
         },
         methods: {
             async fetchAllSurveys(){

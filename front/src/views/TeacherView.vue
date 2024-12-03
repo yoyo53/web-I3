@@ -6,7 +6,8 @@
 </template>
 
 <script>
-    import SurveysListComponent from '@/components/surveys/SurveysListComponent.vue';
+import SideBarComponent from '@/components/sidebar/SideBarComponent.vue';
+import SurveysListComponent from '@/components/surveys/SurveysListComponent.vue';
 
     export default{
         data(){
@@ -16,6 +17,7 @@
         },
         components: {
             SurveysListComponent,
+            SideBarComponent,
         },
         methods: {
             async fetchAllSurveys(){
