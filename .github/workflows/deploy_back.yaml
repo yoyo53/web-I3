@@ -7,6 +7,9 @@ on:
       - back/**
       - .github/workflows/deploy_back.yaml
 
+concurrency:
+  group: ${{ github.workflow }}
+
 defaults:
   run:
     working-directory: back
@@ -23,7 +26,8 @@ jobs:
 
     steps:
       - name: Checkout 🛎️
-        uses: actions/checkout@main
+        uses: actions/checkout@v4
+
 
       - name: Setup Node.js 🔧
         uses: actions/setup-node@v2
@@ -33,8 +37,14 @@ jobs:
       - name: Install dependencies 📦
         run: npm install
 
-      - name: Run migrations 🚀
-        run: npm run db:migrate
+      - name: Lint code 🧹
+        run: npm run lint
+
+      - name: Build 🏗️
+        run: npm run build
+
+      - name: Reset database 🔄
+        run: npm run db:reset -- --force
 
       - name: Run tests 🧪
         run: npm test
@@ -52,7 +62,7 @@ jobs:
 
     steps:
       - name: Checkout 🛎️
-        uses: actions/checkout@main
+        uses: actions/checkout@v4
 
       - name: Setup Node.js 🔧
         uses: actions/setup-node@v2
@@ -62,14 +72,22 @@ jobs:
       - name: Install dependencies 📦
         run: npm install
 
+      - name: Build 🏗️
+        run: npm run build
+
       - name: Run migrations 🚀
         run: npm run db:migrate
+
+      - name: Run seeds 🌱
+        run: npm run db:seed
 
       - name: Setup flyctl 🔧
         uses: superfly/flyctl-actions/setup-flyctl@master
 
       - name: Configure Secrets 🔐
         run: flyctl secrets set POSTGRES_URL=$POSTGRES_URL SECRET_KEY=$SECRET_KEY DEFAULT_PASSWORD=$DEFAULT_PASSWORD --stage
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
 
       - name: Deploy 🚀
         run: flyctl deploy --remote-only
