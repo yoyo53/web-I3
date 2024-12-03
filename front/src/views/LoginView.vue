@@ -25,6 +25,7 @@ export default {
 					console.log('Login successful:', data);
 					// Save the token to local storage
 					localStorage.setItem('token', data.token);
+					localStorage.setItem('userType', data.type);
 				} else {
 					// Handle login error
 					console.error('Login failed:', data);
