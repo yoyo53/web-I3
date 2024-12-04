@@ -27,6 +27,10 @@ export default {
             type: String,
             default: 'text-white'
         },
+        to: {
+            type: Object,
+            required: true
+        }
     },
     methods: {
         handleClick() {
