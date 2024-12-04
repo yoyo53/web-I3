@@ -93,9 +93,9 @@ async function deleteStudent(id) {
     catch {return null}
 }
 
-async function getName(id) {
+async function getStudentNameByID(id) {
     try {
-        return await prisma.students.findUnique({
+        const query = await prisma.students.findMany({
             where: {studentID: id},
             select: {
                 user: {
@@ -106,6 +106,7 @@ async function getName(id) {
                 }
             }
         });
+        return query;
     }
     catch {return null}
 }
@@ -160,6 +161,6 @@ module.exports = {
     createStudent,
     updateStudent,
     deleteStudent, 
-    getName,
+    getStudentNameByID,
     getAllSurveys
 }
