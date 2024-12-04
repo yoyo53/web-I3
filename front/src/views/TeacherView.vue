@@ -1,12 +1,19 @@
 <template>
-    <div class="flex flex-col gap-y-4">
-        <h1 class="text-2xl font-semibold text-gray-900">Surveys</h1>
-        <SurveysListComponent :surveys="surveys"/>
+    <div class="flex">
+        <SideBarComponent />
+        <div class="flex flex-col gap-y-4">
+            <h1 class="text-2xl font-semibold text-gray-900">Surveys</h1>
+            <div v-if="surveys.length === 0" class="text-gray-500 text-sm">
+                No surveys yet
+            </div>
+            <SurveysListComponent :surveys="surveys"/>
+        </div>
     </div>
 </template>
 
 <script>
-    import SurveysListComponent from '@/components/surveys/SurveysListComponent.vue';
+import SideBarComponent from '@/components/sidebar/SideBarComponent.vue';
+import SurveysListComponent from '@/components/surveys/SurveysListComponent.vue';
 
     export default{
         data(){
@@ -16,6 +23,7 @@
         },
         components: {
             SurveysListComponent,
+            SideBarComponent
         },
         methods: {
             async fetchAllSurveys(){

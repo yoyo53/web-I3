@@ -61,7 +61,7 @@ prisma.$queryRaw`SELECT migration_name FROM _prisma_migrations WHERE rolled_back
             }
         });
     })
-    .catch((error) => {
+    .catch(() => {
         console.error("\x1b[31mFailed to get the latest migration.\x1b[0m");
         process.exit(1);
     });

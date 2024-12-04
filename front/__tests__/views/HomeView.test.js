@@ -1,4 +1,4 @@
-import { expect, test } from 'vitest'
+import { test } from 'vitest'
 import { render } from '@testing-library/vue'
 import HomeView from '../../src/views/HomeView.vue'
 
@@ -7,5 +7,5 @@ test('Page', () => {
     props: {
     }
   })
-  page.getByText('official documentation')
+  page.getAllByText('TeachPoint')
 })
