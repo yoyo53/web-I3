@@ -1,7 +1,7 @@
-const studentQueries = require('../queries/student.queries');
+const studentQueries = require('../database/queries/student.queries');
 
 async function getStudentName(req, res) {
-    const name = await studentQueries.getName(req.params.id)
+    const name = await studentQueries.getStudentNameByID(parseInt(req.user_id));
     if (name != null) {
         res.status(200).json(name);
     } else {
