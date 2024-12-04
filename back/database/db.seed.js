@@ -11,7 +11,6 @@ async function main() {
         data: [
             { question_type: 'text' },
             { question_type: 'radio' },
-            { question_type: 'radio_checkbox' },
             { question_type: 'checkbox' },
             { question_type: 'score' }
         ],

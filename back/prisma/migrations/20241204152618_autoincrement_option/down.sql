@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "options" ALTER COLUMN "optionID" DROP DEFAULT;
+DROP SEQUENCE "";
+

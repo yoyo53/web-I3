@@ -99,12 +99,11 @@ model questions {
 }
 
 model options {
-  optionID    Int
+  optionID    Int       @id @default(autoincrement())
   questionID  Int
   option_text String?
   question    questions @relation(fields: [questionID], references: [questionID], onDelete: Cascade, onUpdate: NoAction)
 
-  @@id([optionID, questionID])
 }
 
 model survey_answers {
