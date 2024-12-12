@@ -13,7 +13,7 @@
       <!-- Menu Déroulant (affiché uniquement si isOpen est vrai) -->
       <div
         v-if="isOpen"
-        class="absolute z-10 w-full mt-1 bg-white border rounded shadow-lg"
+        class="absolute z-10 w-full mt-1 bg-white border rounded-md shadow-sm px-4 py-2 text-gray-700"
       >
         <!-- Liste d'options filtrées -->
         <ul class="max-h-48 overflow-y-auto">

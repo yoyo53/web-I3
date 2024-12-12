@@ -45,6 +45,11 @@ const router = createRouter({
       path: '/admin/templates/create',
       name: 'createTemplate',
       component: () => import('../views/CreateTemplateView.vue'),
+    },
+    {
+      path: '/admin/survey/create',
+      name: 'createSurvey',
+      component: () => import('../views/CreateSurveyView.vue'),      
     }
   ],
 })
