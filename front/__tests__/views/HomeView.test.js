@@ -7,5 +7,5 @@ test('Page', () => {
     props: {
     }
   })
-  page.getByText('official documentation')
+  page.getAllByText('TeachPoint')
 })

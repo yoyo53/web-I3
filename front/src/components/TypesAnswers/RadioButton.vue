@@ -7,7 +7,7 @@
                     <!-- Radio button -->
                     <input type="radio" v-model="selectedRadio" :id="'radio-' + index" :value="index"
                         class="h-4 w-4 rounded-full border-gray-300 text-primary focus:ring-primary" />
-                    <input type="text" v-model="radio.label" :placeholder="'Enter name for radio button ' + (index + 1)"
+                    <input type="text" v-model="radio.option_text" :placeholder="'Enter name for radio button ' + (index + 1)"
                         class="block w-full rounded-md border-0 py-1.5 pl-2 text-primary-blue-color shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-0 focus:ring-inset focus:ring-primary sm:text-sm/6" 
                         required
                         />
@@ -37,7 +37,7 @@ export default {
     },
     radios: {
       type: Array,
-      default: () => [{ label: "Default Option" }], // Option par défaut
+      default: () => [{ option_text: "Default Option" }], // Option par défaut
     },
   },
   data() {
@@ -56,7 +56,7 @@ export default {
   },
   methods: {
     addRadio() {
-      this.localRadios.push({ label: "" });
+      this.localRadios.push({ option_text: "" });
     },
     removeRadio(index) {
       if (this.selectedRadio === index) {

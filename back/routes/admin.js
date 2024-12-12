@@ -47,4 +47,26 @@ router.get('/templates', (req, res) => {
 });
 
 
+/**
+ * @swagger
+ * /admin/templates/create:
+ *   post:
+ *     summary: Post a new survey template
+ *     tags: [Admin]
+ *     requestBody:
+ *       required: true
+ *     responses:
+ *       200:
+ *         description: Survey template created successfully
+ *       400:
+ *         description: Bad request
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Internal server error
+ */
+router.post('/templates/create', (req, res) => {
+  controller.createSurveyTemplate(req, res);
+});
+
 module.exports = router;
