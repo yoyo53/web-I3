@@ -69,4 +69,35 @@ router.post('/templates/create', (req, res) => {
   controller.createSurveyTemplate(req, res);
 });
 
+
+/**
+ * @swagger
+ * /admin/templates/{id}:
+ *   get:
+ *     summary: Get a survey template by ID
+ *     tags: [Admin]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The survey template ID
+ *     responses:
+ *       200:
+ *         description: Get a survey template by ID
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *       404:
+ *         description: Template not found
+ *       500:
+ *         description: Error while fetching the template
+ */
+router.get('/templates/:id', (req, res) => {
+  controller.getTemplateByID(req, res);
+  console.log("salut");
+});
+
 module.exports = router;

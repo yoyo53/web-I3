@@ -28,9 +28,21 @@ async function createSurveyTemplate(req, res) {
     }
 };
 
+async function getTemplateByID(req, res) {
+    const survey = await templateQueries.getTemplateByID(req.params.id)
+    console.log(req.params.id);
+    if (survey != null) {
+        res.status(200).json(survey);
+        console.log(survey);
+    } else {
+        res.status(500).send('Error while fetching this template');
+    }
+}
+
 
 module.exports = {
     getAdminSurveys,
     getSurveyTemplates,
-    createSurveyTemplate
+    createSurveyTemplate,
+    getTemplateByID
 };

@@ -43,7 +43,7 @@
             <RadioButton 
                 v-if="question.question_type === 'radio'"
                 :questionId="question.id"
-                :checkboxes="question.options"
+                :radios="question.options"
                 @update-options="updateOptions"
             />
 

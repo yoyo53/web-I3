@@ -35,16 +35,27 @@ const router = createRouter({
       name: 'templates',
       component: () => import('../views/TemplateView.vue')
     },
-    {
+    /* {
       path: '/admin/templates/:id',
       name: 'templateDetail',
       component: () => import('../views/TemplateDetailView.vue'),
       props: true,
-    },
+    }, */
     {
       path: '/admin/templates/create',
       name: 'createTemplate',
       component: () => import('../views/CreateTemplateView.vue'),
+    },
+    {
+      path: '/admin/surveys/create',
+      name: 'createSurvey',
+      component: () => import('../views/CreateSurveyView.vue'),
+    },
+    {
+      path: '/admin/templates/:id',
+      name: 'test',
+      component: () => import('../views/TestVue.vue'),
+      props: true,
     }
   ],
 })
