@@ -36,7 +36,7 @@
       </div> -->
 
       <label class="block text-sm font-medium text-gray-700 mb-2">Response Type</label>
-      <select v-model="question.question_type"
+      <select v-model="question.question_type" :disabled="!isEditable" 
         class="block w-full px-4 py-2 border rounded-md shadow-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
         <option value="text">Text Input</option>
         <option value="stars">Star Rating (1-5)</option>
@@ -52,7 +52,7 @@
     </div>
 
     <!-- Add Question Button -->
-    <button @click="addQuestion"
+    <button @click="addQuestion" :disabled="!isEditable"
       class="w-full py-2 px-4 bg-primary font-semibold text-[white] rounded-md shadow-md hover:bg-primary-hover transition duration-300">
       Add Question
     </button>
@@ -75,10 +75,7 @@ import searchBar from '../searchBar.vue';
 export default {
   data() {
     return {
-      isEditable: {
-      type: Boolean,
-      default: false,
-    },
+      isEditable: false,
       templateName: '',
       questions: [],
       errors: {},
