@@ -6,6 +6,10 @@ export default {
 			password: ''
 		};
 	},
+	components: {
+		HeaderComponent,
+		FooterComponent
+	},
 	methods: {
 		async login() {
 			try {
@@ -25,10 +29,9 @@ export default {
 					console.log('Login successful:', data);
 					// Save the token to local storage
 					localStorage.setItem('token', data.token);
-					localStorage.setItem('userType', data.type);
 					// Redirect depending on user type
-					if (data.type === 'admin') {
-						this.$router.push('/Admin');
+					if (data.type === 'Admin') {
+						this.$router.push('/admin');
 					} else if (data.type === 'Teacher') {
 						this.$router.push('/teacher');
 					} else {
@@ -47,14 +50,7 @@ export default {
 </script>
 
 <template>
-	<!--
-	  This example requires updating your template:
-  
-	  ```
-	  <html class="h-full bg-white">
-	  <body class="h-full">
-	  ```
-	-->
+	<HeaderComponent />
 	<div class="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
 	  <div class="sm:mx-auto sm:w-full sm:max-w-sm">
 		<img class="mx-auto h-20 w-auto" src="@/assets/logo.svg" alt="EFREI LOGO" />
@@ -88,4 +84,5 @@ export default {
 		</form>
 	  </div>
 	</div>
+	<FooterComponent />
 </template>

@@ -103,7 +103,6 @@ router.beforeEach(async (to, from, next) => {
       const data = await response.json();
       userState.userType = data.user_type;
       userState.userId = data.user_id;
-      console.log(data, from, to);
       if (data.user_type === 'Admin') {
         if (to.path.startsWith('/admin') || to.path === '/profile') {
           next();
@@ -129,6 +128,7 @@ router.beforeEach(async (to, from, next) => {
         }
       }
       else {
+        localStorage.removeItem('token');
         if (to.path === '/login') {
           next();
         }
@@ -139,6 +139,7 @@ router.beforeEach(async (to, from, next) => {
     }
     catch (error) {
       console.error(error);
+      localStorage.removeItem('token');
       if (to.path === '/login') {
         next();
       }
