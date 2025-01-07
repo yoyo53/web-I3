@@ -29,7 +29,7 @@
         },
         methods: {
             async fetchAllTemplates(){
-                const response = await fetch('http://localhost:3000/admin/templates');
+                const response = await fetch(`${import.meta.env.VITE_API_URL}admin/templates`);	
                 this.templates = await response.json();
                 console.log(this.templates);
             },

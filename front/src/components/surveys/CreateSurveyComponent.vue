@@ -24,15 +24,21 @@
     <div v-for="(question, index) in questions" :key="index"
       class="mb-4 p-4 border-2 border-dashed border-transparent-hover rounded-lg">
       <label class="block text-sm font-medium text-gray-700 mb-2">Question {{ index + 1 }}</label>
-      <input type="text" v-model="question.text"
+
+      <div v-if="isEditable">
+      <p>{{ question.question_text}}</p>
+      </div>
+      <div v-else>
+      <input type="text" v-model="question.question_text"
         class="block w-full px-4 py-2 border rounded-md shadow-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 mb-2"
         placeholder="Enter question" />
+      </div>
       <!-- <div v-if="errors[`question_${question.id}`]" class="text-red-500 text-sm mt-1">
         {{ errors[`question_${question.id}`] }}
       </div> -->
 
       <label class="block text-sm font-medium text-gray-700 mb-2">Response Type</label>
-      <select v-model="question.responseType"
+      <select v-model="question.question_type"
         class="block w-full px-4 py-2 border rounded-md shadow-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
         <option value="text">Text Input</option>
         <option value="stars">Star Rating (1-5)</option>
@@ -40,10 +46,10 @@
         <option value="checkbox">Checkbox</option>
       </select>
 
-      <RadioButton v-if="question.responseType === 'radio'" :question="question"
+      <RadioButton v-if="question.question_type === 'radio'" :question="question" :isEditable="isEditable"
         @update-options="updateOptions" />
 
-      <CheckBox v-if="question.responseType === 'checkbox'" :question="question"
+      <CheckBox v-if="question.question_type === 'checkbox'" :question="question" :isEditable="isEditable"
         @update-options="updateOptions" />
     </div>
 
@@ -71,8 +77,11 @@ import searchBar from '../searchBar.vue';
 export default {
   data() {
     return {
+      isEditable: {
+      type: Boolean,
+      default: false,
+    },
       templateName: '',
-      //id: 0,
       questions: [],
       errors: {},
     };
@@ -83,9 +92,12 @@ export default {
     searchBar,
   },
   methods: {
+    modifyForm() {
+      this.isEditable = !this.isEditable;
+    },
     addQuestion() {
       //this.id += 1;
-      this.questions.push({ text: '', responseType: 'text', options: [] });
+      this.questions.push({ question_text: '', question_type: 'text', options: [] });
       console.log(this.questions);
     },
     updateOptions(question, options) {
@@ -103,7 +115,7 @@ export default {
 
       // Validation des questions
       this.questions.forEach((question) => {
-        if (question.responseType === 'text' && !question.text.trim()) {
+        if (question.question_type === 'text' && !question.text.trim()) {
           this.errors[`question_${question.id}`] = 'Question text is required.';
           isValid = false;
         }
@@ -114,13 +126,22 @@ export default {
     handleTemplateSelected(template) {
       this.templateName = template.name;
       console.log(template.name, template.survey_templateID);
-      this.getQuestionsFromTemplate(template.survey_templateID);
+      this.getTemplate(template.survey_templateID);
     },
-    async getQuestionsFromTemplate(templateID) {
+    async getTemplate(templateID) {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}admin/template/${templateID}`);
+        const response = await fetch(`${import.meta.env.VITE_API_URL}admin/templates/${templateID}`);
         //this.questions = response.data.questions;
         response.json().then((data) => {
+          //this.questions = 
+          // options: Array []
+          //     questionID: 14
+          //    question_text: "arnaud"
+          // question_type: Object { question_type: "text" }
+
+          // options: Array []
+          //question_type: "radio"
+          //text: "qzdqzd"
           console.log(data.questions);
           this.questions = data.questions;
         });

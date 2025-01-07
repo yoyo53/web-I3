@@ -20,7 +20,7 @@
     export default{
         methods: {
             openTemplate(template){
-                this.$router.push({ path: `/template/${template.survey_templateid}` });
+                this.$router.push({ path: `/template/${template.survey_templateID}` });
             }
         },
         components: {
