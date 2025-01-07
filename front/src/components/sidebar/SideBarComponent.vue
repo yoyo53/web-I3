@@ -2,7 +2,7 @@
     <aside id="default-sidebar" class="top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
         <div class="h-full px-3 py-8 overflow-y-auto bg-gray-50 dark:bg-gray-800">
             <ul class="space-y-4 font-medium h-full flex flex-col">
-                <TabComponent :img="ProfileSVG" text="Profile" :to="{ name: 'admin' }"/>
+                <TabComponent :img="ProfileSVG" text="Profile" :to="{ name: 'profile' }"/>
                 <TabComponent :img="surveySVG" text="Surveys" :to="getSurveyRoute"/>
                 <TabComponent v-if="userState.userType === 'Admin'" :img="templateSVG" text="Template" :to="{ name: 'templates' }"/>
                 <TabComponent :img="logoutSVG" text="Logout" :to="{ name: 'login'}" textStyle="text-red-500 font-semibold" class="!mt-auto" :click="logout"/>

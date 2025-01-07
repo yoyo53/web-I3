@@ -45,6 +45,11 @@ const router = createRouter({
       path: '/admin/templates/create',
       name: 'createTemplate',
       component: () => import('../views/CreateTemplateView.vue'),
+    },
+    {
+      path: '/profile',
+      name: 'profile',
+      component: () => import('../views/ProfileView.vue'),
     }
   ],
 })
@@ -74,7 +79,7 @@ router.beforeEach(async (to, from, next) => {
       userState.userId = data.user_id;
       console.log(data, from, to);
       if (data.user_type === 'Admin') {
-        if (to.path.startsWith('/admin')) {
+        if (to.path.startsWith('/admin') || to.path === '/profile') {
           next();
         }
         else {
@@ -82,7 +87,7 @@ router.beforeEach(async (to, from, next) => {
         }
       }
       else if (data.user_type === 'Teacher') {
-        if (to.path.startsWith('/teacher')) {
+        if (to.path.startsWith('/teacher') || to.path === '/profile') {
           next();
         }
         else {
@@ -90,7 +95,7 @@ router.beforeEach(async (to, from, next) => {
         }
       }
       else if (data.user_type === 'Student') {
-        if (to.path.startsWith('/student')) {
+        if (to.path.startsWith('/student') || to.path === '/profile') {
           next();
         }
         else {

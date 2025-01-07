@@ -37,6 +37,8 @@ app.use('/admin', require('./routes/admin.js'));
 
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 
+app.use('/user', require('./routes/user.routes.js'));
+
 module.exports = {
   app,
 };
