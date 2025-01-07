@@ -34,7 +34,6 @@ export default {
             const type = localStorage.getItem('userType');
             if (type !== 'Student') {
                 this.$router.push('/login');
-                console.log('User type : ', type, 'is not a student');
             }
         }, 
         async fetchStudentName() {
@@ -46,7 +45,6 @@ export default {
                 }
             });
             const data = await response.json();
-            console.log(data);
             this.studentName = data[0].user.firstname + " " + data[0].user.lastname;
         }, 
         async fetchAllStudentSurveys() {
@@ -58,7 +56,7 @@ export default {
                 },
             });
             this.surveys = await response.json();
-            console.log(this.surveys);
+            console.log("surveys", this.surveys);
         }
     },
     beforeMount() {

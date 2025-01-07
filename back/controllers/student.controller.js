@@ -10,7 +10,7 @@ async function getStudentName(req, res) {
 }
 
 async function getStudentSurveys(req, res) {
-    const surveys = await studentQueries.getAllSurveys()
+    const surveys = await studentQueries.getAllSurveys(parseInt(req.user_id))
     if (surveys != null) {
         res.status(200).json(surveys);
     } else {

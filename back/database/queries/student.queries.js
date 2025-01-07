@@ -111,46 +111,60 @@ async function getStudentNameByID(id) {
     catch {return null}
 }
 
-async function getAllSurveys() {
+async function getAllSurveys(studentID) {
     try {
         const surveys = await prisma.surveys.findMany({
-            select: {
-                surveyid: true,
-                teachers: {
-                    select: {
-                        users: {
-                            select: {
-                                lastname: true,
-                                firstname: true
+            where: {
+                module: {
+                    group: {
+                        students: {
+                            some: {
+                                studentID: studentID
                             }
                         }
                     }
-                },
-                modules: {
+                }
+            },
+            select: {
+                surveyID: true,
+                module: {
                     select: {
-                        subjects: {
+                        subject: {
                             select: {
                                 name: true
                             }
                         },
-                        groups: {
+                        group: {
                             select: {
                                 name: true
+                            }
+                        },
+                        teacher: {
+                            select: {
+                                user: {
+                                    select: {
+                                        firstname: true,
+                                        lastname: true
+                                    }
+                                }
                             }
                         }
                     }
                 }
             }
         });
+
         return surveys.map(survey => ({
-            surveyid: survey.surveyid,
-            lastname: survey.teachers.users.lastname,
-            firstname: survey.teachers.users.firstname,
-            subject: survey.modules.subjects.name,
-            group: survey.modules.groups.name
+            surveyID: survey.surveyID,
+            subject: survey.module.subject.name,
+            group: survey.module.group.name,
+            firstname: survey.module.teacher.user.firstname,
+            lastname: survey.module.teacher.user.lastname
         }));
+    } catch (error) {
+        console.error(error);
+        return null;
     }
-    catch {return null}
 }
 
 module.exports = {
