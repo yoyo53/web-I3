@@ -1,5 +1,4 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
 import { inject } from 'vue';
 
 const router = createRouter({
@@ -8,7 +7,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: HomeView,
+      component: () => import('../views/HomeView.vue'),
     },
     {
       path: '/login',
@@ -61,19 +60,35 @@ const router = createRouter({
       path: '/profile',
       name: 'profile',
       component: () => import('../views/ProfileView.vue'),
-    }
+    },
+    {
+      path: '/404',
+      name: '404',
+      component: () => import('../views/404View.vue'),
+    },
+    {
+      path: '/about',
+      name: 'about',
+      component: () => import('../views/AboutView.vue'),
+    },
   ],
 })
 
 router.beforeEach(async (to, from, next) => {
-  const publicPages = ['/'];
+  const publicPages = ['/', '/404', '/about'];
   const authRequired = !publicPages.includes(to.path);
   const token = localStorage.getItem('token');
   const userState = inject('userState');
   userState.userType = null;
   userState.userId = null;
-  //localStorage.removeItem('token');
-  if (!authRequired) {
+  console.log(to.matched);
+  if (to.path === '/404') {
+    next();
+  }
+  else if (!to.matched.length) {
+    next('/404');
+  }
+  else if (!authRequired) {
     next();
   }
   else if (token) {

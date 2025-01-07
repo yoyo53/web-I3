@@ -16,7 +16,7 @@
             </p>
             <div class="flex flex-col mb-8 space-y-4 lg:mb-16 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4">
                 <RouterLink
-                    :to="{ name: 'home' }"
+                    :to="{ name: 'about' }"
                     class="inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center text-white bg-primary-hover rounded-lg hover:bg-primary-hover focus:ring-4 focus:ring-primary-hover :ring-primary-hover"
                 >
                     Learn more
