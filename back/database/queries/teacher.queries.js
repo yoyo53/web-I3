@@ -93,28 +93,18 @@ async function deleteTeacher(id) {
 
 async function getSurveysByTeacherID(id) {
     try {
-        const surveys = await prisma.findMany({
-            where: {teacherID: id},
+        const surveys = await prisma.surveys.findMany({
+            where: {module: {teacherID: id}},
             select: {
-            surveyid: true,
-            teachers: {
+            surveyID: true,
+            module: {
                 select: {
-                    users: {
-                        select: {
-                            lastname: true,
-                            firstname: true
-                        }
-                    }
-                }
-            },
-            modules: {
-                select: {
-                    subjects: {
+                    subject: {
                         select: {
                             name: true
                         }
                     },
-                    groups: {
+                    group: {
                         select: {
                             name: true
                         }
@@ -124,11 +114,9 @@ async function getSurveysByTeacherID(id) {
         }
     });
     return surveys.map(survey => ({
-        surveyid: survey.surveyid,
-        lastname: survey.teachers.users.lastname,
-        firstname: survey.teachers.users.firstname,
-        subject: survey.modules.subjects.name,
-        group: survey.modules.groups.name
+        surveyid: survey.surveyID,
+        subject: survey.module.subject.name,
+        group: survey.module.group.name
     }));
     } catch {
         return null;
