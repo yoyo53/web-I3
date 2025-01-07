@@ -51,11 +51,6 @@ const router = createRouter({
       component: () => import('../views/CreateSurveyView.vue'),
     },
     {
-      path: '/admin/templates/:id',
-      name: 'test',
-      component: () => import('../views/TestVue.vue'),
-    },
-    {
       props: true,
       path: '/profile',
       name: 'profile',
