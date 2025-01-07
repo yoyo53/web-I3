@@ -42,15 +42,13 @@
 
             <RadioButton 
                 v-if="question.question_type === 'radio'"
-                :questionId="question.id"
-                :radios="question.options"
+                :question="question"
                 @update-options="updateOptions"
             />
 
             <CheckBox 
                 v-if="question.question_type === 'checkbox'"
-                :questionId="question.id"
-                :checkboxes="question.options"
+                :question="question"
                 @update-options="updateOptions"
             />
         </div>
@@ -97,11 +95,12 @@
         this.questions.push({ id: this.id, question_text: '', question_type: 'text', options: [] });
         console.log(this.questions);
       },
-      updateOptions(questionId, options) {
-      const question = this.questions.find((q) => q.id === questionId);
-      if (question) {
-        question.options = options;
-      }
+      updateOptions(question, options) {
+      question.options = options; // Mettre à jour les options de la question
+      // const question = this.questions.find((q) => q.id === questionId);
+      // if (question) {
+      //   question.options = options;
+      // }
     },
     validateFields() {
       this.errors = {}; // Réinitialiser les erreurs

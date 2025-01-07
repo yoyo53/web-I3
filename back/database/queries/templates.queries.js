@@ -76,8 +76,9 @@ async function createSurveyTemplate(name, questions) {
                             },
                             options: {
                                 // Connect to the options table with the option_text = option_text
-                                create: question.options.map(option => ({
-                                    option_text: option.option_text
+                                create: question.options.map((option, index) => ({
+                                    option_text: option.option_text,
+                                    optionID: index
                                 }))
                             }
                         }))

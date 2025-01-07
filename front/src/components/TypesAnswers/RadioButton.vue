@@ -7,19 +7,19 @@
                     <!-- Radio button -->
                     <input type="radio" v-model="selectedRadio" :id="'radio-' + index" :value="index"
                         class="h-4 w-4 rounded-full border-gray-300 text-primary focus:ring-primary" />
-                        <div v-if="isEditable">{{ checkbox.option_text }}</div>
+                        <div v-if="!isEditable">{{ checkbox.option_text }}</div>
                     <input v-else type="text" v-model="radio.option_text" :placeholder="'Enter name for radio button ' + (index + 1)"
                         class="block w-full rounded-md border-0 py-1.5 pl-2 text-primary-blue-color shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-0 focus:ring-inset focus:ring-primary sm:text-sm/6" 
                         required
                         />
-                    <button @click="removeRadio(index)" type="button"
+                    <button v-if="isEditable" @click="removeRadio(index)" type="button"
                         class="py-2.5 px-6 text-sm rounded-lg bg-red-50 text-red-500 cursor-pointer font-semibold text-center shadow-xs transition-all duration-300 hover:bg-red-100 hover:text-red-700">
                         Remove
                     </button>
                 </div>
             </div>
 
-            <div class="mt-6">
+            <div v-if="isEditable" class="mt-6">
                 <button @click="addRadio"
                     class="flex w-full justify-center rounded-md bg-primary px-3 py-1.5 text-sm/6 font-semibold text-[white] shadow-sm hover:bg-primary-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-colors duration-150">
                     Add Radio Button
