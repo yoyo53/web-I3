@@ -1,8 +1,9 @@
 const adminQueries = require('../database/queries/admin.queries');
+const surveyQueries = require('../database/queries/surveys.queries');
 const templateQueries = require('../database/queries/templates.queries');
 
 async function getAdminSurveys(req, res) {
-    const surveys = await adminQueries.getAllSurveys()
+    const surveys = await surveyQueries.getAllSurveys()
     if (surveys != null) {
         res.status(200).json(surveys);
     } else {
@@ -39,10 +40,19 @@ async function getTemplateByID(req, res) {
     }
 }
 
+async function getAllModules(req, res) {
+    const module = await adminQueries.getAllModules();
+    if (module != null) {
+        res.status(200).json(module);
+    } else {
+        res.status(500).send('Error while fetching this module');
+    }
+}
 
 module.exports = {
     getAdminSurveys,
     getSurveyTemplates,
     createTemplate,
-    getTemplateByID
+    getTemplateByID,
+    getAllModules
 };

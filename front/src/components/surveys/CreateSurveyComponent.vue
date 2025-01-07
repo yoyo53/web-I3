@@ -12,7 +12,8 @@
         {{ errors.templateName }}
       </div>
       <div class="flex justify-between items-center">
-        <searchBar class="py-2" @template-selected="handleTemplateSelected"/>
+        <searchBarTemplate class="py-2" @template-selected="handleTemplateSelected"/>
+        <searchBarModule class="py-2" @module-selected="handleModuleSelected"/>
         <button @click="modifyForm" class="ml-4 py-2 px-4 bg-primary font-semibold text-white rounded-md shadow-md hover:bg-primary-hover transition duration-300
               ">
           Modify Form
@@ -72,7 +73,8 @@
 import RadioButton from '@/components/TypesAnswers/RadioButton.vue';
 import CheckBox from '@/components/TypesAnswers/CheckBox.vue';
 
-import searchBar from '../searchBar.vue';
+import searchBarTemplate from '../searchBarTemplate.vue';
+import searchBarModule from '../searchBarModule.vue';
 
 export default {
   data() {
@@ -89,7 +91,8 @@ export default {
   components: {
     RadioButton,
     CheckBox,
-    searchBar,
+    searchBarTemplate,
+    searchBarModule
   },
   methods: {
     modifyForm() {
@@ -128,6 +131,9 @@ export default {
       this.templateName = template.name;
       console.log(template.name, template.survey_templateID);
       this.getTemplate(template.survey_templateID);
+    },
+    handleModuleSelected(module) {
+      console.log(module);
     },
     async getTemplate(templateID) {
       try {

@@ -98,4 +98,14 @@ router.get('/templates/:id', (req, res) => {
   controller.getTemplateByID(req, res);
 });
 
+
+/**
+ * @swagger
+ * /admin/modules:
+  *   get:  
+ */
+router.get('/modules', (req, res) => {
+  controller.getAllModules(req, res);
+});
+
 module.exports = router;
