@@ -55,6 +55,8 @@ const router = createRouter({
       path: '/admin/templates/:id',
       name: 'test',
       component: () => import('../views/TestVue.vue'),
+    },
+    {
       props: true,
       path: '/profile',
       name: 'profile',

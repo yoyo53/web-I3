@@ -7,8 +7,8 @@
           class="flex items-center justify-between gap-4">
           <input type="checkbox" v-model="checkbox.checked" :id="'checkbox-' + index"
             class="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary" />
-          <div v-if="!isEditable">{{ checkbox.option_text }}</div>
-          <input v-else type="text" v-model="checkbox.option_text" :placeholder="'Enter name for checkbox ' + (index + 1)"
+          <input type="text" v-model="checkbox.option_text" :placeholder="'Enter name for checkbox ' + (index + 1)"
+            :disabled="!isEditable"
             class="block w-full rounded-md border-0 py-1.5 pl-2 text-primary-blue-color shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-0 focus:ring-inset focus:ring-primary sm:text-sm/6" 
             required
             />

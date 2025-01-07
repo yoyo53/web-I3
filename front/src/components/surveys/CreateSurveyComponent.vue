@@ -25,11 +25,9 @@
       class="mb-4 p-4 border-2 border-dashed border-transparent-hover rounded-lg">
       <label class="block text-sm font-medium text-gray-700 mb-2">Question {{ index + 1 }}</label>
 
-      <div v-if="isEditable">
-      <p>{{ question.question_text}}</p>
-      </div>
-      <div v-else>
+      <div>
       <input type="text" v-model="question.question_text"
+      :disabled="isEditable"
         class="block w-full px-4 py-2 border rounded-md shadow-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 mb-2"
         placeholder="Enter question" />
       </div>
