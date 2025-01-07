@@ -52,15 +52,17 @@
     </div>
 
     <!-- Add Question Button -->
-    <button @click="addQuestion" :disabled="!isEditable"
+    <div v-if="isEditable">
+    <button @click="addQuestion"
       class="w-full py-2 px-4 bg-primary font-semibold text-[white] rounded-md shadow-md hover:bg-primary-hover transition duration-300">
       Add Question
     </button>
+    </div>
 
     <!-- Submit Form Button -->
-    <button @click="submitTemplate"
+    <button @click="submitSurvey"
       class="mt-4 w-full py-2 px-4 bg-transparent font-semibold text-[primary] rounded-md shadow-md hover:bg-transparent-hover transition duration-300">
-      Submit Template
+      Publish Survey
     </button>
 
   </form>
@@ -75,8 +77,11 @@ import searchBar from '../searchBar.vue';
 export default {
   data() {
     return {
-      isEditable: false,
+      modified: false,
+      isEditable: true,
       templateName: '',
+      questionsTemplateNotModified: [],
+      temlpateID: null,
       questions: [],
       errors: {},
     };
@@ -110,7 +115,7 @@ export default {
 
       // Validation des questions
       this.questions.forEach((question) => {
-        if (question.question_type === 'text' && !question.text.trim()) {
+        if (question.question_type === 'text' && !question.question_text.trim()) {
           this.errors[`question_${question.id}`] = 'Question text is required.';
           isValid = false;
         }
@@ -119,6 +124,7 @@ export default {
       return isValid;
     },
     handleTemplateSelected(template) {
+      this.isEditable = false;
       this.templateName = template.name;
       console.log(template.name, template.survey_templateID);
       this.getTemplate(template.survey_templateID);
@@ -126,30 +132,24 @@ export default {
     async getTemplate(templateID) {
       try {
         const response = await fetch(`${import.meta.env.VITE_API_URL}admin/templates/${templateID}`);
-        //this.questions = response.data.questions;
         response.json().then((data) => {
-          //this.questions = 
-          // options: Array []
-          //     questionID: 14
-          //    question_text: "arnaud"
-          // question_type: Object { question_type: "text" }
-
-          // options: Array []
-          //question_type: "radio"
-          //text: "qzdqzd"
-          console.log(data.questions);
+          console.log(data);
           this.questions = data.questions;
+          this.questionsTemplateNotModified = JSON.parse(JSON.stringify(data.questions));
         });
       } catch (error) {
         console.error(error);
       }
     },
-    submitTemplate() {
+    submitSurvey() {
       if (this.validateFields()) {
-        console.log({ 
-          templateName: this.templateName,
-          questions: this.questions,
-        });
+        console.log(this.questions);
+        console.log(this.questionsTemplateNotModified);
+        if (JSON.stringify(this.questionsTemplateNotModified) === JSON.stringify(this.questions)) {
+          console.log('No changes');
+        } else {
+          console.log('Changes detected');
+        }
       }
     },
   },

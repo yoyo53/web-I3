@@ -19,8 +19,8 @@ async function getSurveyTemplates(req, res) {
     }
 }
 
-async function createSurveyTemplate(req, res) {
-    const response = await templateQueries.createSurveyTemplate(req.body.name, req.body.questions)
+async function createTemplate(req, res) {
+    const response = await templateQueries.createTemplate(req.body.name, req.body.questions)
     if (response != null) {
         res.status(200).json(response);
     } else {
@@ -43,6 +43,6 @@ async function getTemplateByID(req, res) {
 module.exports = {
     getAdminSurveys,
     getSurveyTemplates,
-    createSurveyTemplate,
+    createTemplate,
     getTemplateByID
 };

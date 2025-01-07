@@ -53,7 +53,7 @@ async function getTemplateByID(templateID) {
 
 
 
-async function createSurveyTemplate(name, questions) {
+async function createTemplate(name, questions) {
     console.log(questions);
     questions.forEach(question => {
         delete question.id;
@@ -94,6 +94,6 @@ async function createSurveyTemplate(name, questions) {
 
 module.exports = {
     getAllTemplates,
-    createSurveyTemplate,
+    createTemplate,
     getTemplateByID
 };

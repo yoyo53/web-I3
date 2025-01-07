@@ -66,7 +66,7 @@ router.get('/templates', (req, res) => {
  *         description: Internal server error
  */
 router.post('/templates/create', (req, res) => {
-  controller.createSurveyTemplate(req, res);
+  controller.createTemplate(req, res);
 });
 
 /**
