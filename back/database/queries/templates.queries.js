@@ -1,4 +1,3 @@
-const { options } = require('../../routes/admin');
 const { prisma } = require('../db.connection');
 
 async function getAllTemplates() {
