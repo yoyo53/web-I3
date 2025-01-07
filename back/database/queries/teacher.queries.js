@@ -108,6 +108,16 @@ async function getSurveysByTeacherID(id) {
                         select: {
                             name: true
                         }
+                    },
+                    teacher: {
+                        select: {
+                            user: {
+                                select: {
+                                    firstname: true,
+                                    lastname: true
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -116,9 +126,12 @@ async function getSurveysByTeacherID(id) {
     return surveys.map(survey => ({
         surveyid: survey.surveyID,
         subject: survey.module.subject.name,
-        group: survey.module.group.name
+        group: survey.module.group.name,
+        firstname: survey.module.teacher.user.firstname,
+        lastname: survey.module.teacher.user.lastname
     }));
-    } catch {
+    } catch (error) {
+        console.error(error);
         return null;
     }
 }

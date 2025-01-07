@@ -43,6 +43,8 @@ app.use('/user', require('./routes/user.routes.js'));
 
 app.use('/teacher', require('./routes/teacher.routes.js'));
 
+app.use('/survey', require('./routes/survey.routes.js'));
+
 module.exports = {
   app,
 };
