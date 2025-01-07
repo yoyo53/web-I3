@@ -1,10 +1,19 @@
 <script>
+import HeaderComponent from '@/components/HeaderComponent.vue';
+import FooterComponent from '@/components/FooterComponent.vue';
+import { useToast } from 'vue-toastification';
+const toaster = useToast();
+
 export default {
 	data() {
 		return {
 			email: '',
 			password: ''
 		};
+	},
+	components: {
+		HeaderComponent,
+		FooterComponent
 	},
 	methods: {
 		async login() {
@@ -23,12 +32,17 @@ export default {
 				if (response.ok) {
 					// Handle successful login
 					console.log('Login successful:', data);
+					toaster.success('Login successful', {
+						position: 'top-center',
+						timeout: 5000,
+						pauseOnHover: false,
+						draggable: false
+					});
 					// Save the token to local storage
 					localStorage.setItem('token', data.token);
-					localStorage.setItem('userType', data.type);
 					// Redirect depending on user type
-					if (data.type === 'admin') {
-						this.$router.push('/Admin');
+					if (data.type === 'Admin') {
+						this.$router.push('/admin');
 					} else if (data.type === 'Teacher') {
 						this.$router.push('/teacher');
 					} else {
@@ -37,24 +51,37 @@ export default {
 				} else {
 					// Handle login error
 					console.error('Login failed:', data);
+					toaster.error('Incorrect email or password', {
+						position: 'top-center',
+						timeout: 5000,
+						pauseOnHover: false,
+						draggable: false
+					});
 				}
 			} catch (error) {
 				console.error('Error:', error);
+				toaster.error('An error occurred', {
+					position: 'top-center',
+					timeout: 5000,
+					pauseOnHover: false,
+					draggable: false
+				});
 			}
+		},
+		forgotPassword() {
+            toaster.info("That's sad 😭", {
+                position: "top-center",
+                timeout: 5000,
+                pauseOnHover: false,
+                draggable: false,
+            });
 		}
 	}
 };
 </script>
 
 <template>
-	<!--
-	  This example requires updating your template:
-  
-	  ```
-	  <html class="h-full bg-white">
-	  <body class="h-full">
-	  ```
-	-->
+	<HeaderComponent />
 	<div class="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
 	  <div class="sm:mx-auto sm:w-full sm:max-w-sm">
 		<img class="mx-auto h-20 w-auto" src="@/assets/logo.svg" alt="EFREI LOGO" />
@@ -74,7 +101,7 @@ export default {
 			<div class="flex items-center justify-between">
 			  <label for="password" class="block text-sm/6 font-medium text-gray-900">Password</label>
 			  <div class="text-sm">
-				<a href="#" class="font-semibold text-primar">Forgot password?</a>
+				<button type="button" @click="forgotPassword" href="#" class="font-semibold text-primar">Forgot password?</button>
 			  </div>
 			</div>
 			<div class="mt-2">
@@ -88,4 +115,5 @@ export default {
 		</form>
 	  </div>
 	</div>
+	<FooterComponent />
 </template>
