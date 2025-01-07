@@ -57,14 +57,14 @@ const router = createRouter({
       component: () => import('../views/ProfileView.vue'),
     },
     {
-      path: '/404',
-      name: '404',
-      component: () => import('../views/404View.vue'),
-    },
-    {
       path: '/about',
       name: 'about',
       component: () => import('../views/AboutView.vue'),
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      name: '404',
+      component: () => import('../views/404View.vue'),
     },
   ],
 })
@@ -76,12 +76,8 @@ router.beforeEach(async (to, from, next) => {
   const userState = inject('userState');
   userState.userType = null;
   userState.userId = null;
-  console.log(to.matched);
-  if (to.path === '/404') {
+  if (to.matched.some(route => route.name === '404')) {
     next();
-  }
-  else if (!to.matched.length) {
-    next('/404');
   }
   else if (!authRequired) {
     next();
