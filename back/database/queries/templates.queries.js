@@ -60,7 +60,7 @@ async function createTemplate(name, questions) {
     });
     // Questions is an array of objects, each object has a question_text, question_type and options wich is an array of objects with option_text
     try {
-        const surveyTemplate = await prisma.survey_templates.create({
+        const Template = await prisma.survey_templates.create({
             data: {
                 name: name,
                 questions: {
@@ -83,7 +83,7 @@ async function createTemplate(name, questions) {
                 }
             }
         });
-        return surveyTemplate;
+        return Template;
     }
     catch (error) {
         console.error(error);
