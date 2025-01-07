@@ -25,10 +25,9 @@ async function getUserData (req, res) {
     } else {
         user = await userQueries.getUserById(req.user_id);
         newUser = {
-            firstName: user.user.firstname,
-            lastName: user.user.lastname,
-            email: user.user.email,
-            id: user.userID
+            firstName: user.firstname,
+            lastName: user.lastname,
+            email: user.email,
         }
     }
     if (newUser !== null) {
