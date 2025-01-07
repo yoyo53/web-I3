@@ -3,8 +3,8 @@ const { prisma } = require('../db.connection');
 
 async function getAllTemplates() {
     try {
-        const query = await prisma.survey_templates.findMany();
-        return query.rows;
+        const AllTemplates = await prisma.survey_templates.findMany();
+        return AllTemplates;
     } catch { return null }
 }
 
@@ -46,7 +46,35 @@ async function createSurveyTemplate(name, questions) {
     }
 }
 
+async function getQuestionAndOptionsFromTemplateId(templateId) {
+    try {
+        const template = await prisma.survey_templates.findUnique({
+            where: {
+            survey_templateID: templateId
+            },
+            include: {
+            questions: {
+                select: {
+                questionID: true,
+                question_text: true,
+                options: true,
+                question_type: {
+                    select: {
+                    question_type: true
+                    }
+                }
+                }
+            }
+            }
+        });
+        return template;
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
+}
 module.exports = {
     getAllTemplates,
-    createSurveyTemplate
+    createSurveyTemplate,
+    getQuestionAndOptionsFromTemplateId
 };

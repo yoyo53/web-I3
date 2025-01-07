@@ -31,18 +31,20 @@
 <script>
 export default {
   props: {
-    questionId: {
-      type: Number,
+    question: {
+      type: Object,
       required: true,
-    },
-    radios: {
-      type: Array,
-      default: () => [{ option_text: "Default Option" }], // Option par défaut
-    },
+    }
+    // radios: {
+    //   type: Array,
+    //   default: () => [{ option_text: "Default Option" }], // Option par défaut
+    // },
   },
   data() {
     return {
-      localRadios: [...this.radios],
+      localRadios: this.question.options.length
+        ? [...this.question.options]
+        : [{ option_text: "Default Answer" }],// [...this.question.radios],
       selectedRadio: null, // Garde l'index de l'option sélectionnée
     };
   },
@@ -50,7 +52,7 @@ export default {
     localRadios: {
       deep: true,
       handler() {
-        this.$emit("update-options", this.questionId, this.localRadios);
+        this.$emit("update-options", this.question, this.localRadios);
       },
     },
   },

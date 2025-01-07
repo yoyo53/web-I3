@@ -32,18 +32,15 @@
 <script>
 export default {
   props: {
-    questionId: {
-      type: Number,
+    question: {
+      type: Object,
       required: true,
-    },
-    checkboxes: {
-      type: Array,
-    },
+    }
   },
   data() {
     return {
-      localCheckboxes: this.checkboxes.length
-        ? [...this.checkboxes]
+      localCheckboxes: this.question.options.length
+      ? [...this.question.options]
         : [{ option_text: "Default Answer", checked: false }],
     };
 },
@@ -51,7 +48,7 @@ export default {
     localCheckboxes: {
       deep: true,
       handler() {
-        this.$emit("update-options", this.questionId, this.localCheckboxes);
+        this.$emit("update-options", this.question, this.localCheckboxes);
       },
     },
   },

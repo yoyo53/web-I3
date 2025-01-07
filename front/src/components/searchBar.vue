@@ -19,11 +19,11 @@
         <ul class="max-h-48 overflow-y-auto">
           <li
             v-for="item in filteredItems"
-            :key="item"
+            :key="item.survey_templateID"
             @click="selectItem(item)"
             class="px-4 py-2 cursor-pointer hover:bg-gray-100"
           >
-            {{ item }}
+            {{ item.name }}
           </li>
           <li
             v-if="filteredItems.length === 0"
@@ -40,31 +40,30 @@
   export default {
     data() {
       return {
-        isOpen: false,  // Indicateur d'ouverture du menu
+        isOpen: false,  // Indicateur d'ouverture du menu        
         search: "",     // Valeur de recherche liée à l'input
         selected: null, // Option sélectionnée
-        items: [
-          "Option 1", 
-          "Option 2", 
-          "Option 3", 
-          "Autre option"
-        ], // Liste d'éléments disponibles
+        templates: [],  // Liste des templates on this format : [{survey_templateID: 1, name: "template1"}, {survey_templateID: 2, name: "template2"}]
       };
     },
     computed: {
       filteredItems() {
         // Filtre les éléments en fonction de la recherche
-        return this.items.filter(item =>
-          item.toLowerCase().includes(this.search.toLowerCase())
+        return this.templates.filter((item) =>
+          item.name.toLowerCase().includes(this.search.toLowerCase())
         );
       },
+    },
+    mounted() {
+    this.getallTemplates();
     },
     methods: {
       selectItem(item) {
         this.selected = item;
-        console.log("Option sélectionnée:", item);
-        this.search = item;  // Met à jour le champ de recherche avec l'élément sélectionné
+        //console.log("Option sélectionnée:", item);
+        this.search = item.name;  // Met à jour le champ de recherche avec l'élément sélectionné
         this.isOpen = false; // Ferme le menu
+        this.$emit('template-selected', item);
       },
       closeDropdown() {
         // Ferme le menu lorsque l'input perd le focus
@@ -72,11 +71,22 @@
           this.isOpen = false;
         }, 150); // Délai pour éviter de fermer trop tôt si un élément est sélectionné
       },
+      async getallTemplates() {
+      try {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}admin/templates`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            "Authorization": `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        const data = await response.json();
+        this.templates = data;
+        console.log(data);
+      } catch (error) {
+        console.error(error);
+      }
+    },
     },
   };
   </script>
-  
-  <style scoped>
-  /* Vous pouvez ajouter des styles personnalisés ici si nécessaire */
-  </style>
-  
