@@ -39,6 +39,8 @@ app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 
 app.use('/user', require('./routes/user.routes.js'));
 
+app.use('/teacher', require('./routes/teacher.routes.js'));
+
 module.exports = {
   app,
 };
