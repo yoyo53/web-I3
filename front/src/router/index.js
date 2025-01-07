@@ -67,10 +67,16 @@ const router = createRouter({
       component: () => import('../views/AboutView.vue'),
     },
     {
+      path: '/teacher/survey/:id',
+      name: 'teacher-survey',
+      component: () => import('../views/DetailedSurveyView.vue'),
+      props: true
+    },
+    {
       path: '/:pathMatch(.*)*',
       name: '404',
       component: () => import('../views/404View.vue'),
-    },
+    }
   ],
 })
 

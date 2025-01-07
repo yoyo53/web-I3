@@ -1,5 +1,5 @@
 <template>
-    <div class="flex">
+    <div class="flex space-x-4">
         <SideBarComponent />
         <div class="flex flex-col gap-y-4">
             <h1 class="text-2xl font-semibold text-gray-900">Surveys</h1>
@@ -27,7 +27,7 @@ import SurveysListComponent from '@/components/surveys/SurveysListComponent.vue'
         },
         methods: {
             async fetchAllSurveys(){
-                const response = await fetch('http://localhost:3000/teacher/surveys', {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}teacher/surveys`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
