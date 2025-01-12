@@ -1,10 +1,7 @@
 <script setup>
-    import HeaderComponent from "@/components/HeaderComponent.vue";
-    import FooterComponent from "@/components/FooterComponent.vue";
 </script>
 
 <template>
-    <HeaderComponent />
     <section class="bg-white">
         <div class="max-w-screen-xl px-4 py-8 mx-auto text-center lg:py-16 lg:px-12">
             <h1 class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl">
@@ -139,5 +136,4 @@
             </div>
         </div>
     </section>
-    <FooterComponent />
 </template>

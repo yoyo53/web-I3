@@ -1,8 +1,5 @@
 <template>
   <div class="flex min-h-screen">
-    <!-- Barre latérale -->
-    <SideBarComponent />
-
     <!-- Contenu principal -->
     <div class="flex-grow p-6 bg-gray-50 overflow-auto">
       <!-- Titre et détails du sondage -->
@@ -34,7 +31,6 @@
 </template>
 
 <script>
-import SideBarComponent from '@/components/sidebar/SideBarComponent.vue';
 import SurveyAnswerComponent from '@/components/surveys/SurveyAnswerComponent.vue';
 import SurveyAnswerFormComponent from '@/components/surveys/SurveyAnswerFormComponent.vue';
 
@@ -48,7 +44,6 @@ export default {
   components: {
     SurveyAnswerComponent,
     SurveyAnswerFormComponent,
-    SideBarComponent,
   },
   name: 'DetailedSurveysComponent',
   props: {

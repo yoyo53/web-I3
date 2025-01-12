@@ -1,11 +1,10 @@
 <template>
-    <HeaderComponent />
     <div className="bg-white py-12 flex flex-col gap-y-10">
         <div className="mx-auto flex flex-col max-w-7xl gap-x-8 gap-y-6 px-6 lg:px-8">
-            <h2 className="max-w-2xl text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl mx-auto">
+            <h2 className="text-center max-w-2xl text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl mx-auto">
                 The story behind TeachPoint
             </h2>
-            <p className="text-lg leading-8 text-gray-600 text-justify max-w-3xl">
+            <p className="text-lg leading-8 text-gray-600 text-justify max-w-3xl mx-auto">
                 Welcome to TeachPoint, the only place where the red pen is firmly in the hands of the students! Forget
                 apples and polite head nods—this is your chance to give your teachers the real feedback they didn’t ask
                 for.<br /><br />
@@ -21,7 +20,7 @@
                 consider this your syllabus for self-improvement… or just a reality check.
             </p>
         </div>
-        <div className="mx-auto flex flex-col max-w-7xl gap-x-8 gap-y-6 px-6 lg:px-8">
+        <div className="mx-auto flex flex-col max-w-7xl gap-x-8 gap-y-6 px-6 lg:px-8 mt-5">
             <h2 className="max-w-2xl text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl mx-auto">
                 Meet our team
             </h2>
@@ -40,12 +39,9 @@
             </ul>
         </div>
     </div>
-    <FooterComponent />
 </template>
 
 <script>
-    import HeaderComponent from "@/components/HeaderComponent.vue";
-    import FooterComponent from "@/components/FooterComponent.vue";
     import avatarHugo from "@/assets/avatar-hugo.jpg";
     import avatarYohan from "@/assets/avatar-yohan.jpg";
     import avatarLucas from "@/assets/avatar-lucas.jpg";
@@ -84,10 +80,6 @@
                     },
                 ],
             };
-        },
-        components: {
-            HeaderComponent,
-            FooterComponent,
         },
     };
 </script>
