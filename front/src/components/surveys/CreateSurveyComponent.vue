@@ -2,9 +2,6 @@
   <form>
     <!-- Survey Name -->
     <div class="mb-6">
-      <p id="survey-name" class="block text-sm font-medium text-gray-700 mb-2">
-        Survey Name: <strong class="text-lg">{{ templateName + "-" + moduleName }}</strong>
-      </p>
       <div class="flex justify-between items-center">
         <searchBarTemplate class="py-2" @template-selected="handleTemplateSelected"/>
         <searchBarModule class="py-2" @module-selected="handleModuleSelected"/>
@@ -75,8 +72,6 @@ export default {
     return {
       modified: false,
       isEditable: true,
-      moduleName: '',
-      templateName: '',
       questionsTemplateNotModified: [],
       temlpateID: null,
       questions: [],
@@ -117,12 +112,10 @@ export default {
     },
     handleTemplateSelected(template) {
       this.isEditable = false;
-      this.templateName = template.name;
       console.log(template.name, template.survey_templateID);
       this.getTemplate(template.survey_templateID);
     },
     handleModuleSelected(module) {
-      this.moduleName = module.name
       console.log(module);
     },
     async getTemplate(templateID) {
