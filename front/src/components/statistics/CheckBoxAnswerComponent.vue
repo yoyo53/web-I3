@@ -1,14 +1,15 @@
 <template>
     <div>
-        <Pie :data="chartData" :options="chartOptions" />
+        <Bar :data="chartData" :options="chartOptions" class="h-96"/>
     </div>
 
 </template>
 
 <script>
-import { Pie } from 'vue-chartjs';
-import { Chart, ArcElement, Tooltip, Legend } from 'chart.js';
-Chart.register(ArcElement, Tooltip, Legend);
+import { Bar } from 'vue-chartjs';
+import { Chart, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+
+Chart.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 export default {
     data() {
@@ -17,11 +18,12 @@ export default {
             chartOptions: {
                 responsive: true,
                 maintainAspectRatio: false,
+
             },
         };
     },
     components: {
-        Pie,
+        Bar,
     },
     props: {
         question: {
@@ -48,6 +50,8 @@ export default {
             labels: this.question.options.map((label) => label.option_text),
             datasets: [
                 {
+                    maxBarThickness: 80,
+                    minBarLength: 2,
                     label: 'Answers',
                     data: this.question.options.map((label) => count[label.option_text]),
                     backgroundColor: this.question.options.map(_ => "#" + ((1 << 24) * Math.random() | 0).toString(16).padStart(6, "0")),

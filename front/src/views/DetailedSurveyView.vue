@@ -19,8 +19,7 @@
           <!-- Composants de réponse selon le type d'utilisateur -->
           <SurveyAnswerComponent
             v-if="userState.userType === 'Teacher' || userState.userType === 'Admin'"
-            :answers="question.answers"
-            :question_type="question.question_type"
+            :question="question"
             class="mt-4"
           />
           <SurveyAnswerFormComponent

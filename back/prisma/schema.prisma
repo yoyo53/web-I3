@@ -116,11 +116,10 @@ model survey_answers {
 }
 
 model answer_questions {
+  answer_questionID Int             @id @default(autoincrement())
   survey_answerID Int
   questionID      Int
   answer_text     String
   question        questions      @relation(fields: [questionID], references: [questionID], onDelete: Cascade, onUpdate: NoAction)
   survey_answer   survey_answers @relation(fields: [survey_answerID], references: [survey_answerID], onDelete: Cascade, onUpdate: NoAction)
-
-  @@id([survey_answerID, questionID])
 }
