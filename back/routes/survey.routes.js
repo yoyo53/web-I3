@@ -6,4 +6,7 @@ const securityMiddleware = require('../middlewares/security.js')
 
 router.get('/:id', securityMiddleware.verifyToken, surveyController.getSurveyByID);
 
+router.post('/createfromtemplate', surveyController.createSurveyFromTemplate);
+router.post('/createfromnothing', surveyController.createSurveyFromNothing);
+
 module.exports = router;

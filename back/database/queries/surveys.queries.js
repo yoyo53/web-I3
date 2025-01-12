@@ -42,6 +42,31 @@ async function getAllSurveys() {
     catch {return null}
 }
 
+async function createSurveyFromTemplate(moduleID, survey_templateID) {
+    try {
+        console.log(moduleID, survey_templateID);
+        return await prisma.surveys.create({
+            data: {
+                module: {
+                    connect: {
+                        moduleID
+                    }
+                },
+                survey_template: {
+                    connect: {
+                        survey_templateID
+                    }
+                }
+            }
+        });
+    }
+    catch (e) {
+        console.log(e);
+        return null
+    }
+}
+
 module.exports = {
     getAllSurveys,
+    createSurveyFromTemplate
 };
