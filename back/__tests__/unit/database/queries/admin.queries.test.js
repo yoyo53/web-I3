@@ -25,36 +25,36 @@ describe("Check All surveys", () => {
   it("should return all surveys", async () => {
     const surveys = [
       {
-        surveyid: 1,
-        teachers: {
-          users: {
-            lastname: "Doe",
-            firstname: "John"
-          }
-        },
-        modules: {
-          subjects:{
+        surveyID: 1,
+        module: {
+          subject:{
             name: "Mathematics"
           },
-          groups:{
+          group:{
             name: "SE1"
-          }
+          },
+          teacher: {
+            user: {
+              lastname: "Doe",
+              firstname: "John"
+            }
+          },  
         }
       },
       {
-        surveyid: 2,
-        teachers: {
-          users: {
-            lastname: "Smith",
-            firstname: "John"
-          }
-        },
-        modules: {
-          subjects:{
+        surveyID: 2,
+        module: {
+          subject:{
             name: "Physics"
           },
-          groups:{
+          group:{
             name: "SE2"
+          },
+          teacher: {
+            user: {
+              lastname: "Smith",
+              firstname: "John"
+            }
           }
         }
       }
@@ -62,11 +62,11 @@ describe("Check All surveys", () => {
     prismaMock.surveys.findMany.mockResolvedValue(surveys);
     const response = await adminQueries.getAllSurveys();
     expect(response).toEqual(surveys.map(survey => ({
-      surveyid: survey.surveyid,
-      lastname: survey.teachers.users.lastname,
-      firstname: survey.teachers.users.firstname,
-      subject: survey.modules.subjects.name,
-      group: survey.modules.groups.name
+      surveyID: survey.surveyID,
+      lastname: survey.module.teacher.user.lastname,
+      firstname: survey.module.teacher.user.firstname,
+      subject: survey.module.subject.name,
+      group: survey.module.group.name
     })))
 
   });

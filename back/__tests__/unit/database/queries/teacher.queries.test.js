@@ -189,6 +189,12 @@ describe("Get teacher by user ID", () => {
         },
         group:{
           name: "A"
+        },
+        teacher:{
+          user:{
+            firstname: "John",
+            lastname: "Doe"
+          }
         }
       }
   };
@@ -198,7 +204,9 @@ describe("Get teacher by user ID", () => {
   expect(response).toEqual([{
     surveyid: survey.surveyID,
     subject: survey.module.subject.name,
-    group: survey.module.group.name
+    group: survey.module.group.name,
+    firstname: survey.module.teacher.user.firstname,
+    lastname: survey.module.teacher.user.lastname
   }]);
   });
 
