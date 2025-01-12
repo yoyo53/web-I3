@@ -174,3 +174,43 @@ describe("Delete teacher", () => {
     expect(response).toBeNull();
   });
 });
+
+describe("Get teacher by user ID", () => {
+  it("should return teacher if teacher exists", async () => {
+    const survey = {
+
+      surveyID: 1,
+      moduleID: 1,
+      groupeID: 1,
+      module:{
+        teacherID: 1,
+        subject:{
+          name: "Mathematics"
+        },
+        group:{
+          name: "A"
+        }
+      }
+  };
+
+  prismaMock.surveys.findMany.mockResolvedValue([survey]);
+  const response = await teacherQueries.getSurveysByTeacherID(1);
+  expect(response).toEqual([{
+    surveyid: survey.surveyID,
+    subject: survey.module.subject.name,
+    group: survey.module.group.name
+  }]);
+  });
+
+  it("should return empty array if teacher does not exist", async () => {
+    prismaMock.surveys.findMany.mockResolvedValue([]);
+    const response = await teacherQueries.getSurveysByTeacherID(1);
+    expect(response).toEqual([]);
+  });
+
+  it("should return empty array if an error occurs", async () => {  
+    prismaMock.surveys.findMany.mockRejectedValue(new Error());
+    const response = await teacherQueries.getSurveysByTeacherID(1);
+    expect(response).toBeNull();
+  });
+});
