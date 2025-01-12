@@ -8,7 +8,7 @@ export default [
   pluginJs.configs.recommended,
   {plugins: {jest: pluginJest}},
   {files: ["**/*.js"], languageOptions: {sourceType: "commonjs"}},
-  {rules: {"no-unused-vars": "warn"}},
+  {rules: {"no-unused-vars": ["warn", { argsIgnorePattern: "^_" }]}},
   {languageOptions: { globals: { ...globals.node, ...globals.jest }}},
   pluginPrettier,
 ];
