@@ -23,4 +23,6 @@ const securityMiddleware = require('../middlewares/security')
  */
 router.get('/surveys', securityMiddleware.verifyToken, teacherController.getTeacherSurveys);
 
+router.get('/surveys/:id', securityMiddleware.verifyToken, teacherController.getSurveyByID);
+
 module.exports = router;

@@ -134,6 +134,103 @@ async function getSurveysByTeacherID(id) {
         console.error(error);
         return null;
     }
+
+}
+
+async function getSurveyByID(surveyID) {
+    try {
+        const result = await prisma.surveys.findUnique({
+            where: {
+                surveyID: parseInt(surveyID),
+            },
+            include: {
+                survey_template: {
+                    select: {
+                        name: true, // Nom du template (facultatif)
+                        questions: {
+                            select: {
+                                questionID: true, // Récupérer l'ID de la question
+                                question_text: true, // Texte de la question
+                                options: {
+                                    select: {
+                                        option_text: true, // Récupérer uniquement le texte des options
+                                    },
+                                },
+                                question_type: {
+                                    select: {
+                                        question_type: true, // Récupérer le type de question
+                                    },
+                                },
+                                answer_questions: {
+                                    select: {
+                                        survey_answerID: true,
+                                        answer_text: true, // Récupérer les réponses des étudiants
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+                module: {
+                    select: {
+                        subject: {
+                            select: {
+                                name: true, // Nom de la matière
+                            },
+                        },
+                        group: {
+                            select: {
+                                name: true, // Nom du groupe
+                            },
+                        },
+                        teacher: {
+                            select: {
+                                user: {
+                                    select: {
+                                        firstname: true,
+                                        lastname: true, // Prénom et nom du professeur
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        });
+
+        if (!result) {
+            console.error(`Survey with ID ${surveyID} not found.`);
+            return null;
+        }
+
+        // Transformer les données pour inclure les options et réponses comme objets JSON
+        const transformedData = {
+            surveyID: result.surveyID,
+            template_name: result.survey_template.name,
+            questions: result.survey_template.questions.map((question) => ({
+                questionID: question.questionID,
+                question_text: question.question_text,
+                question_type: question.question_type.question_type,
+                options: question.options.map((option) => ({
+                    option_text: option.option_text,
+                })),
+                answers: question.answer_questions.map((answer) => ({
+                    survey_answerID: answer.survey_answerID,
+                    answer_text: answer.answer_text,
+                })),
+            })),
+            subject: result.module.subject.name,
+            group: result.module.group.name,
+            teacher: {
+                firstname: result.module.teacher.user.firstname,
+                lastname: result.module.teacher.user.lastname,
+            },
+        };
+        return transformedData;
+    } catch (error) {
+        console.error('Error fetching survey by ID:', error);
+        return null;
+    }
 }
 
 module.exports = {
@@ -144,5 +241,6 @@ module.exports = {
     createTeacher,
     updateTeacher,
     deleteTeacher,
-    getSurveysByTeacherID
+    getSurveysByTeacherID,
+    getSurveyByID
 }
