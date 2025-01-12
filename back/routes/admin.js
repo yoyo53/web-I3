@@ -108,4 +108,7 @@ router.get('/modules', (req, res) => {
   controller.getAllModules(req, res);
 });
 
+router.post('/createfromtemplate', controller.createSurveyFromTemplate);
+router.post('/createfromnothing', controller.createSurveyFromNothing);
+
 module.exports = router;

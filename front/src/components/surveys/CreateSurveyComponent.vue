@@ -146,7 +146,7 @@ export default {
           console.log('No changes');
           console.log(this.moduleID);
           console.log(this.templateID);
-          const response = await fetch(`${import.meta.env.VITE_API_URL}survey/createfromtemplate`, {
+          const response = await fetch(`${import.meta.env.VITE_API_URL}admin/createfromtemplate`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -164,7 +164,7 @@ export default {
         } else {
           console.log('Changes detected');
           console.log(this.questions)
-          const response = await fetch(`${import.meta.env.VITE_API_URL}survey/createfromnothing`, {
+          const response = await fetch(`${import.meta.env.VITE_API_URL}admin/createfromnothing`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

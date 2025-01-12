@@ -1,9 +1,9 @@
 const adminQueries = require('../database/queries/admin.queries');
-const surveyQueries = require('../database/queries/surveys.queries');
 const templateQueries = require('../database/queries/templates.queries');
 
 async function getAdminSurveys(req, res) {
-    const surveys = await surveyQueries.getAllSurveys()
+    const surveys = await adminQueries.getAllSurveys()
+    console.log(surveys);
     if (surveys != null) {
         res.status(200).json(surveys);
     } else {
@@ -49,10 +49,46 @@ async function getAllModules(req, res) {
     }
 }
 
+async function createSurveyFromTemplate(req, res) {
+    const { moduleID, survey_templateID } = req.body;
+    const survey = await adminQueries.createSurveyFromTemplate(moduleID, survey_templateID);
+    if (survey !== null) {
+        res.status(200).json(survey);
+    } else {
+        res.status(500).send('Error');
+    }
+};
+
+async function createSurveyFromNothing(req, res) {
+    const { name, moduleID , questions} = req.body;
+    if (moduleID === undefined) {
+        res.status(400).send('moduleID is required');
+        return;
+    }
+    if (name === undefined) {
+        res.status(400).send('name is required');
+        return;
+    }
+    if (questions === undefined) {
+        res.status(400).send('questions is required');
+        return;
+    }
+    const template = await templateQueries.createTemplate(name, questions);
+    console.log(template.survey_templateID);
+    const survey = await adminQueries.createSurveyFromTemplate(moduleID, template.survey_templateID);
+    if (survey !== null) {
+        res.status(200).json(survey);
+    } else {
+        res.status(500).send('Error');
+    }
+}
+
 module.exports = {
     getAdminSurveys,
     getSurveyTemplates,
     createTemplate,
     getTemplateByID,
-    getAllModules
+    getAllModules,
+    createSurveyFromTemplate,
+    createSurveyFromNothing
 };

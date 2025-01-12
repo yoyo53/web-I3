@@ -1,60 +1,38 @@
 <template>
     <div>
-        <h1>Survey Answer Component</h1>
-        <form @submit.prevent="submitAnswer">
-            <div v-for="(question, index) in questions" :key="index">
-                <label :for="'question-' + index">{{ question }}</label>
-                <input type="text" :id="'question-' + index" v-model="answers[index]" />
-            </div>
-            <button type="submit">Submit</button>
-        </form>
+        <div v-if="question.question_type === 'radio'" class="min-w-0 flex-auto">
+            <RadioButtonAnswerComponent :question="question" />
+        </div>
+        <div v-else-if="question.question_type === 'checkbox'" class="min-w-0 flex-auto">
+            <CheckBoxAnswerComponent :question="question" />
+        </div>
+        <div v-else-if="question.question_type === 'score'" class="min-w-0 flex-auto">
+            <StarRatingAnswerComponent :question="question" />
+        </div>
+        <div v-else class="min-w-0 flex-auto">
+            <TextAnswerComponent :question="question" />
+        </div>
     </div>
 </template>
 
 <script>
+import RadioButtonAnswerComponent from '@/components/statistics/RadioButtonAnswerComponent.vue';
+import CheckBoxAnswerComponent from '@/components/statistics/CheckBoxAnswerComponent.vue';
+import StarRatingAnswerComponent from '@/components/statistics/StarRatingAnswerComponent.vue';
+import TextAnswerComponent from '@/components/statistics/TextAnswerComponent.vue';
+
 export default {
-    data() {
-        return {
-            questions: ["What is your name?", "How old are you?", "What is your favorite color?"],
-            answers: ["", "", ""]
-        };
+    props: {
+        question: {
+            type: Object,
+            required: true
+        },
     },
-    methods: {
-        submitAnswer() {
-            console.log("Submitted answers:", this.answers);
-            // Add your form submission logic here
-        }
+    components: {
+        RadioButtonAnswerComponent,
+        CheckBoxAnswerComponent,
+        StarRatingAnswerComponent,
+        TextAnswerComponent
     }
 };
 </script>
-
-<style scoped>
-h1 {
-    font-size: 24px;
-    margin-bottom: 20px;
-}
-
-form {
-    display: flex;
-    flex-direction: column;
-}
-
-div {
-    margin-bottom: 10px;
-}
-
-label {
-    margin-bottom: 5px;
-}
-
-input {
-    padding: 5px;
-    font-size: 16px;
-}
-
-button {
-    padding: 10px;
-    font-size: 16px;
-    cursor: pointer;
-}
-</style>
