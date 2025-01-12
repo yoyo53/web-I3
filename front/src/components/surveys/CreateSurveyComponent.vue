@@ -2,15 +2,9 @@
   <form>
     <!-- Survey Name -->
     <div class="mb-6">
-      <label for="template-name" class="block text-sm font-medium text-gray-700 mb-2">
-        Survey Name
-      </label>
-      <input type="text" id="template-name" v-model="templateName"
-        class="block w-full px-4 py-2 border rounded-md shadow-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-        placeholder="Enter template name" />
-      <div v-if="errors.templateName" class="text-red-500 text-sm mt-1">
-        {{ errors.templateName }}
-      </div>
+      <p id="survey-name" class="block text-sm font-medium text-gray-700 mb-2">
+        Survey Name: <strong class="text-lg">{{ templateName + "-" + moduleName }}</strong>
+      </p>
       <div class="flex justify-between items-center">
         <searchBarTemplate class="py-2" @template-selected="handleTemplateSelected"/>
         <searchBarModule class="py-2" @module-selected="handleModuleSelected"/>
@@ -81,6 +75,7 @@ export default {
     return {
       modified: false,
       isEditable: true,
+      moduleName: '',
       templateName: '',
       questionsTemplateNotModified: [],
       temlpateID: null,
@@ -110,12 +105,6 @@ export default {
       this.errors = {}; // Réinitialiser les erreurs
       let isValid = true;
 
-      // Validation du template name
-      if (!this.templateName.trim()) {
-        this.errors.templateName = 'Template name is required.';
-        isValid = false;
-      }
-
       // Validation des questions
       this.questions.forEach((question) => {
         if (question.question_type === 'text' && !question.question_text.trim()) {
@@ -133,6 +122,7 @@ export default {
       this.getTemplate(template.survey_templateID);
     },
     handleModuleSelected(module) {
+      this.moduleName = module.name
       console.log(module);
     },
     async getTemplate(templateID) {

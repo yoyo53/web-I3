@@ -23,7 +23,7 @@
             @click="selectItem(item)"
             class="px-4 py-2 cursor-pointer hover:bg-gray-100"
           >
-            {{ item.subject }} - {{ item.teacher_firstname }}
+            {{ item.subject + "-" + item.group + "-" + item.teacher_lastname }}
           </li>
           <li
             v-if="filteredItems.length === 0"
