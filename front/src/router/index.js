@@ -82,21 +82,24 @@ router.beforeEach(async (to, from, next) => {
     userState.userType = null;
     userState.userId = null;
     if (token) {
-      try {
-          const response = await fetch(import.meta.env.VITE_API_URL + "auth/verifyToken", {
-              method: "GET",
-              headers: {
-                  "Content-Type": "application/json",
-                  Authorization: "Bearer " + token,
-              },
-          });
-          const data = await response.json();
-          userState.userType = data.user_type;
-          userState.userId = data.user_id;
-      } catch (error) {
-          console.error(error);
-          window.localStorage.removeItem("token");
-      }
+        try {
+            const response = await fetch(import.meta.env.VITE_API_URL + "auth/verifyToken", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: "Bearer " + token,
+                },
+            });
+            if (!response.ok) {
+                throw new Error(response.statusText);
+            }
+            const data = await response.json();
+            userState.userType = data.user_type;
+            userState.userId = data.user_id;
+        } catch (error) {
+            console.error(error);
+            window.localStorage.removeItem("token");
+        }
     }
     if (to.matched.some((route) => route.name === "404")) {
         next();
