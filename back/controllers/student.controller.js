@@ -1,16 +1,7 @@
-const studentQueries = require('../database/queries/student.queries');
-
-async function getStudentName(req, res) {
-    const name = await studentQueries.getStudentNameByID(parseInt(req.user_id));
-    if (name != null) {
-        res.status(200).json(name);
-    } else {
-        res.status(500).send('Error while fetching student name');
-    }
-}
+const queries = require('../database/queries/student.queries.js');
 
 async function getStudentSurveys(req, res) {
-    const surveys = await studentQueries.getAllSurveys(parseInt(req.user_id))
+    const surveys = await queries.getSurveysByStudentID(req.user_id);
     if (surveys != null) {
         res.status(200).json(surveys);
     } else {
@@ -19,6 +10,5 @@ async function getStudentSurveys(req, res) {
 }
 
 module.exports = {
-    getStudentName,
     getStudentSurveys
 };

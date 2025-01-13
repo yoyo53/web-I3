@@ -93,35 +93,13 @@ async function deleteStudent(id) {
     catch {return null}
 }
 
-async function getStudentNameByID(id) {
-    try {
-        const query = await prisma.students.findMany({
-            where: {studentID: id},
-            select: {
-                user: {
-                    select: {
-                        firstname: true,
-                        lastname: true
-                    }
-                }
-            }
-        });
-        return query;
-    }
-    catch {return null}
-}
-
-async function getAllSurveys(studentID) {
+async function getSurveysByStudentID(id) {
     try {
         const surveys = await prisma.surveys.findMany({
             where: {
-                module: {
-                    group: {
-                        students: {
-                            some: {
-                                studentID: studentID
-                            }
-                        }
+                survey_answers: {
+                    some: {
+                        studentID: id
                     }
                 }
             },
@@ -153,9 +131,8 @@ async function getAllSurveys(studentID) {
                 }
             }
         });
-
         return surveys.map(survey => ({
-            surveyID: survey.surveyID,
+            surveyid: survey.surveyID,
             subject: survey.module.subject.name,
             group: survey.module.group.name,
             firstname: survey.module.teacher.user.firstname,
@@ -175,6 +152,5 @@ module.exports = {
     createStudent,
     updateStudent,
     deleteStudent, 
-    getStudentNameByID,
-    getAllSurveys
+    getSurveysByStudentID
 }
