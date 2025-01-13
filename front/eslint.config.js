@@ -10,7 +10,7 @@ export default [
   {files: ["**/*.{js,mjs,cjs,vue}"]},
   {ignores: ["**/dist/**"]},
   {files: ["**/*.js"], languageOptions: {sourceType: "module"}},
-  {rules: {"no-unused-vars": "warn"}},
+  {rules: {"no-unused-vars": ["warn", { argsIgnorePattern: "^_" }]}},
   {languageOptions: { globals: { ...globals.browser, ...globals.node }}},
   pluginPrettier,
 ];

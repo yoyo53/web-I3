@@ -1,6 +1,5 @@
 <template>
-    <div class="flex">
-        <SideBarComponent />
+    <div class="flex space-x-4">
         <div class="border-b border-gray-900/10 pb-12">
             <h2 class="text-base/7 font-semibold text-gray-900">Personal Information</h2>
             <p class="mt-1 text-sm/6 text-gray-600">Use a permanent address where you can receive mail.</p>
@@ -45,8 +44,6 @@
 </template>
 
 <script>
-import SideBarComponent from '@/components/sidebar/SideBarComponent.vue';
-
 export default {
     data() {
         return {
@@ -60,9 +57,6 @@ export default {
     },
     inject: ['userState'],
     name: 'ProfileView',
-    components: {
-        SideBarComponent
-    },
     methods: {
         async fetchUserData() {
             const token = localStorage.getItem('token');

@@ -2,21 +2,18 @@
   <form>
     <!-- Survey Name -->
     <div class="mb-6">
-      <label for="template-name" class="block text-sm font-medium text-gray-700 mb-2">
-        Survey Name
-      </label>
-      <input type="text" id="template-name" v-model="templateName"
-        class="block w-full px-4 py-2 border rounded-md shadow-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-        placeholder="Enter template name" />
-      <div v-if="errors.templateName" class="text-red-500 text-sm mt-1">
-        {{ errors.templateName }}
-      </div>
       <div class="flex justify-between items-center">
-        <searchBar class="py-2" @template-selected="handleTemplateSelected"/>
+        <searchBarTemplate class="py-2" @template-selected="handleTemplateSelected" />
+        <searchBarModule class="py-2" @module-selected="handleModuleSelected" />
         <button @click="modifyForm" class="ml-4 py-2 px-4 bg-primary font-semibold text-white rounded-md shadow-md hover:bg-primary-hover transition duration-300
               ">
           Modify Form
         </button>
+      </div>
+      <div v-if = "isEditable">
+        <input type="text" v-model="templateName"
+          class="block w-full px-4 py-2 border rounded-md shadow-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 mt-4"
+          placeholder="Enter Template name" />
       </div>
 
     </div>
@@ -26,20 +23,19 @@
       <label class="block text-sm font-medium text-gray-700 mb-2">Question {{ index + 1 }}</label>
 
       <div>
-      <input type="text" v-model="question.question_text"
-      :disabled="!isEditable"
-        class="block w-full px-4 py-2 border rounded-md shadow-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 mb-2"
-        placeholder="Enter question" />
+        <input type="text" v-model="question.question_text" :disabled="!isEditable"
+          class="block w-full px-4 py-2 border rounded-md shadow-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 mb-2"
+          placeholder="Enter question" />
       </div>
       <!-- <div v-if="errors[`question_${question.id}`]" class="text-red-500 text-sm mt-1">
         {{ errors[`question_${question.id}`] }}
       </div> -->
 
       <label class="block text-sm font-medium text-gray-700 mb-2">Response Type</label>
-      <select v-model="question.question_type" :disabled="!isEditable" 
+      <select v-model="question.question_type" :disabled="!isEditable"
         class="block w-full px-4 py-2 border rounded-md shadow-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
         <option value="text">Text Input</option>
-        <option value="stars">Star Rating (1-5)</option>
+        <option value="score">Star Rating (1-5)</option>
         <option value="radio">Radio Buttons</option>
         <option value="checkbox">Checkbox</option>
       </select>
@@ -52,15 +48,17 @@
     </div>
 
     <!-- Add Question Button -->
-    <button @click="addQuestion" :disabled="!isEditable"
-      class="w-full py-2 px-4 bg-primary font-semibold text-[white] rounded-md shadow-md hover:bg-primary-hover transition duration-300">
-      Add Question
-    </button>
+    <div v-if="isEditable">
+      <button @click="addQuestion"
+        class="w-full py-2 px-4 bg-primary font-semibold text-[white] rounded-md shadow-md hover:bg-primary-hover transition duration-300">
+        Add Question
+      </button>
+    </div>
 
     <!-- Submit Form Button -->
-    <button @click="submitTemplate"
+    <button @click="submitSurvey"
       class="mt-4 w-full py-2 px-4 bg-transparent font-semibold text-[primary] rounded-md shadow-md hover:bg-transparent-hover transition duration-300">
-      Submit Template
+      Publish Survey
     </button>
 
   </form>
@@ -70,21 +68,27 @@
 import RadioButton from '@/components/TypesAnswers/RadioButton.vue';
 import CheckBox from '@/components/TypesAnswers/CheckBox.vue';
 
-import searchBar from '../searchBar.vue';
+import searchBarTemplate from '../searchBarTemplate.vue';
+import searchBarModule from '../searchBarModule.vue';
 
 export default {
   data() {
     return {
-      isEditable: false,
-      templateName: '',
+      modified: false,
+      isEditable: true,
+      questionsTemplateNotModified: [],
+      templateID: null,
+      moduleID: null,
       questions: [],
       errors: {},
+      templateName: '',
     };
   },
   components: {
     RadioButton,
     CheckBox,
-    searchBar,
+    searchBarTemplate,
+    searchBarModule
   },
   methods: {
     modifyForm() {
@@ -102,15 +106,9 @@ export default {
       this.errors = {}; // Réinitialiser les erreurs
       let isValid = true;
 
-      // Validation du template name
-      if (!this.templateName.trim()) {
-        this.errors.templateName = 'Template name is required.';
-        isValid = false;
-      }
-
       // Validation des questions
       this.questions.forEach((question) => {
-        if (question.question_type === 'text' && !question.text.trim()) {
+        if (question.question_type === 'text' && !question.question_text.trim()) {
           this.errors[`question_${question.id}`] = 'Question text is required.';
           isValid = false;
         }
@@ -119,37 +117,70 @@ export default {
       return isValid;
     },
     handleTemplateSelected(template) {
-      this.templateName = template.name;
+      this.isEditable = false;
+      this.templateID = template.survey_templateID;
       console.log(template.name, template.survey_templateID);
       this.getTemplate(template.survey_templateID);
+    },
+    handleModuleSelected(module) {
+      console.log(module);
+      this.moduleID = module.moduleID;
     },
     async getTemplate(templateID) {
       try {
         const response = await fetch(`${import.meta.env.VITE_API_URL}admin/templates/${templateID}`);
-        //this.questions = response.data.questions;
         response.json().then((data) => {
-          //this.questions = 
-          // options: Array []
-          //     questionID: 14
-          //    question_text: "arnaud"
-          // question_type: Object { question_type: "text" }
-
-          // options: Array []
-          //question_type: "radio"
-          //text: "qzdqzd"
-          console.log(data.questions);
+          console.log(data);
           this.questions = data.questions;
+          this.questionsTemplateNotModified = JSON.parse(JSON.stringify(data.questions));
         });
       } catch (error) {
         console.error(error);
       }
     },
-    submitTemplate() {
+    async submitSurvey() {
       if (this.validateFields()) {
-        console.log({ 
-          templateName: this.templateName,
-          questions: this.questions,
-        });
+        console.log(this.questions);
+        console.log(this.questionsTemplateNotModified);
+        if (JSON.stringify(this.questionsTemplateNotModified) === JSON.stringify(this.questions)) {
+          console.log('No changes');
+          console.log(this.moduleID);
+          console.log(this.templateID);
+          const response = await fetch(`${import.meta.env.VITE_API_URL}admin/createfromtemplate`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              survey_templateID: this.templateID,
+              moduleID: this.moduleID,
+            }),
+          });
+          response.json().then((data) => {
+            console.log(data);
+            //this.questions = data.questions;
+            //this.questionsTemplateNotModified = JSON.parse(JSON.stringify(data.questions));
+          });
+        } else {
+          console.log('Changes detected');
+          console.log(this.questions)
+          const response = await fetch(`${import.meta.env.VITE_API_URL}admin/createfromnothing`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              name: this.templateName,
+              questions: this.questions,
+              moduleID: this.moduleID,
+            }),
+          });
+          response.json().then((data) => {
+            console.log(data);
+            //this.questions = data.questions;
+            //this.questionsTemplateNotModified = JSON.parse(JSON.stringify(data.questions));
+          });
+        }
       }
     },
   },

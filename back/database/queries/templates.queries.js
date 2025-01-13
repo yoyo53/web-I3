@@ -53,14 +53,14 @@ async function getTemplateByID(templateID) {
 
 
 
-async function createSurveyTemplate(name, questions) {
+async function createTemplate(name, questions) {
     console.log(questions);
     questions.forEach(question => {
         delete question.id;
     });
     // Questions is an array of objects, each object has a question_text, question_type and options wich is an array of objects with option_text
     try {
-        const surveyTemplate = await prisma.survey_templates.create({
+        const Template = await prisma.survey_templates.create({
             data: {
                 name: name,
                 questions: {
@@ -83,7 +83,7 @@ async function createSurveyTemplate(name, questions) {
                 }
             }
         });
-        return surveyTemplate;
+        return Template;
     }
     catch (error) {
         console.error(error);
@@ -94,6 +94,6 @@ async function createSurveyTemplate(name, questions) {
 
 module.exports = {
     getAllTemplates,
-    createSurveyTemplate,
+    createTemplate,
     getTemplateByID
 };

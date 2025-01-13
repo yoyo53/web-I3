@@ -1,6 +1,6 @@
 <template>
     <footer class="p-4 bg-white sm:p-6">
-        <div class="max-w-screen-xl mx-auto">
+        <div class="mx-auto">
             <div class="md:flex md:justify-between">
                 <div class="mb-6 md:mb-0">
                     <RouterLink :to="{ name: 'home' }" class="flex items-center">
@@ -13,10 +13,10 @@
                         <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase">Follow us</h2>
                         <ul class="text-gray-600">
                             <li class="mb-4">
-                                <a href="https://github.com/yoyo53/web-I3" class="hover:underline">Github</a>
+                                <RouterLink :to="{ name: 'about' }" class="hover:underline">About Us</RouterLink>
                             </li>
                             <li>
-                                <a href="https://github.com/yoyo53/web-I3" class="hover:underline">Discord</a>
+                                <a href="https://github.com/yoyo53/web-I3" class="hover:underline">Github</a>
                             </li>
                         </ul>
                     </div>
@@ -42,7 +42,7 @@
                     </div>
                 </div>
             </div>
-            <hr class="my-6 border-gray-200 sm:mx-auto lg:my-8" />
+            <hr class="my-6 border-gray-200 sm:mx-auto" />
             <div class="sm:flex sm:items-center sm:justify-between">
                 <span class="text-sm text-gray-500 sm:text-center"
                     >© 2024 <RouterLink :to="{ name: 'home' }" class="hover:underline">TeachPoint™</RouterLink>. All

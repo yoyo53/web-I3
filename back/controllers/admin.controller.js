@@ -3,6 +3,7 @@ const templateQueries = require('../database/queries/templates.queries');
 
 async function getAdminSurveys(req, res) {
     const surveys = await adminQueries.getAllSurveys()
+    console.log(surveys);
     if (surveys != null) {
         res.status(200).json(surveys);
     } else {
@@ -19,8 +20,8 @@ async function getSurveyTemplates(req, res) {
     }
 }
 
-async function createSurveyTemplate(req, res) {
-    const response = await templateQueries.createSurveyTemplate(req.body.name, req.body.questions)
+async function createTemplate(req, res) {
+    const response = await templateQueries.createTemplate(req.body.name, req.body.questions)
     if (response != null) {
         res.status(200).json(response);
     } else {
@@ -39,10 +40,55 @@ async function getTemplateByID(req, res) {
     }
 }
 
+async function getAllModules(req, res) {
+    const module = await adminQueries.getAllModules();
+    if (module != null) {
+        res.status(200).json(module);
+    } else {
+        res.status(500).send('Error while fetching this module');
+    }
+}
+
+async function createSurveyFromTemplate(req, res) {
+    const { moduleID, survey_templateID } = req.body;
+    const survey = await adminQueries.createSurveyFromTemplate(moduleID, survey_templateID);
+    if (survey !== null) {
+        res.status(200).json(survey);
+    } else {
+        res.status(500).send('Error');
+    }
+};
+
+async function createSurveyFromNothing(req, res) {
+    const { name, moduleID , questions} = req.body;
+    if (moduleID === undefined) {
+        res.status(400).send('moduleID is required');
+        return;
+    }
+    if (name === undefined) {
+        res.status(400).send('name is required');
+        return;
+    }
+    if (questions === undefined) {
+        res.status(400).send('questions is required');
+        return;
+    }
+    const template = await templateQueries.createTemplate(name, questions);
+    console.log(template.survey_templateID);
+    const survey = await adminQueries.createSurveyFromTemplate(moduleID, template.survey_templateID);
+    if (survey !== null) {
+        res.status(200).json(survey);
+    } else {
+        res.status(500).send('Error');
+    }
+}
 
 module.exports = {
     getAdminSurveys,
     getSurveyTemplates,
-    createSurveyTemplate,
-    getTemplateByID
+    createTemplate,
+    getTemplateByID,
+    getAllModules,
+    createSurveyFromTemplate,
+    createSurveyFromNothing
 };

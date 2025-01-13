@@ -66,7 +66,7 @@ router.get('/templates', (req, res) => {
  *         description: Internal server error
  */
 router.post('/templates/create', (req, res) => {
-  controller.createSurveyTemplate(req, res);
+  controller.createTemplate(req, res);
 });
 
 /**
@@ -97,5 +97,18 @@ router.post('/templates/create', (req, res) => {
 router.get('/templates/:id', (req, res) => {
   controller.getTemplateByID(req, res);
 });
+
+
+/**
+ * @swagger
+ * /admin/modules:
+  *   get:  
+ */
+router.get('/modules', (req, res) => {
+  controller.getAllModules(req, res);
+});
+
+router.post('/createfromtemplate', controller.createSurveyFromTemplate);
+router.post('/createfromnothing', controller.createSurveyFromNothing);
 
 module.exports = router;

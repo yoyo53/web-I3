@@ -7,5 +7,5 @@ test('Page', () => {
     props: {
     }
   })
-  page.getAllByText('TeachPoint')
+  page.getAllByText('TeachPoint. Teacher grading made easy')
 })

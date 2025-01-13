@@ -9,6 +9,16 @@ async function getTeacherSurveys (req, res) {
     }
   };
 
+async function getSurveyByID (req, res) {
+      const survey = await queries.getSurveyByID(req.params.id);
+      if (survey !== null) {
+          res.status(200).json(survey);
+      } else {
+          res.status(500).send('Error');
+      }
+};
+
 module.exports = {
-    getTeacherSurveys
+    getTeacherSurveys,
+    getSurveyByID,
 };
