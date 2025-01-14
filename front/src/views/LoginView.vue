@@ -23,11 +23,15 @@
                             password: this.password,
                         }),
                     });
-                    const data = await response.json();
-                    if (response.ok) {
-                        toaster.success("Login successful");
+
+                    if (response.status === 400) {
+                        toaster.error("Incorrect email or password");
+                    } else if (!response.ok) {
+                        throw new Error(response.statusText);
+                    } else {
+                        const data = await response.json();
                         localStorage.setItem("token", data.token);
-                        console.log(data);
+                        toaster.success("Login successful");
                         if (data.type === "Admin") {
                             this.$router.push({ name: "admin" });
                         } else if (data.type === "Teacher") {
@@ -35,12 +39,10 @@
                         } else {
                             this.$router.push({ name: "student" });
                         }
-                    } else {
-                        toaster.error("Incorrect email or password");
                     }
                 } catch (error) {
                     console.error(error);
-                    toaster.error("An error occurred");
+                    toaster.error("Something went wrong");
                 }
             },
             forgotPassword() {

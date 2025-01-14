@@ -1,3 +1,56 @@
+<script>
+    import { useToast } from "vue-toastification";
+    const toaster = useToast();
+
+    export default {
+        data() {
+            return {
+                email: "",
+                firstName: "",
+                lastName: "",
+                accountNumber: "",
+                accountType: "Student",
+            };
+        },
+        methods: {
+            async registerUser() {
+                try {
+                    const response = await fetch(`${import.meta.env.VITE_API_URL}auth/register`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${localStorage.getItem("token")}`,
+                        },
+                        body: JSON.stringify({
+                            email: this.email,
+                            firstName: this.firstName,
+                            lastName: this.lastName,
+                            accountNumber: this.accountNumber,
+                            accountType: this.accountType,
+                        }),
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(response.statusText);
+                    }
+                    else {
+                        toaster.success("Account created successfully");
+                    }
+                } catch (error) {
+                    console.error(error);
+                    toaster.error("Something went wrong");
+                }
+            },
+            toggleAccountType() {
+                this.accountType = this.accountType === "Student" ? "Teacher" : "Student";
+            },
+            validateAccountNumber() {
+                this.accountNumber = this.accountNumber.replace(/\D/g, "");
+            },
+        },
+    };
+</script>
+
 <template>
     <div class="flex flex-col justify-center">
         <section class="mx-auto w-full my-8 p-6 md:max-w-md">
@@ -92,56 +145,4 @@
     </div>
 </template>
 
-<script>
-    export default {
-        data() {
-            return {
-                email: "",
-                firstName: "",
-                lastName: "",
-                accountNumber: "",
-                accountType: "Student", // Default account type
-            };
-        },
-        methods: {
-            async registerUser() {
-                try {
-                    const response = await fetch(`${import.meta.env.VITE_API_URL}auth/register`, {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                            Authorization: `Bearer ${localStorage.getItem("token")}`,
-                        },
-                        body: JSON.stringify({
-                            email: this.email,
-                            firstName: this.firstName,
-                            lastName: this.lastName,
-                            accountNumber: this.accountNumber,
-                            accountType: this.accountType,
-                        }),
-                    });
-
-                    if (!response.ok) {
-                        throw new Error("Network response was not ok");
-                    }
-
-                    const data = await response.json();
-                    alert("Registration successful!");
-                    console.log(data);
-                    console.log(this.email, this.firstName, this.lastName, this.accountNumber, this.accountType);
-                } catch (error) {
-                    console.error("There was a problem with the registration:", error);
-                    alert("Registration failed. Please try again.");
-                }
-            },
-            toggleAccountType() {
-                this.accountType = this.accountType === "Student" ? "Teacher" : "Student";
-                console.log("Account type changed to:", this.accountType);
-            },
-            validateAccountNumber() {
-                // Ensure only digits are entered
-                this.accountNumber = this.accountNumber.replace(/\D/g, "");
-            },
-        },
-    };
-</script>
+<style></style>

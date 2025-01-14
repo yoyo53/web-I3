@@ -1,5 +1,7 @@
-
 <script>
+    import { useToast } from "vue-toastification";
+    const toaster = useToast();
+
     export default {
         name: "ProfileView",
         inject: ["userState"],
@@ -15,13 +17,17 @@
         },
         methods: {
             async fetchUserData() {
-                const token = localStorage.getItem("token");
-                const response = await fetch(`${import.meta.env.VITE_API_URL}user/data`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-                this.user = await response.json();
+                try {
+                    const response = await fetch(`${import.meta.env.VITE_API_URL}user/data`, {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem("token")}`,
+                        },
+                    });
+                    this.user = await response.json();
+                } catch (error) {
+                    console.error(error);
+                    toaster.error("Something went wrong");
+                }
             },
         },
         async beforeMount() {
@@ -83,10 +89,7 @@
                 </div>
 
                 <div v-if="userState.userType !== 'Admin'" class="sm:col-span-4">
-                    <label
-                        v-if="userState.userType === 'Teacher'"
-                        for="user-id"
-                        class="block text-sm/6 font-medium"
+                    <label v-if="userState.userType === 'Teacher'" for="user-id" class="block text-sm/6 font-medium"
                         >Teacher ID</label
                     >
                     <label
