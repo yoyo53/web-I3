@@ -79,7 +79,7 @@
 
         <div
             v-if="isOpen"
-            class="absolute z-10 w-full mt-1 px-2 py-2 rounded-md bg-white border border-neutral-300 shadow-sm placeholder-neutral-500"
+            class="absolute z-10 w-full mt-1 px-2 py-2 rounded-md bg-white border border-neutral-300 shadow-sm placeholder-neutral-400"
         >
             <ul class="max-h-48 px-1 overflow-y-auto">
                 <li

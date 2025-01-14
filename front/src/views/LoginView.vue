@@ -69,8 +69,9 @@
                                 type="email"
                                 v-model="email"
                                 autocomplete="email"
+                                placeholder="john.doe@email.com"
                                 required
-                                class="block w-full rounded-md px-3 py-1.5 shadow-sm border border-gray-300 sm:text-sm/6 focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-efrei-blue-700"
+                                class="block w-full rounded-md px-3 py-1.5 shadow-sm border border-gray-300 sm:text-sm/6 focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-efrei-blue-700 placeholder-neutral-400"
                             />
                         </div>
                     </div>
@@ -95,8 +96,9 @@
                                 type="password"
                                 v-model="password"
                                 autocomplete="current-password"
+                                placeholder="********"
                                 required
-                                class="block w-full rounded-md px-3 py-1.5 shadow-sm border border-gray-300 sm:text-sm/6 focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-efrei-blue-700"
+                                class="block w-full rounded-md px-3 py-1.5 shadow-sm border border-gray-300 sm:text-sm/6 focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-efrei-blue-700 placeholder-neutral-400"
                             />
                         </div>
                     </div>
@@ -104,7 +106,7 @@
                     <div>
                         <button
                             type="submit"
-                            class="flex w-full justify-center rounded-md px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm bg-efrei-blue-500 hover:bg-efrei-blue-950 focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-efrei-blue-700"
+                            class="w-full rounded-md px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm bg-efrei-blue-500 hover:bg-efrei-blue-950 focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-efrei-blue-700"
                         >
                             Sign in
                         </button>

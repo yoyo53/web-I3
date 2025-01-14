@@ -47,7 +47,7 @@
                             id="first-name"
                             autocomplete="given-name"
                             :placeholder="user.firstName"
-                            class="block w-full rounded-md bg-white px-3 py-1.5 text-sm/6 border border-neutral-300 placeholder:text-neutral-500 cursor-not-allowed"
+                            class="block w-full rounded-md bg-white px-3 py-1.5 text-sm/6 border border-neutral-300 placeholder-neutral-400 cursor-not-allowed"
                         />
                     </div>
                 </div>
@@ -62,7 +62,7 @@
                             id="last-name"
                             autocomplete="family-name"
                             :placeholder="user.lastName"
-                            class="block w-full rounded-md bg-white px-3 py-1.5 text-sm/6 border border-neutral-300 placeholder:text-neutral-500 cursor-not-allowed"
+                            class="block w-full rounded-md bg-white px-3 py-1.5 text-sm/6 border border-neutral-300 placeholder-neutral-400 cursor-not-allowed"
                         />
                     </div>
                 </div>
@@ -77,7 +77,7 @@
                             type="email"
                             autocomplete="email"
                             :placeholder="user.email"
-                            class="block w-full rounded-md bg-white px-3 py-1.5 text-sm/6 border border-neutral-300 placeholder:text-neutral-500 cursor-not-allowed"
+                            class="block w-full rounded-md bg-white px-3 py-1.5 text-sm/6 border border-neutral-300 placeholder-neutral-400 cursor-not-allowed"
                         />
                     </div>
                 </div>
@@ -103,7 +103,7 @@
                             type="text"
                             autocomplete="off"
                             :placeholder="user.id"
-                            class="block w-full rounded-md bg-white px-3 py-1.5 text-sm/6 border border-neutral-300 placeholder:text-neutral-500 cursor-not-allowed"
+                            class="block w-full rounded-md bg-white px-3 py-1.5 text-sm/6 border border-neutral-300 placeholder-neutral-400 cursor-not-allowed"
                         />
                     </div>
                 </div>
