@@ -2,13 +2,29 @@
     <div class="survey-answer-form">
         <h1>Survey Answer Form</h1>
         <form @submit.prevent="submitForm">
-            <div class="form-group">
-                <label for="question1">Question 1:</label>
-                <input type="text" id="question1" v-model="answers.question1" required />
-            </div>
-            <div class="form-group">
-                <label for="question2">Question 2:</label>
-                <input type="text" id="question2" v-model="answers.question2" required />
+            <div v-for="question in question" :key="question.questionID" class="mb-4">
+                <label :for="'question-' + question.questionID">{{ question.question_text }}</label>
+                <div v-if="question.question_type === 'text'">
+                    <input type="text" :id="'question-' + question.questionID" v-model="answers[question.questionID]" class="block w-full px-4 py-2 border rounded-md shadow-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                </div>
+                <div v-else-if="question.question_type === 'radio'">
+                    <div v-for="option in question.options" :key="option.option_text">
+                        <input type="radio" :id="'question-' + question.questionID + '-' + option.option_text" :name="'question-' + question.questionID" :value="option.option_text" v-model="answers[question.questionID]" />
+                        <label :for="'question-' + question.questionID + '-' + option.option_text">{{ option.option_text }}</label>
+                    </div>
+                </div>
+                <div v-else-if="question.question_type === 'checkbox'">
+                    <div v-for="option in question.options" :key="option.option_text">
+                        <input type="checkbox" :id="'question-' + question.questionID + '-' + option.option_text" :value="option.option_text" v-model="answers[question.questionID]" />
+                        <label :for="'question-' + question.questionID + '-' + option.option_text">{{ option.option_text }}</label>
+                    </div>
+                </div>
+                <div v-else-if="question.question_type === 'score'">
+                    <div v-for="score in [1, 2, 3, 4, 5]" :key="score">
+                        <input type="radio" :id="'question-' + question.questionID + '-' + score" :name="'question-' + question.questionID" :value="score" v-model="answers[question.questionID]" />
+                        <label :for="'question-' + question.questionID + '-' + score">{{ score }}</label>
+                    </div>
+                </div>
             </div>
             <button type="submit">Submit</button>
         </form>
@@ -18,16 +34,19 @@
 <script>
 export default {
     name: 'SurveyAnswerFormComponent',
+    props: {
+        question: {
+            type: Object,
+            required: true
+        }, 
+    },
     data() {
         return {
-            answers: {
-                question1: '',
-                question2: ''
-            }
+            answers: {}
         };
     },
     methods: {
-        submitForm() {
+        async submitForm() {
             console.log('Form submitted with answers:', this.answers);
             // Add your form submission logic here
         }
