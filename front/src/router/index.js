@@ -23,12 +23,12 @@ const router = createRouter({
         {
             path: "/teacher",
             name: "teacher",
-            component: () => import("../views/TeacherView.vue"),
+            component: () => import("../views/SurveysListView.vue"),
         },
         {
             path: "/admin",
             name: "admin",
-            component: () => import("../views/AdminView.vue"),
+            component: () => import("../views/SurveysListView.vue"),
         },
         {
             path: "/admin/templates",
@@ -83,7 +83,7 @@ const router = createRouter({
         {
           path: "/student",
           name: "student",
-          component: () => import("../views/StudentView.vue"),
+          component: () => import("../views/SurveysListView.vue"),
         }, 
         {
           path: "/student/survey/:id",
