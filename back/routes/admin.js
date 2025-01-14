@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const controller = require('../controllers/admin.controller');
-const securityMiddleware = require('../middlewares/security')
 
 
 /**
@@ -26,7 +25,7 @@ router.get('/surveys', (req, res) => {
   controller.getAdminSurveys(req, res); 
 });
 
-router.get('/surveys/:id', securityMiddleware.verifyToken, controller.getSurveyByID);
+router.get('/surveys/:id', controller.getSurveyByID);
 
 /**
  * @swagger

@@ -3,6 +3,8 @@ const { json } = require("express");
 const cors = require("cors");
 const swaggerUi = require("swagger-ui-express");
 const swaggerSpecs = require('./swagger');
+const securityMiddleware = require('./middlewares/security');
+const adminAccess = require('./middlewares/adminAccess');
 
 const app = express();
 
@@ -33,13 +35,13 @@ app.get("/", (req, res) => {
 
 app.use("/auth", require("./routes/auth.routes"));
 
-app.use('/admin', require('./routes/admin.js'));
+app.use('/admin', adminAccess.adminToken, require('./routes/admin.js'));
 
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 
-app.use('/user', require('./routes/user.routes.js'));
+app.use('/user', securityMiddleware.verifyToken, require('./routes/user.routes.js'));
 
-app.use('/teacher', require('./routes/teacher.routes.js'));
+app.use('/teacher', securityMiddleware.verifyToken, require('./routes/teacher.routes.js'));
 
 module.exports = {
   app,
