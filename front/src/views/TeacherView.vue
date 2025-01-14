@@ -32,7 +32,6 @@ import SurveysListComponent from '@/components/surveys/SurveysListComponent.vue'
                     }
                 });
                 this.surveys = await response.json();
-                console.log(this.surveys);
             }
         },
         beforeMount(){

@@ -6,6 +6,7 @@
                 No surveys yet
             </div>
             <SurveysListComponent :surveys="surveys"/>
+
         </div>
     </div>
 </template>
@@ -24,8 +25,15 @@
         },
         methods: {
             async fetchAllSurveys(){
-                const response = await fetch('http://localhost:3000/admin');
+                const response = await fetch(`${import.meta.env.VITE_API_URL}admin/surveys`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    }
+                });
                 this.surveys = await response.json();
+                console.log(this.surveys);
             }
         },
         beforeMount(){

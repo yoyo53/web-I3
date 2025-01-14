@@ -7,18 +7,9 @@
           :key="survey.id" 
           class="border border-gray-300 rounded-lg p-4 bg-gray-50 transition-transform duration-200 ease-in-out hover:bg-gray-100 hover:-translate-y-1 hover:shadow-md cursor-pointer"
           >
-          <router-link 
-          v-if="userState.userType === 'Student'" 
-          :to="{ name: 'student-survey', params: { id: survey.surveyid } }"
-        >
-          <SurveyComponent :survey="survey" />
-        </router-link>
-        <router-link 
-          v-else-if="userState.userType === 'Teacher'" 
-          :to="{ name: 'teacher-survey', params: { id: survey.surveyid } }"
-        >
-          <SurveyComponent :survey="survey" />
-        </router-link> 
+          <router-link :to="{ name: routeToSurvey(), params: { id: survey.surveyID } }">
+            <SurveyComponent :survey="survey" />
+          </router-link>  
         </li>
       </ul>
     </div>
@@ -27,17 +18,27 @@
 <script>
     import SurveyComponent from '@/components/surveys/SurveyComponent.vue';
     export default{
+        inject: ['userState'],
         components: {
             SurveyComponent,
-        }, 
-        inject: ['userState'],
+        },
         props: {
         surveys: {
             type: Array,
             required: true,
         },
-        
-    },
+      },
+      methods: {
+            routeToSurvey(){
+              if (this.userState.userType === 'Teacher') {
+                return 'teacherSurveys';
+              } else if (this.userState.userType === 'Admin') {
+                return 'adminSurveys';
+              } else {
+                return 'studentSurveys';
+              }
+            }
+        },
     }
 
 </script>
