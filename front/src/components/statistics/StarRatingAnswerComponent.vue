@@ -1,17 +1,29 @@
 <template>
-    
-    <div>
-        <Bar :data="chartData" :options="chartOptions" class="!h-96"/>
-        <div class="flex justify-center items-center mt-4">
-            <p class="font-bold text-3xl text-center">Mean: {{ mean }}</p>
+    <div class="space-y-8"> 
+      <div>
+        <Bar :data="chartData" :options="chartOptions" class="!h-96" />
+      </div>
+      <div v-if="userState.userType === 'Admin'" class="flex flex-col items-center">
+        <div class="w-48 flex justify-center">
+            <button
+                @click="toggleDetails"
+                class="w-36 text-white bg-primary-hover hover:bg-primary-hover focus:ring-4 focus:ring-primary-hover font-medium rounded-lg text-sm px-4 py-2 mr-2 focus:outline-none"
+            >
+                {{ showDetails ? 'Close Details' : 'View Details' }}
+            </button>
         </div>
+  
+        <div v-if="showDetails" class="mt-8 w-full max-w-3xl mx-auto">
+          <TextAnswerComponent :question="question" />
+        </div>
+      </div>
     </div>
-
-</template>
+  </template>
 
 <script>
 import { Bar } from 'vue-chartjs';
 import { Chart, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import TextAnswerComponent from '@/components/statistics/TextAnswerComponent.vue';
 
 Chart.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
@@ -20,6 +32,7 @@ export default {
         return {
             mean: 0,
             chartData: {},
+            showDetails: false,
             chartOptions: {
                 responsive: true,
                 maintainAspectRatio: false,
@@ -27,8 +40,10 @@ export default {
             },
         };
     },
+    inject: ['userState'],
     components: {
         Bar,
+        TextAnswerComponent,
     },
     props: {
         question: {
@@ -54,6 +69,9 @@ export default {
                 sum += parseInt(answer.answer_text);
             });
             return sum / this.question.answers.length;
+        },
+        toggleDetails(){
+            this.showDetails = !this.showDetails;
         }
     },
     beforeMount(){

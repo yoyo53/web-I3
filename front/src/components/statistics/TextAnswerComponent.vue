@@ -1,6 +1,6 @@
 <template>
     <div class="max-w-3xl mx-auto p-4">
-        <!-- Réponses filtrées et paginées -->
+        <!-- Affichage des réponses -->
         <div 
             v-for="(answer, index) in filteredAndPaginatedAnswers" 
             :key="index" 
@@ -17,8 +17,8 @@
             </div>
         </div>
 
-        <!-- Contrôles de pagination -->
-        <div class="flex justify-center items-center mt-6 space-x-4">
+        <!-- Pagination -->
+        <div v-if="filteredAnswers.length > 0" class="flex justify-center items-center mt-6 space-x-4">
             <button 
                 class="px-6 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition duration-300 disabled:bg-gray-300 disabled:cursor-not-allowed" 
                 :disabled="currentPage === 1" 
@@ -36,6 +36,11 @@
             >
                 Next
             </button>
+        </div>
+
+        <!-- Message si aucune réponse -->
+        <div v-else class="text-center text-gray-500 text-lg mt-8">
+            No answers available
         </div>
     </div>
 </template>
@@ -75,7 +80,6 @@ export default {
         },
     },
     beforeMount() {
-        // Détermine le rôle de l'utilisateur
         this.isTeacher = this.userState.userType === 'Teacher';
     },
 };
