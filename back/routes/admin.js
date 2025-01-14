@@ -201,7 +201,7 @@ router.post('/createfromnothing', controller.createSurveyFromNothing);
 
 
 
-router.delete('/deleteTemplate/:id', controller.deleteTemplateByID);
+router.delete('/template/:id', controller.deleteTemplateByID);
 
 
 module.exports = router;
