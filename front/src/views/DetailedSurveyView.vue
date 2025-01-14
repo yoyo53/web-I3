@@ -1,7 +1,7 @@
 <template>
   <div class="flex">
     <!-- Contenu principal -->
-    <div class="flex-grow p-6 bg-gray-50 overflow-auto">
+    <div class="flex-grow p-6 bg-gray-50">
       <!-- Titre et détails du sondage -->
       <div class="bg-white shadow rounded-lg p-6 mb-6">
         <h1 class="text-2xl font-semibold text-gray-800 mb-4"> {{ survey.subject }}-{{ survey.group }}</h1>
