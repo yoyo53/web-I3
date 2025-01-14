@@ -40,126 +40,6 @@ const router = createRouter({
       component: () => import('../views/TemplateDetailView.vue'),
       props: true,
     }, */
-<<<<<<< HEAD
-    {
-      path: '/admin/templates/create',
-      name: 'createTemplate',
-      component: () => import('../views/CreateTemplateView.vue'),
-    },
-    {
-      path: '/admin/surveys/create',
-      name: 'createSurvey',
-      component: () => import('../views/CreateSurveyView.vue'),
-    },
-    {
-      props: true,
-      path: '/profile',
-      name: 'profile',
-      component: () => import('../views/ProfileView.vue'),
-    },
-    { 
-      path: '/student',
-      name: 'student',
-      component: () => import('../views/StudentView.vue'),
-    },
-    {
-      path: '/about',
-      name: 'about',
-      component: () => import('../views/AboutView.vue'),
-    },
-    {
-      path: '/teacher/survey/:id',
-      name: 'teacher-survey',
-      component: () => import('../views/DetailedSurveyView.vue'),
-      props: true
-    },
-    {
-      path: '/:pathMatch(.*)*',
-      name: '404',
-      component: () => import('../views/404View.vue'),
-    }
-  ],
-})
-
-router.beforeEach(async (to, from, next) => {
-  const publicPages = ['/', '/404', '/about'];
-  const authRequired = !publicPages.includes(to.path);
-  const token = localStorage.getItem('token');
-  const userState = inject('userState');
-  userState.userType = null;
-  userState.userId = null;
-  if (to.matched.some(route => route.name === '404')) {
-    next();
-  }
-  else if (!authRequired) {
-    next();
-  }
-  else if (token) {
-    try {
-      const response = await fetch(import.meta.env.VITE_API_URL + 'auth/verifyToken', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + token
-        }
-      });
-      const data = await response.json();
-      userState.userType = data.user_type;
-      userState.userId = data.user_id;
-      if (data.user_type === 'Admin') {
-        if (to.path.startsWith('/admin') || to.path === '/profile') {
-          next();
-        }
-        else {
-          next('/admin');
-        }
-      }
-      else if (data.user_type === 'Teacher') {
-        if (to.path.startsWith('/teacher') || to.path === '/profile') {
-          next();
-        }
-        else {
-          next('/teacher');
-        }
-      }
-      else if (data.user_type === 'Student') {
-        if (to.path.startsWith('/student') || to.path === '/profile') {
-          next();
-        }
-        else {
-          next('/student');
-        }
-      }
-      else {
-        localStorage.removeItem('token');
-        if (to.path === '/login') {
-          next();
-        }
-        else {
-          next('/login');
-        }
-      }
-    }
-    catch (error) {
-      console.error(error);
-      localStorage.removeItem('token');
-      if (to.path === '/login') {
-        next();
-      }
-      else {
-        next('/login');
-      }
-    }
-  }
-  else {
-    if (to.path === '/login') {
-      next();
-    }
-    else {
-      next('/login');
-    }
-  }
-=======
         {
             path: "/admin/templates/create",
             name: "createTemplate",
@@ -188,12 +68,22 @@ router.beforeEach(async (to, from, next) => {
             props: true,
         },
         {
+          path: "/student",
+          name: "student",
+          component: () => import("../views/StudentView.vue"),
+        }, 
+        {
+          path: "/student/survey/:id",
+          name: "student-survey",
+          component: () => import("../views/DetailedSurveyView.vue"),
+          props: true,
+        }, 
+        {
             path: "/:pathMatch(.*)*",
             name: "404",
             component: () => import("../views/404View.vue"),
         },
     ],
->>>>>>> main
 });
 
 router.beforeEach(async (to, from, next) => {
