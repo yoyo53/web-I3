@@ -9,6 +9,8 @@ const swaggerJsdoc = require("swagger-jsdoc");
  *     description: Admin routes
  *   - name: Teacher
  *     description: Teacher routes
+ *   - name: Student
+ *     description: Student routes
  * 
  * components:
  *   schemas:
