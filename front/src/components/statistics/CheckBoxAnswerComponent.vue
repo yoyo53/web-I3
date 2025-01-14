@@ -37,6 +37,11 @@
         chartOptions: {
           responsive: true,
           maintainAspectRatio: false,
+          plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
         },
         showDetails: false,
       };
