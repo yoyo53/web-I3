@@ -51,6 +51,7 @@ export default {
         ? [...this.question.options]
         : [{ option_text: "Default Answer" }],// [...this.question.radios],
       selectedRadio: null, // Garde l'index de l'option sélectionnée
+      selectedTextRadio: null, // Garde le texte de l'option sélectionnée
     };
   },
   watch: {
@@ -59,6 +60,10 @@ export default {
       handler() {
         this.$emit("update-options", this.question, this.localRadios);
       },
+    },
+    selectedRadio() {
+      this.selectedTextRadio = this.localRadios[this.selectedRadio].option_text;
+      this.$emit("selected-radio", [this.selectedTextRadio], this.question);
     },
   },
   methods: {

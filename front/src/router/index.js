@@ -80,6 +80,17 @@ const router = createRouter({
             props: true,
         },
         {
+          path: "/student",
+          name: "student",
+          component: () => import("../views/StudentView.vue"),
+        }, 
+        {
+          path: "/student/survey/:id",
+          name: "student-survey",
+          component: () => import("../views/DetailedSurveyView.vue"),
+          props: true,
+        }, 
+        {
             path: "/:pathMatch(.*)*",
             name: "404",
             component: () => import("../views/404View.vue"),
