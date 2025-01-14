@@ -174,7 +174,6 @@ async function getSurveyByID(surveyID) {
             return null;
         }
 
-        // Transformer les données pour inclure les options et réponses comme objets JSON
         const transformedData = {
             surveyID: result.surveyID,
             template_name: result.survey_template.name,

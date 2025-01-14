@@ -9,7 +9,10 @@
             <div class="ml-4 flex-grow">
                 <p class="text-lg font-medium text-gray-800">{{ answer.answer_text }}</p>
             </div>
-            <div class="text-sm text-gray-400">
+            <div v-if="userState.userType === 'Admin'">
+                {{ answer.student.firstname }} {{ answer.student.lastname }}
+            </div>
+            <div v-else class="text-sm text-gray-400">
                 Answer #{{ index + 1 }}
             </div>
         </div>

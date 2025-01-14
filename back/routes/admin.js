@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const controller = require('../controllers/admin.controller');
+const securityMiddleware = require('../middlewares/security')
+
 
 /**
  * @swagger
@@ -20,9 +22,11 @@ const controller = require('../controllers/admin.controller');
  *       500:
  *         description: Error while fetching surveys
  */
-router.get('/', (req, res) => {
+router.get('/surveys', (req, res) => {
   controller.getAdminSurveys(req, res); 
 });
+
+router.get('/surveys/:id', securityMiddleware.verifyToken, controller.getSurveyByID);
 
 /**
  * @swagger

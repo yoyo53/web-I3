@@ -62,8 +62,20 @@ const router = createRouter({
             component: () => import("../views/AboutView.vue"),
         },
         {
+            path: "/admin/survey/:id",
+            name: "adminSurveys",
+            component: () => import("../views/DetailedSurveyView.vue"),
+            props: true,
+        },
+        {
             path: "/teacher/survey/:id",
-            name: "teacher-survey",
+            name: "teacherSurveys",
+            component: () => import("../views/DetailedSurveyView.vue"),
+            props: true,
+        },
+        {
+            path: "/student/survey/:id",
+            name: "studentSurveys",
             component: () => import("../views/DetailedSurveyView.vue"),
             props: true,
         },
