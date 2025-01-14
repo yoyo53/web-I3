@@ -152,7 +152,7 @@ async function getSurveysByStudentID(student_id) {
 
 async function getSurveyByID(surveyID) {
     try {
-        console.log(surveyID);
+        // console.log(surveyID);
         const result = await prisma.surveys.findUnique({
             where: {
                 surveyID: parseInt(surveyID),
@@ -269,7 +269,7 @@ async function answerToSurvey(surveyID, studentID, answers) {
                 }
             }
         });
-        console.log(survey);
+        // console.log(survey);
         if (!survey) {
             console.error(`Survey with ID ${surveyID} not found.`);
             return false;

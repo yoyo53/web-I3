@@ -65,6 +65,10 @@ export default {
             type: Object,
             required: true
         },
+        surveyID: {
+            type: Number,
+            required: true
+        }
     },
     data() {
         return {
@@ -77,6 +81,7 @@ export default {
             this.answers[question.questionID] = options;
         },
         async submitForm() {
+            console.log('Form submitted with answers:', this.questions);
             console.log('Form submitted with answers:', this.answers);
             // Add your form submission logic here answertosurvey
             const response = await fetch(`${import.meta.env.VITE_API_URL}student/answertosurvey`, {
@@ -86,10 +91,12 @@ export default {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
                 },
                 body: JSON.stringify({
-                    surveyID: this.questions.surveyID,
+                    surveyID: this.surveyID,
                     answers: this.answers
                 })
             });
+            const data = await response.json();
+            console.log(data);
         }
     }
 };

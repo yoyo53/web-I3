@@ -21,11 +21,18 @@ async function getSurveyByID(req, res) {
 }
 
 async function answerToSurvey(req, res) {
-    const surveyID = 5; //req.params.surveyID;
+    const surveyID = req.body.surveyID;
     const studentID = req.user_id;
     const answers = req.body.answers;
 
+    console.log(surveyID);
+    console.log(studentID);
     console.log(answers);
+    // SurveyID, studentID, answers are required
+    if (!surveyID || !studentID || !answers) {
+        res.status(400).send('SurveyID, studentID, answers are required');
+        return;
+    }
 
     // res.status(200).send('Survey answered');
     const result = await queries.answerToSurvey(surveyID, studentID, answers);
