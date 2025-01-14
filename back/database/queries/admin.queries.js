@@ -173,6 +173,7 @@ async function getSurveyByID(surveyID) {
             console.error(`Survey with ID ${surveyID} not found.`);
             return null;
         }
+        console.log(result);
 
         const transformedData = {
             surveyID: result.surveyID,
@@ -201,7 +202,7 @@ async function getSurveyByID(surveyID) {
             },
         };
 
-        console.log(transformedData);
+        //console.log(transformedData);
         return transformedData;
     } catch (error) {
         console.error('Error fetching survey by ID:', error);
@@ -233,10 +234,24 @@ async function createSurveyFromTemplate(moduleID, survey_templateID) {
     }
 }
 
+async function deleteSurveyByID(surveyID) {
+    try {
+        return await prisma.surveys.delete({
+            where: {
+                surveyID: parseInt(surveyID)
+            }});
+        }
+    catch (e) { 
+        console.log(e);
+        return null;
+    }
+}
+
 module.exports = {
     getAllSurveys,
     checkExistsAdmin,
     getSurveyByID,
     getAllModules,
-    createSurveyFromTemplate
+    createSurveyFromTemplate,
+    deleteSurveyByID
 }

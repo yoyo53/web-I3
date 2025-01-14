@@ -28,6 +28,9 @@ router.get('/surveys', (req, res) => {
 
 router.get('/surveys/:id', securityMiddleware.verifyToken, controller.getSurveyByID);
 
+router.delete('/deleteSurvey/:id', controller.deleteSurveyByID);
+
+
 /**
  * @swagger
  * /admin/templates:

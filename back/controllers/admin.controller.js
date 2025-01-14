@@ -90,6 +90,15 @@ async function getSurveyByID (req, res) {
       }
 };
 
+async function deleteSurveyByID (req, res) {
+    const survey = await adminQueries.deleteSurveyByID(req.params.id);
+    if (survey !== null) {
+        res.status(200).json(survey);
+    } else {
+        res.status(500).send('Error');
+    }
+};
+
 module.exports = {
     getAdminSurveys,
     getSurveyTemplates,
@@ -98,5 +107,6 @@ module.exports = {
     getAllModules,
     createSurveyFromTemplate,
     createSurveyFromNothing,
-    getSurveyByID
+    getSurveyByID,
+    deleteSurveyByID
 };

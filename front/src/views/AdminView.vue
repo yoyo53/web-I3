@@ -11,7 +11,7 @@
                 >
                 Add a Survey
             </button>
-            <SurveysListComponent :surveys="surveys"/>
+            <SurveysListComponent :surveys="surveys" @removeSurvey="removeSurvey"/>
         </div>
     </div>
 </template>
@@ -43,6 +43,9 @@
             goToAddSurvey(){
                 this.$router.push({ path: '/admin/surveys/create' });
             },
+            removeSurvey(surveyID){
+                this.surveys = this.surveys.filter(survey => survey.surveyID !== surveyID);
+            }
         },
         beforeMount(){
             this.fetchAllSurveys();

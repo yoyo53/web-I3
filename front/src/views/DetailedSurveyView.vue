@@ -71,7 +71,6 @@ export default {
           },
         });
         this.survey = await response.json();
-        console.log(this.survey);
     },
   },
   beforeMount() {
