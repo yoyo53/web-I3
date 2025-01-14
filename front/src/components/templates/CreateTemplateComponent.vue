@@ -18,7 +18,13 @@
     </div>
     <!-- Dynamic Questions -->
     <div v-for="(question, index) in questions" :key="index" class="mb-4 p-4 border-2 border-dashed border-transparent-hover rounded-lg">
-          <label class="block text-sm font-medium text-gray-700 mb-2">Question {{ index + 1 }}</label>
+          <!-- <label class="block text-sm font-medium text-gray-700 mb-2">Question {{ index + 1 }}</label> -->
+          <div class="flex justify-between items-center mb-2">
+        <label class="block text-sm font-medium text-gray-700">Question {{ index + 1 }}</label>
+        <button @click="removeQuestion(index)" class="text-red-400 hover:text-red-500 transition duration-300">
+          Remove
+        </button>
+      </div>
           <input
             type="text"
             v-model="question.question_text"
@@ -94,6 +100,9 @@
         this.id += 1;
         this.questions.push({ id: this.id, question_text: '', question_type: 'text', options: [] });
         console.log(this.questions);
+      },
+      removeQuestion(index) {
+        this.questions.splice(index, 1);
       },
       updateOptions(question, options) {
       question.options = options; // Mettre à jour les options de la question
