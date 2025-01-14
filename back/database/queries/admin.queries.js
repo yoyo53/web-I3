@@ -221,11 +221,25 @@ async function deleteSurveyByID(surveyID) {
     }
 }
 
+async function deleteTemplateByID(survey_templateID) {
+    try {
+        return await prisma.survey_templates.delete({
+            where: {
+                survey_templateID: parseInt(survey_templateID)
+            }});
+        }
+    catch (e) { 
+        console.log(e);
+        return null;
+    }
+}
+
 module.exports = {
     getAllSurveys,
     checkExistsAdmin,
     getSurveyByID,
     getAllModules,
     createSurveyFromTemplate,
-    deleteSurveyByID
+    deleteSurveyByID,
+    deleteTemplateByID
 }

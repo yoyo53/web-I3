@@ -24,23 +24,21 @@
             </select>
 
             <RadioButton v-if="question.question_type === 'radio'" :question="question"
-                @update-options="updateOptions" :isEditable="false"/>
+                :isEditable="false"/>
 
             <CheckBox v-if="question.question_type === 'checkbox'" :question="question"
-                @update-options="updateOptions" :isEditable="false" />
+                :isEditable="false" />
+        </div>
+
+        <div class="flex justify-center mt-4">
+            <button @click="removeTemplate(id)"
+            class="py-2.5 px-6 text-sm rounded-lg bg-red-50 text-red-500 cursor-pointer font-semibold text-center shadow-xs transition-all duration-300 hover:bg-red-100 hover:text-red-700">
+            Delete Template
+            </button>
         </div>
     </div>
 
 </template>
-
-<!-- <template>
-    <div class="min-h-screen p-8 flex justify-center items-start">
-        <div class="bg-white shadow-md rounded-lg p-6 w-full max-w-3xl">
-            <h1 class="text-2xl font-semibold text-[primary] mb-4">Create Template</h1>
-            <CreateTemplateComponent />
-        </div>
-    </div>
-</template> -->
 
 
 <script>
@@ -64,15 +62,38 @@ export default {
             template: null,
         };
     },
+    methods:{
+        async removeTemplate(templateID){
+                const response = await fetch(`${import.meta.env.VITE_API_URL}admin/deleteTemplate/${templateID}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    },
+                });
+                if (!response.ok) {
+                    console.log('Error deleting template');
+                    return;
+                }
+                this.$router.push({ path: '/admin/templates' });
+            },
+    },
 
     async mounted() {
         try {
-            const response = await fetch(`${import.meta.env.VITE_API_URL}admin/templates/${this.id}`);
+            const response = await fetch(`${import.meta.env.VITE_API_URL}admin/templates/${this.id}`,
+                {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    },
+                }
+            );
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
             this.template = await response.json();
-            console.log(this.template);
         } catch (error) {
             console.error('There was a problem with the fetch operation:', error);
         }

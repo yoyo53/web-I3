@@ -10,7 +10,7 @@
         >
         Add a Template
         </button>
-        <TemplateListComponent :templates="templates"/>
+        <TemplateListComponent :templates="templates" @removeTemplate="fetchAllTemplates"/>
     </div>
 </template>
 
@@ -37,7 +37,6 @@
                     }
                 });
                 this.templates = await response.json();
-                console.log(this.templates);
             },
             goToAddTemplate(){
                 this.$router.push({ path: '/admin/templates/create' });
