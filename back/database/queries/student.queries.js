@@ -105,6 +105,11 @@ async function getSurveysByStudentID(student_id) {
                             }
                         }
                     }
+                },
+                survey_answers: {
+                    none: {
+                        studentID: student_id
+                    }
                 }
             },
             select: {
@@ -247,6 +252,11 @@ async function answerToSurvey(surveyID, studentID, answers) {
         const survey = await prisma.surveys.findUnique({
             where: {
                 surveyID: parseInt(surveyID),
+                survey_answers: {
+                    none: {
+                        studentID: studentID
+                    }
+                }
             },
             include: {
                 survey_template: {
@@ -304,16 +314,16 @@ async function answerToSurvey(surveyID, studentID, answers) {
         // Créer les réponses
         const surveyAnswer = await prisma.survey_answers.create({
             data: {
-            surveyID: parseInt(surveyID),
-            studentID: studentID,
-            answer_questions: {
-                create: Object.entries(answers).flatMap(([questionID, responses]) =>
-                responses.map(response => ({
-                    questionID: parseInt(questionID),
-                    answer_text: response
-                }))
-                )
-            }
+                surveyID: parseInt(surveyID),
+                studentID: studentID,
+                answer_questions: {
+                    create: Object.entries(answers).flatMap(([questionID, responses]) =>
+                        responses.map(response => ({
+                            questionID: parseInt(questionID),
+                            answer_text: response
+                        }))
+                    )
+                }
             }
         });
         const result = surveyAnswer ? true : false;
