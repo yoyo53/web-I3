@@ -12,7 +12,7 @@
     </ul>
     <!-- <PopupComponent :show-dialog="showPopup" :dialog="'Are you sure you want to delete this template?'"
           :onConfirm="() => removeTemplate(deleteTemplate.survey_templateID)" /> -->
-    <PopupComponent :isOpen="showPopup" @close-modal="() => {showPopup = false}" @confirm-action="() => removeTemplate(deleteTemplate.survey_templateID)" />
+    <PopupComponent :isOpen="showPopup" popUpText="Are you sure you want to delete this template ? This will delete all associated surveys" @close-modal="() => {showPopup = false}" @confirm-action="() => removeTemplate(deleteTemplate.survey_templateID)" />
   </div>
 </template>
 
