@@ -58,7 +58,7 @@
             <RouterLink
                 v-if="userState.userType === 'Admin'"
                 :to="{ name: 'createSurvey' }"
-                class="block w-full rounded-md text-center my-4 px-4 py-2 text-sm/6 font-semibold text-white shadow-sm bg-efrei-blue-500 hover:bg-efrei-blue-950 focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-efrei-blue-700"
+                class="block w-full max-w-7xl rounded-md text-center my-4 px-4 py-2 text-sm/6 font-semibold text-white shadow-sm bg-efrei-blue-500 hover:bg-efrei-blue-950 focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-efrei-blue-700"
                 >
                 Create a Survey
             </RouterLink>
