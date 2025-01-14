@@ -3,20 +3,13 @@ const swaggerJsdoc = require("swagger-jsdoc");
 /**
  * @swagger
  * tags:
- *   name: Auth
- *   description: Authentication routes
+ *   - name: Auth
+ *     description: Authentication routes
+ *   - name: Admin
+ *     description: Admin routes
+ *   - name: Teacher
+ *     description: Teacher routes
  * 
- * @swagger
- * tags:
- *   name: Admin
- *   description: Admin routes
- * 
- * @swagger
- * tags:
- *   name: Teacher
- *   description: Teacher routes
- * 
- * @swagger
  * components:
  *   schemas:
  *     User:
@@ -41,10 +34,10 @@ const swaggerJsdoc = require("swagger-jsdoc");
  *         email: "john.doe@mail.com"
  *         accountType: "Teacher"
  *       required:
- *       - firstName
- *       - lastName
- *       - email
- *       - accountType
+ *         - firstName
+ *         - lastName
+ *         - email
+ *         - accountType
  *     Survey:
  *       type: object
  *       properties:
@@ -69,6 +62,107 @@ const swaggerJsdoc = require("swagger-jsdoc");
  *         firstname: "John"
  *         subject: "Math"
  *         group: "A"
+ *     SurveyByID:
+ *       type: object
+ *       properties:
+ *         surveyID:
+ *           type: integer
+ *           description: The unique identifier of the survey.
+ *         template_name:
+ *           type: string
+ *           description: The name of the survey template.
+ *         questions:
+ *           type: array
+ *           description: The list of questions in the survey.
+ *           items:
+ *             type: object
+ *             properties:
+ *               questionID:
+ *                 type: integer
+ *                 description: The unique identifier of the question.
+ *               question_text:
+ *                 type: string
+ *                 description: The text of the question.
+ *               question_type:
+ *                 type: string
+ *                 description: The type of the question (e.g., multiple-choice, open-ended).
+ *               options:
+ *                 type: array
+ *                 description: The possible options for the question (if applicable).
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     option_text:
+ *                       type: string
+ *                       description: The text of the option.
+ *               answers:
+ *                 type: array
+ *                 description: The answers provided for the question.
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     survey_answerID:
+ *                       type: integer
+ *                       description: The unique identifier of the survey answer.
+ *                     answer_text:
+ *                       type: string
+ *                       description: The text of the answer provided by the student.
+ *                     student:
+ *                       type: object
+ *                       description: Information about the student who provided the answer.
+ *                       properties:
+ *                         firstname:
+ *                           type: string
+ *                           description: The first name of the student.
+ *                         lastname:
+ *                           type: string
+ *                           description: The last name of the student.
+ *         subject:
+ *           type: string
+ *           description: The subject of the survey.
+ *         group:
+ *           type: string
+ *           description: The group associated with the survey.
+ *         teacher:
+ *           type: object
+ *           description: Information about the teacher associated with the survey.
+ *           properties:
+ *             firstname:
+ *               type: string
+ *               description: The first name of the teacher.
+ *             lastname:
+ *               type: string
+ *               description: The last name of the teacher.
+ *       required:
+ *         - surveyID
+ *         - template_name
+ *         - questions
+ *         - subject
+ *         - group
+ *         - teacher
+ *       example:
+ *         surveyID: 1
+ *         template_name: "End of Year Feedback"
+ *         questions:
+ *           - questionID: 101
+ *             question_text: "How would you rate the course overall?"
+ *             question_type: "Rating"
+ *             options:
+ *               - option_text: "Excellent"
+ *               - option_text: "Good"
+ *               - option_text: "Average"
+ *               - option_text: "Poor"
+ *             answers:
+ *               - survey_answerID: 201
+ *                 answer_text: "Excellent"
+ *                 student:
+ *                   firstname: "Alice"
+ *                   lastname: "Johnson"
+ *         subject: "Mathematics"
+ *         group: "Group A"
+ *         teacher:
+ *           firstname: "John"
+ *           lastname: "Doe"
  *   securitySchemes:
  *     adminToken:
  *       type: http

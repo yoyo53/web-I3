@@ -43,7 +43,7 @@ router.get('/surveys', (req, res) => {
  *         content:
  *           application/json:
  *             schema:
- *               type: object
+ *               $ref: '#/components/schemas/SurveyByID'
  *       500:
  *         description: Error while fetching the survey
  */
