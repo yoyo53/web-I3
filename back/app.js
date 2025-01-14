@@ -37,6 +37,8 @@ app.use("/auth", require("./routes/auth.routes"));
 
 app.use('/admin', adminAccess.adminToken, require('./routes/admin.js'));
 
+app.use("/student", require("./routes/student.routes"));
+
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 
 app.use('/user', securityMiddleware.verifyToken, require('./routes/user.routes.js'));
