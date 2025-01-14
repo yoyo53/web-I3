@@ -24,23 +24,14 @@
             </select>
 
             <RadioButton v-if="question.question_type === 'radio'" :question="question"
-                @update-options="updateOptions" :isEditable="false"/>
+                :isEditable="false"/>
 
             <CheckBox v-if="question.question_type === 'checkbox'" :question="question"
-                @update-options="updateOptions" :isEditable="false" />
+                :isEditable="false" />
         </div>
     </div>
 
 </template>
-
-<!-- <template>
-    <div class="min-h-screen p-8 flex justify-center items-start">
-        <div class="bg-white shadow-md rounded-lg p-6 w-full max-w-3xl">
-            <h1 class="text-2xl font-semibold text-[primary] mb-4">Create Template</h1>
-            <CreateTemplateComponent />
-        </div>
-    </div>
-</template> -->
 
 
 <script>
@@ -67,7 +58,15 @@ export default {
 
     async mounted() {
         try {
-            const response = await fetch(`${import.meta.env.VITE_API_URL}admin/templates/${this.id}`);
+            const response = await fetch(`${import.meta.env.VITE_API_URL}admin/templates/${this.id}`,
+                {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    },
+                }
+            );
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }

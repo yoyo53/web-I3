@@ -10,7 +10,7 @@
         >
         Add a Template
         </button>
-        <TemplateListComponent :templates="templates"/>
+        <TemplateListComponent :templates="templates" @removeTemplate="removeTemplate"/>
     </div>
 </template>
 
@@ -42,6 +42,9 @@
             goToAddTemplate(){
                 this.$router.push({ path: '/admin/templates/create' });
             },
+            removeTemplate(templateID){
+                this.templates = this.templates.filter(template => template.templateID !== templateID);
+            }
         },
         beforeMount(){
             this.fetchAllTemplates();

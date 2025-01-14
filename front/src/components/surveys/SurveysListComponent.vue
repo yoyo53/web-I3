@@ -39,8 +39,8 @@ export default {
         return 'studentSurveys';
       }
     },
-    removeSurvey(surveyID) {
-      fetch(`${import.meta.env.VITE_API_URL}admin/deleteSurvey/${surveyID}`, {
+    async removeSurvey(surveyID) {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}admin/deleteSurvey/${surveyID}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -48,6 +48,10 @@ export default {
         },
 
       })
+      if (!response.ok) {
+        console.log('Error deleting template');
+        return;
+      }
       this.$emit('removeSurvey', surveyID);
     },
 
