@@ -124,7 +124,7 @@ async function getSurveysByTeacherID(id) {
         }
     });
     return surveys.map(survey => ({
-        surveyid: survey.surveyID,
+        surveyID: survey.surveyID,
         subject: survey.module.subject.name,
         group: survey.module.group.name,
         firstname: survey.module.teacher.user.firstname,
@@ -146,25 +146,25 @@ async function getSurveyByID(surveyID) {
             include: {
                 survey_template: {
                     select: {
-                        name: true, // Nom du template (facultatif)
+                        name: true, 
                         questions: {
                             select: {
-                                questionID: true, // Récupérer l'ID de la question
-                                question_text: true, // Texte de la question
+                                questionID: true, 
+                                question_text: true, 
                                 options: {
                                     select: {
-                                        option_text: true, // Récupérer uniquement le texte des options
+                                        option_text: true, 
                                     },
                                 },
                                 question_type: {
                                     select: {
-                                        question_type: true, // Récupérer le type de question
+                                        question_type: true, 
                                     },
                                 },
                                 answer_questions: {
                                     select: {
                                         survey_answerID: true,
-                                        answer_text: true, // Récupérer les réponses des étudiants
+                                        answer_text: true, 
                                     },
                                 },
                             },
@@ -175,12 +175,12 @@ async function getSurveyByID(surveyID) {
                     select: {
                         subject: {
                             select: {
-                                name: true, // Nom de la matière
+                                name: true, 
                             },
                         },
                         group: {
                             select: {
-                                name: true, // Nom du groupe
+                                name: true, 
                             },
                         },
                         teacher: {
@@ -188,7 +188,7 @@ async function getSurveyByID(surveyID) {
                                 user: {
                                     select: {
                                         firstname: true,
-                                        lastname: true, // Prénom et nom du professeur
+                                        lastname: true, 
                                     },
                                 },
                             },
@@ -203,7 +203,6 @@ async function getSurveyByID(surveyID) {
             return null;
         }
 
-        // Transformer les données pour inclure les options et réponses comme objets JSON
         const transformedData = {
             surveyID: result.surveyID,
             template_name: result.survey_template.name,

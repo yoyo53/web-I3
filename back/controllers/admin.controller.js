@@ -1,9 +1,9 @@
 const adminQueries = require('../database/queries/admin.queries');
 const templateQueries = require('../database/queries/templates.queries');
+const { getSurveyByID } = require('./teacher.controller');
 
 async function getAdminSurveys(req, res) {
     const surveys = await adminQueries.getAllSurveys()
-    console.log(surveys);
     if (surveys != null) {
         res.status(200).json(surveys);
     } else {
@@ -31,7 +31,6 @@ async function createTemplate(req, res) {
 
 async function getTemplateByID(req, res) {
     const survey = await templateQueries.getTemplateByID(req.params.id)
-    console.log(req.params.id);
     if (survey != null) {
         res.status(200).json(survey);
         console.log(survey);
@@ -90,5 +89,6 @@ module.exports = {
     getTemplateByID,
     getAllModules,
     createSurveyFromTemplate,
-    createSurveyFromNothing
+    createSurveyFromNothing,
+    getSurveyByID
 };
