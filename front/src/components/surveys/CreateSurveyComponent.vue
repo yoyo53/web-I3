@@ -3,8 +3,8 @@
     <!-- Survey Name -->
     <div class="mb-6">
       <div class="flex justify-between items-center">
-        <searchBarTemplate class="py-2" @template-selected="handleTemplateSelected" />
-        <searchBarModule class="py-2" @module-selected="handleModuleSelected" />
+        <TemplateSelectSearchComponent class="py-2" @template-selected="handleTemplateSelected" />
+        <ModuleSelectSearchComponent class="py-2" @module-selected="handleModuleSelected" />
         <button @click="modifyForm" class="ml-4 py-2 px-4 bg-primary font-semibold text-white rounded-md shadow-md hover:bg-primary-hover transition duration-300
               ">
           Modify Form
@@ -73,8 +73,8 @@
 import RadioButton from '@/components/TypesAnswers/RadioButton.vue';
 import CheckBox from '@/components/TypesAnswers/CheckBox.vue';
 
-import searchBarTemplate from '../searchBarTemplate.vue';
-import searchBarModule from '../searchBarModule.vue';
+import ModuleSelectSearchComponent from '@/components/ModuleSelectSearchComponent.vue';
+import TemplateSelectSearchComponent from '@/components/TemplateSelectSearchComponent.vue';
 
 export default {
   data() {
@@ -92,8 +92,8 @@ export default {
   components: {
     RadioButton,
     CheckBox,
-    searchBarTemplate,
-    searchBarModule
+    ModuleSelectSearchComponent,
+    TemplateSelectSearchComponent,
   },
   methods: {
     modifyForm() {
