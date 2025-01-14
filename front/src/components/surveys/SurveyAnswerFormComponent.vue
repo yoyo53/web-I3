@@ -1,44 +1,70 @@
 <template>
     <div class="survey-answer-form">
-        <h1>Survey Answer Form</h1>
-        <form @submit.prevent="submitForm">
-            <div v-for="question in question" :key="question.questionID" class="mb-4">
-                <label :for="'question-' + question.questionID">{{ question.question_text }}</label>
-                <div v-if="question.question_type === 'text'">
-                    <input type="text" :id="'question-' + question.questionID" v-model="answers[question.questionID]" class="block w-full px-4 py-2 border rounded-md shadow-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+        <form>
+
+            <!-- Dynamic Questions -->
+            <div v-for="(question, index) in questions" :key="index"
+                class="mb-4 p-4 border-2 border-dashed border-transparent-hover rounded-lg">
+                <!-- <label class="block text-sm font-medium text-gray-700 mb-2">Question {{ index + 1 }}</label> -->
+                <div class="flex justify-between items-center mb-2">
+                    <label class="block text-sm font-medium text-gray-700">Question {{ index + 1 }}</label>
                 </div>
-                <div v-else-if="question.question_type === 'radio'">
-                    <div v-for="option in question.options" :key="option.option_text">
-                        <input type="radio" :id="'question-' + question.questionID + '-' + option.option_text" :name="'question-' + question.questionID" :value="option.option_text" v-model="answers[question.questionID]" />
-                        <label :for="'question-' + question.questionID + '-' + option.option_text">{{ option.option_text }}</label>
-                    </div>
-                </div>
-                <div v-else-if="question.question_type === 'checkbox'">
-                    <div v-for="option in question.options" :key="option.option_text">
-                        <input type="checkbox" :id="'question-' + question.questionID + '-' + option.option_text" :value="option.option_text" v-model="answers[question.questionID]" />
-                        <label :for="'question-' + question.questionID + '-' + option.option_text">{{ option.option_text }}</label>
-                    </div>
-                </div>
-                <div v-else-if="question.question_type === 'score'">
-                    <div v-for="score in [1, 2, 3, 4, 5]" :key="score">
-                        <input type="radio" :id="'question-' + question.questionID + '-' + score" :name="'question-' + question.questionID" :value="score" v-model="answers[question.questionID]" />
-                        <label :for="'question-' + question.questionID + '-' + score">{{ score }}</label>
-                    </div>
-                </div>
+                <p class="block w-full px-4 py-2 border rounded-md shadow-sm text-gray-700 mb-2">{{
+                    question.question_text }}</p>
+                <!-- <label class="block text-sm font-medium text-gray-700 mb-2">Response Type</label>
+                <select v-model="question.question_type"
+                    class="block w-full px-4 py-2 border rounded-md shadow-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <option value="text">Text Input</option>
+                    <option value="score">Star Rating (1-5)</option>
+                    <option value="radio">Radio Buttons</option>
+                    <option value="checkbox">Checkbox</option>
+                </select> -->
+
+                <!-- Dynamic Answer Components -->
+                <ScoreAnswer v-if="question.question_type === 'score'" :question="question"
+                    @selectedScore="selectAnswer" />
+
+                <TextAnswer v-if="question.question_type === 'text'" :question="question"
+                    @selectedText="selectAnswer" />
+
+                <RadioButton v-if="question.question_type === 'radio'" :question="question" :is-editable="false"
+                    @selected-radio="selectAnswer" />
+
+                <CheckBox v-if="question.question_type === 'checkbox'" :question="question" :is-editable="false"
+                    @selected-checkbox="selectAnswer" />
             </div>
-            <button type="submit">Submit</button>
+
+            <!-- Submit Form Button -->
+            <button @click="submitForm"
+                class="mt-4 w-full py-2 px-4 bg-transparent font-semibold text-[primary] rounded-md shadow-md hover:bg-transparent-hover transition duration-300">
+                Submit Template
+            </button>
+
         </form>
     </div>
 </template>
 
 <script>
+
+import ScoreAnswer from '../TypesAnswers/ScoreAnswer.vue';
+import TextAnswer from '../TypesAnswers/TextAnswer.vue';
+
+import RadioButton from '@/components/TypesAnswers/RadioButton.vue';
+import CheckBox from '@/components/TypesAnswers/CheckBox.vue';
+
 export default {
     name: 'SurveyAnswerFormComponent',
+    components: {
+        ScoreAnswer,
+        TextAnswer,
+        RadioButton,
+        CheckBox,
+    },
     props: {
-        question: {
+        questions: {
             type: Object,
             required: true
-        }, 
+        },
     },
     data() {
         return {
@@ -46,48 +72,25 @@ export default {
         };
     },
     methods: {
+        selectAnswer(options, question) {
+            console.log('Selected score:', options, 'for question:', question);
+            this.answers[question.questionID] = options;
+        },
         async submitForm() {
             console.log('Form submitted with answers:', this.answers);
-            // Add your form submission logic here
+            // Add your form submission logic here answertosurvey
+            const response = await fetch(`${import.meta.env.VITE_API_URL}student/answertosurvey`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+                body: JSON.stringify({
+                    surveyID: this.questions.surveyID,
+                    answers: this.answers
+                })
+            });
         }
     }
 };
 </script>
-
-<style scoped>
-.survey-answer-form {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-.form-group {
-    margin-bottom: 15px;
-}
-
-label {
-    display: block;
-    margin-bottom: 5px;
-}
-
-input {
-    width: 100%;
-    padding: 8px;
-    box-sizing: border-box;
-}
-
-button {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #0056b3;
-}
-</style>

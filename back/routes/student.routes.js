@@ -7,4 +7,6 @@ router.get('/surveys', securityMiddleware.verifyToken, studentController.getStud
 
 router.get('/surveys/:id', securityMiddleware.verifyToken, studentController.getSurveyByID);
 
+router.post('/answertosurvey', securityMiddleware.verifyToken, studentController.answerToSurvey);
+
 module.exports = router;
