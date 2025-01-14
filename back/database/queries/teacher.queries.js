@@ -143,28 +143,26 @@ async function getSurveyByID(surveyID) {
             where: {
                 surveyID: parseInt(surveyID),
             },
-            include: {
+            select: {
+                surveyID: true,
                 survey_template: {
                     select: {
-                        name: true, 
+                        name: true,
                         questions: {
                             select: {
-                                questionID: true, 
-                                question_text: true, 
-                                options: {
-                                    select: {
-                                        option_text: true, 
-                                    },
-                                },
-                                question_type: {
-                                    select: {
-                                        question_type: true, 
-                                    },
-                                },
+                                questionID: true,
+                                question_text: true,
+                                options: { select: { option_text: true } },
+                                question_type: { select: { question_type: true } },
                                 answer_questions: {
+                                    where: {
+                                        survey_answer: {
+                                            surveyID: parseInt(surveyID),
+                                        },
+                                    },        
                                     select: {
                                         survey_answerID: true,
-                                        answer_text: true, 
+                                        answer_text: true,
                                     },
                                 },
                             },
@@ -173,26 +171,9 @@ async function getSurveyByID(surveyID) {
                 },
                 module: {
                     select: {
-                        subject: {
-                            select: {
-                                name: true, 
-                            },
-                        },
-                        group: {
-                            select: {
-                                name: true, 
-                            },
-                        },
-                        teacher: {
-                            select: {
-                                user: {
-                                    select: {
-                                        firstname: true,
-                                        lastname: true, 
-                                    },
-                                },
-                            },
-                        },
+                        subject: { select: { name: true } },
+                        group: { select: { name: true } },
+                        teacher: { select: { user: { select: { firstname: true, lastname: true } } } },
                     },
                 },
             },

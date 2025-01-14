@@ -10,7 +10,7 @@
           Modify Form
         </button>
       </div>
-      <div v-if = "isEditable">
+      <div v-if="isEditable">
         <input type="text" v-model="templateName"
           class="block w-full px-4 py-2 border rounded-md shadow-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 mt-4"
           placeholder="Enter Template name" />
@@ -22,7 +22,8 @@
       class="mb-4 p-4 border-2 border-dashed border-transparent-hover rounded-lg">
       <div class="flex justify-between items-center mb-2">
         <label class="block text-sm font-medium text-gray-700">Question {{ index + 1 }}</label>
-        <button v-if="isEditable" @click="removeQuestion(index)" class="text-red-400 hover:text-red-500 transition duration-300">
+        <button v-if="isEditable" @click="removeQuestion(index)"
+          class="text-red-400 hover:text-red-500 transition duration-300">
           Remove
         </button>
       </div>
@@ -136,7 +137,15 @@ export default {
     },
     async getTemplate(templateID) {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}admin/templates/${templateID}`);
+        const response = await fetch(`${import.meta.env.VITE_API_URL}admin/templates/${templateID}`,
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+          }
+        );
         response.json().then((data) => {
           console.log(data);
           this.questions = data.questions;
@@ -157,7 +166,8 @@ export default {
           const response = await fetch(`${import.meta.env.VITE_API_URL}admin/createfromtemplate`, {
             method: 'POST',
             headers: {
-              'Content-Type': 'application/json',
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
             body: JSON.stringify({
               survey_templateID: this.templateID,
@@ -175,7 +185,8 @@ export default {
           const response = await fetch(`${import.meta.env.VITE_API_URL}admin/createfromnothing`, {
             method: 'POST',
             headers: {
-              'Content-Type': 'application/json',
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
             body: JSON.stringify({
               name: this.templateName,
