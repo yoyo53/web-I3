@@ -1,5 +1,5 @@
 <template>
-  <div class="flex min-h-screen">
+  <div class="flex">
     <!-- Contenu principal -->
     <div class="flex-grow p-6 bg-gray-50 overflow-auto">
       <!-- Titre et détails du sondage -->

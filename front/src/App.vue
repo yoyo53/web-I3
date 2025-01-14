@@ -6,6 +6,8 @@ import FooterComponent from './components/FooterComponent.vue';
 
 <template>
   <HeaderComponent />
-  <RouterView class="grow px-2"/>
+  <main class="flex flex-col grow">
+    <RouterView class="grow px-2"/>
+  </main>
   <FooterComponent />
 </template>

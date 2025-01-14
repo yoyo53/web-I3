@@ -14,7 +14,11 @@ app.use(router)
 app.use(Toast, {
     transition: "Vue-Toastification__fade",
     maxToasts: 20,
-    newestOnTop: true
+    newestOnTop: true,
+    position: "top-center",
+    timeout: 5000,
+    pauseOnHover: false,
+    draggable: false,
   });
   
 const userState = reactive({
