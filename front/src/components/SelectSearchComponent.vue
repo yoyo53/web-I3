@@ -8,11 +8,11 @@
             },
             placeholder: {
                 type: String,
-                default: "Sélectionner une option",
+                default: "Select an option",
             },
             emptyMessage: {
                 type: String,
-                default: "Aucun résultat trouvé",
+                default: "No results found",
             },
         },
         data() {

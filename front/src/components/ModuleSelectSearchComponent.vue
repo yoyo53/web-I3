@@ -41,7 +41,7 @@
 <template>
     <SelectSearchComponent
         :options="modules"
-        placeholder="Sélectionner un module"
+        placeholder="Select a module"
         @option-selected="(option) => this.$emit('module-selected', option)"
     />
 </template>

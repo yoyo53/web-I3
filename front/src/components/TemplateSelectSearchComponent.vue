@@ -38,7 +38,7 @@
 <template>
     <SelectSearchComponent
         :options="templates"
-        placeholder="Sélectionner un template"
+        placeholder="Select a template"
         @option-selected="(option) => this.$emit('template-selected', option)"
     />
 </template>
