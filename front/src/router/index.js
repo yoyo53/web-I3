@@ -76,6 +76,7 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
+    document.activeElement.blur();
     const userState = inject("userState");
     const publicPages = ["/", "/about", "/404"];
     const token = localStorage.getItem("token");

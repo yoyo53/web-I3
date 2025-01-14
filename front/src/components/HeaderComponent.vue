@@ -1,36 +1,5 @@
-<template>
-    <header>
-        <nav class="bg-white border-gray-200 px-4 py-2.5">
-            <div class="flex flex-wrap items-center mx-auto">
-                <SideBarComponent v-if="userState.userType !== null" />
-                <RouterLink :to="{ name: 'home' }" class="flex items-center">
-                    <img src="@/assets/logo.svg" class="h-6 mr-3 sm:h-9" alt="TeachPoint Logo" />
-                    <span class="self-center text-xl font-semibold whitespace-nowrap">TeachPoint</span>
-                </RouterLink>
-                <div class="flex items-center ml-auto">
-                    <RouterLink
-                        :to="{
-                            name:
-                                userState.userType === 'Admin'
-                                    ? 'admin'
-                                    : userState.userType === 'Teacher'
-                                      ? 'teacher'
-                                      : userState.userType === 'Student'
-                                        ? 'student'
-                                        : 'login',
-                        }"
-                        class="text-white bg-primary-hover hover:bg-primary-hover focus:ring-4 focus:ring-primary-hover font-medium rounded-lg text-sm px-4 py-2 mr-2 :bg-primary-hover focus:outline-none :ring-primary-hover"
-                    >
-                        {{ userState.userType !== null ? "Dashboard" : "Log in" }}
-                    </RouterLink>
-                </div>
-            </div>
-        </nav>
-    </header>
-</template>
-
 <script>
-import SideBarComponent from './sidebar/SideBarComponent.vue';
+    import SideBarComponent from "./sidebar/SideBarComponent.vue";
 
     export default {
         name: "HeaderComponent",
@@ -38,5 +7,47 @@ import SideBarComponent from './sidebar/SideBarComponent.vue';
         components: {
             SideBarComponent,
         },
+        computed: {
+            getDashboardRoute() {
+                if (this.userState.userType === "Admin") {
+                    return { name: "admin" };
+                } else if (this.userState.userType === "Teacher") {
+                    return { name: "teacher" };
+                } else {
+                    return { name: "student" };
+                }
+            },
+        },
     };
 </script>
+
+<template>
+    <header>
+        <nav class="flex items-center px-4 py-2.5">
+            <SideBarComponent v-if="userState.userType !== null" />
+            <RouterLink
+                :to="{ name: 'home' }"
+                class="flex items-center ml-2 rounded-lg focus:outline-none focus:ring-offset-4 focus:ring-2 focus:ring-efrei-blue-700"
+            >
+                <img src="@/assets/logo.svg" class="h-9" alt="TeachPoint Logo" />
+                <span class="ml-1 text-xl font-semibold">TeachPoint</span>
+            </RouterLink>
+            <RouterLink
+                v-if="userState.userType !== null"
+                :to="getDashboardRoute"
+                class="text-base font-medium ml-auto px-4 py-2 rounded-lg text-white bg-efrei-blue-500 hover:bg-efrei-blue-950 focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-efrei-blue-700"
+            >
+                Dashboard
+            </RouterLink>
+            <RouterLink
+                v-else
+                :to="{ name: 'login' }"
+                class="text-base font-medium ml-auto px-4 py-2 rounded-lg text-white bg-efrei-blue-500 hover:bg-efrei-blue-950 focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-efrei-blue-700"
+            >
+                Log in
+            </RouterLink>
+        </nav>
+    </header>
+</template>
+
+<style></style>
