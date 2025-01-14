@@ -199,4 +199,9 @@ router.post('/createfromtemplate', controller.createSurveyFromTemplate);
  */
 router.post('/createfromnothing', controller.createSurveyFromNothing);
 
+
+
+router.delete('/deleteTemplate/:id', controller.deleteTemplateByID);
+
+
 module.exports = router;

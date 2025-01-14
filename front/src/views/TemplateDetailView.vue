@@ -29,6 +29,13 @@
             <CheckBox v-if="question.question_type === 'checkbox'" :question="question"
                 :isEditable="false" />
         </div>
+
+        <div class="flex justify-center mt-4">
+            <button @click="removeTemplate(id)"
+            class="py-2.5 px-6 text-sm rounded-lg bg-red-50 text-red-500 cursor-pointer font-semibold text-center shadow-xs transition-all duration-300 hover:bg-red-100 hover:text-red-700">
+            Delete Template
+            </button>
+        </div>
     </div>
 
 </template>
@@ -55,6 +62,22 @@ export default {
             template: null,
         };
     },
+    methods:{
+        async removeTemplate(templateID){
+                const response = await fetch(`${import.meta.env.VITE_API_URL}admin/deleteTemplate/${templateID}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    },
+                });
+                if (!response.ok) {
+                    console.log('Error deleting template');
+                    return;
+                }
+                this.$router.push({ path: '/admin/templates' });
+            },
+    },
 
     async mounted() {
         try {
@@ -71,7 +94,6 @@ export default {
                 throw new Error('Network response was not ok');
             }
             this.template = await response.json();
-            console.log(this.template);
         } catch (error) {
             console.error('There was a problem with the fetch operation:', error);
         }

@@ -52,7 +52,7 @@ export default {
         console.log('Error deleting template');
         return;
       }
-      this.$emit('removeSurvey', surveyID);
+      this.$emit('removeSurvey');
     },
 
   },
