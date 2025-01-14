@@ -29,7 +29,13 @@
         },
         methods: {
             async fetchAllTemplates(){
-                const response = await fetch(`${import.meta.env.VITE_API_URL}admin/templates`);	
+                const response = await fetch(`${import.meta.env.VITE_API_URL}admin/templates`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    }
+                });
                 this.templates = await response.json();
                 console.log(this.templates);
             },

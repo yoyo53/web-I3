@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/user.controller.js');
-const securityMiddleware = require('../middlewares/security')
 
 /**
  * @swagger
@@ -28,6 +27,6 @@ const securityMiddleware = require('../middlewares/security')
  *       500:
  *         description: Internal server error
  */
-router.get('/data', securityMiddleware.verifyToken, userController.getUserData);
+router.get('/data', userController.getUserData);
 
 module.exports = router;
