@@ -75,6 +75,13 @@ export default {
             answers: {}
         };
     },
+    beforeMount() {
+        for (let question of this.questions) {
+            if (question.question_type === 'text') {
+                this.answers[question.questionID] = [''];
+            }
+        }
+    },
     methods: {
         selectAnswer(options, question) {
             console.log('Selected score:', options, 'for question:', question);
