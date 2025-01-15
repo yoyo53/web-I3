@@ -1,11 +1,11 @@
 <script>
-    import RadioButton from "@/components/TypesAnswers/RadioButton.vue";
-    import CheckBox from "@/components/TypesAnswers/CheckBox.vue";
+    import RadioAnswerComponent from "@/components/answers/RadioAnswerComponent.vue";
+    import CheckboxAnswerComponent from "@/components/answers/CheckboxAnswerComponent.vue";
     import { useToast } from "vue-toastification";
     const toaster = useToast();
 
     export default {
-        name: "CreateTemplateComponent",
+        name: "TemplateCreateComponent",
         data() {
             return {
                 templateName: "",
@@ -13,8 +13,8 @@
             };
         },
         components: {
-            RadioButton,
-            CheckBox,
+            RadioAnswerComponent,
+            CheckboxAnswerComponent,
         },
         methods: {
             addQuestion() {
@@ -29,10 +29,9 @@
             async postTemplate() {
                 if (this.questions.length === 0) {
                     toaster.error("Please add at least one question");
-                }
-                else {
+                } else {
                     try {
-                        const response = await fetch(import.meta.env.VITE_API_URL + 'admin/templates/create', {
+                        const response = await fetch(import.meta.env.VITE_API_URL + "admin/templates/create", {
                             method: "POST",
                             headers: {
                                 "Content-Type": "application/json",
@@ -43,13 +42,13 @@
                                 questions: this.questions,
                             }),
                         });
-    
+
                         if (!response.ok) {
                             throw new Error(response.statusText);
                         }
-    
+
                         toaster.success("Template created successfully");
-                        this.$router.push({ name: "templates" });
+                        this.$router.push({ name: "adminTemplatesList" });
                     } catch (error) {
                         console.error(error);
                         toaster.error("Something went wrong");
@@ -109,7 +108,7 @@
                     <option value="checkbox">Checkbox</option>
                 </select>
 
-                <RadioButton
+                <RadioAnswerComponent
                     v-if="question.question_type === 'radio'"
                     :question="question"
                     :editable="true"
@@ -118,7 +117,7 @@
                     class="my-4"
                 />
 
-                <CheckBox
+                <CheckboxAnswerComponent
                     v-if="question.question_type === 'checkbox'"
                     :question="question"
                     :editable="true"

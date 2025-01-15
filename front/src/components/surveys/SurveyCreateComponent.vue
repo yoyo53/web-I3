@@ -1,13 +1,13 @@
 <script>
-    import RadioButton from "@/components/TypesAnswers/RadioButton.vue";
-    import CheckBox from "@/components/TypesAnswers/CheckBox.vue";
-    import ModuleSelectSearchComponent from "@/components/ModuleSelectSearchComponent.vue";
-    import TemplateSelectSearchComponent from "@/components/TemplateSelectSearchComponent.vue";
+    import RadioAnswerComponent from "@/components/answers/RadioAnswerComponent.vue";
+    import CheckboxAnswerComponent from "@/components/answers/CheckboxAnswerComponent.vue";
+    import SelectSearchTemplateComponent from "@/components/select-search/SelectSearchTemplateComponent.vue";
+    import SelectSearchModuleComponent from "@/components/select-search/SelectSearchModuleComponent.vue";
     import { useToast } from "vue-toastification";
     const toaster = useToast();
 
     export default {
-        name: "CreateSurveyComponent",
+        name: "SurveyCreateComponent",
         data() {
             return {
                 editable: false,
@@ -19,10 +19,10 @@
             };
         },
         components: {
-            RadioButton,
-            CheckBox,
-            ModuleSelectSearchComponent,
-            TemplateSelectSearchComponent,
+            RadioAnswerComponent,
+            CheckboxAnswerComponent,
+            SelectSearchModuleComponent,
+            SelectSearchTemplateComponent,
         },
         methods: {
             modifyForm() {
@@ -47,7 +47,7 @@
             },
             async getTemplate(templateID) {
                 try {
-                    const response = await fetch(import.meta.env.VITE_API_URL + 'admin/templates/' + templateID, {
+                    const response = await fetch(import.meta.env.VITE_API_URL + "admin/templates/" + templateID, {
                         method: "GET",
                         headers: {
                             "Content-Type": "application/json",
@@ -120,8 +120,8 @@
         <form @submit.prevent="postSurvey">
             <div class="mb-6">
                 <div class="flex flex-wrap justify-between items-center gap-4">
-                    <TemplateSelectSearchComponent class="grow" @template-selected="handleTemplateSelected" />
-                    <ModuleSelectSearchComponent class="grow" @module-selected="handleModuleSelected" />
+                    <SelectSearchTemplateComponent class="grow" @template-selected="handleTemplateSelected" />
+                    <SelectSearchModuleComponent class="grow" @module-selected="handleModuleSelected" />
                     <button
                         v-if="templateID"
                         type="button"
@@ -182,7 +182,7 @@
                     <option value="checkbox">Checkbox</option>
                 </select>
 
-                <RadioButton
+                <RadioAnswerComponent
                     v-if="question.question_type === 'radio'"
                     :question="question"
                     :editable="editable"
@@ -191,7 +191,7 @@
                     class="my-4"
                 />
 
-                <CheckBox
+                <CheckboxAnswerComponent
                     v-if="question.question_type === 'checkbox'"
                     :question="question"
                     :editable="editable"

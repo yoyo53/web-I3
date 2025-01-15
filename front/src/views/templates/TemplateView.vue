@@ -1,6 +1,6 @@
 <script>
-    import RadioButton from "@/components/TypesAnswers/RadioButton.vue";
-    import CheckBox from "@/components/TypesAnswers/CheckBox.vue";
+    import RadioAnswerComponent from "@/components/answers/RadioAnswerComponent.vue";
+    import CheckboxAnswerComponent from "@/components/answers/CheckboxAnswerComponent.vue";
     import { useToast } from "vue-toastification";
     const toaster = useToast();
 
@@ -18,8 +18,8 @@
             };
         },
         components: {
-            RadioButton,
-            CheckBox,
+            RadioAnswerComponent,
+            CheckboxAnswerComponent,
         },
         methods: {
             async getTemplate(templateID) {
@@ -57,7 +57,7 @@
                     }
 
                     toaster.success("Template deleted successfully");
-                    this.$router.push({ name: "templates" });
+                    this.$router.push({ name: "adminTemplatesList" });
                 } catch (error) {
                     console.error(error);
                     toaster.error("Something went wrong");
@@ -101,7 +101,7 @@
                     <option value="checkbox">Checkbox</option>
                 </select>
 
-                <RadioButton
+                <RadioAnswerComponent
                     v-if="question.question_type === 'radio'"
                     :question="question"
                     :editable="false"
@@ -109,7 +109,7 @@
                     class="my-4"
                 />
 
-                <CheckBox
+                <CheckboxAnswerComponent
                     v-if="question.question_type === 'checkbox'"
                     :question="question"
                     :editable="false"

@@ -3,7 +3,7 @@
     const toaster = useToast();
 
     export default {
-        name: "CreateUserView",
+        name: "UserCreateView",
         data() {
             return {
                 email: "",

@@ -1,23 +1,31 @@
 <script>
-    import TemplateListComponent from '@/components/templates/TemplateListComponent.vue';
+    import SurveysListComponent from "@/components/surveys/SurveysListComponent.vue";
     import { useToast } from "vue-toastification";
     const toaster = useToast();
 
     export default {
-        name: "TemplatesListView",
+        name: "SurveysListView",
         inject: ["userState"],
         data() {
             return {
-                templates: [],
+                surveys: [],
             };
         },
         components: {
-            TemplateListComponent,
+            SurveysListComponent,
         },
         methods: {
-            async fetchAllTemplates() {
+            async fetchAllSurveys() {
                 try {
-                    const response = await fetch(import.meta.env.VITE_API_URL + 'admin/templates', {
+                    let route;
+                    if (this.userState.userType === "Admin") {
+                        route = "admin/surveys";
+                    } else if (this.userState.userType === "Teacher") {
+                        route = "teacher/surveys";
+                    } else {
+                        route = "student/surveys";
+                    }
+                    const response = await fetch(import.meta.env.VITE_API_URL + route, {
                         method: "GET",
                         headers: {
                             "Content-Type": "application/json",
@@ -29,7 +37,7 @@
                         throw new Error(response.statusText);
                     }
 
-                    this.templates = await response.json();
+                    this.surveys = await response.json();
                 } catch (error) {
                     console.error(error);
                     toaster.error("Something went wrong");
@@ -38,7 +46,7 @@
         },
 
         beforeMount() {
-            this.fetchAllTemplates();
+            this.fetchAllSurveys();
         },
     };
 </script>
@@ -46,15 +54,16 @@
 <template>
     <div>
         <section class="my-12">
-            <h1 class="my-6 text-3xl font-semibold text-center">Templates</h1>
+            <h1 class="my-6 text-3xl font-semibold text-center">Surveys</h1>
             <RouterLink
-                :to="{ name: 'createTemplate' }"
+                v-if="userState.userType === 'Admin'"
+                :to="{ name: 'adminSurveyCreate' }"
                 class="block w-full max-w-7xl mx-auto rounded-md text-center my-4 px-4 py-2 text-sm/6 font-semibold text-white shadow-sm bg-efrei-blue-500 hover:bg-efrei-blue-950 focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-efrei-blue-700"
-                >
-                Create a Template
+            >
+                Create a Survey
             </RouterLink>
-            <div v-if="templates.length === 0" class="text-gray-500 text-sm text-center">No templates yet</div>
-            <TemplateListComponent v-else class="max-w-7xl mx-auto" :templates="templates" @removeTemplate="fetchAllTemplates" />
+            <div v-if="surveys.length === 0" class="text-gray-500 text-sm text-center">No surveys yet</div>
+            <SurveysListComponent v-else class="max-w-7xl mx-auto" :surveys="surveys" @removeSurvey="fetchAllSurveys" />
         </section>
     </div>
 </template>

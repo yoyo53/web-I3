@@ -1,13 +1,13 @@
 <script>
-    import ScoreAnswer from "@/components/TypesAnswers/ScoreAnswer.vue";
-    import TextAnswer from "@/components/TypesAnswers/TextAnswer.vue";
-    import RadioButton from "@/components/TypesAnswers/RadioButton.vue";
-    import CheckBox from "@/components/TypesAnswers/CheckBox.vue";
+    import ScoreAnswerComponent from "@/components/answers/ScoreAnswerComponent.vue";
+    import TextAnswerComponent from "@/components/answers/TextAnswerComponent.vue";
+    import RadioAnswerComponent from "@/components/answers/RadioAnswerComponent.vue";
+    import CheckboxAnswerComponent from "@/components/answers/CheckboxAnswerComponent.vue";
     import { useToast } from "vue-toastification";
     const toaster = useToast();
 
     export default {
-        name: "SurveyAnswerFormComponent",
+        name: "SurveyFormComponent",
         props: {
             questions: {
                 type: Object,
@@ -24,10 +24,10 @@
             };
         },
         components: {
-            ScoreAnswer,
-            TextAnswer,
-            RadioButton,
-            CheckBox,
+            ScoreAnswerComponent,
+            TextAnswerComponent,
+            RadioAnswerComponent,
+            CheckboxAnswerComponent,
         },
         methods: {
             selectAnswer(options, question) {
@@ -36,8 +36,7 @@
             async submitForm() {
                 if (Object.keys(this.answers).length !== this.questions.length) {
                     toaster.error("Please answer all questions");
-                }
-                else {
+                } else {
                     try {
                         const response = await fetch(import.meta.env.VITE_API_URL + "student/answertosurvey", {
                             method: "POST",
@@ -51,11 +50,11 @@
                             }),
                         });
                         const data = await response.json();
-    
+
                         if (!response.ok) {
                             throw new Error(data.message);
                         }
-    
+
                         toaster.success("Survey answered successfully");
                         this.$router.push({ name: "student" });
                     } catch (error) {
@@ -81,19 +80,19 @@
                     {{ question.question_text }}
                 </p>
 
-                <ScoreAnswer
+                <ScoreAnswerComponent
                     v-if="question.question_type === 'score'"
                     :question="question"
                     @selectedScore="selectAnswer"
                 />
 
-                <TextAnswer
+                <TextAnswerComponent
                     v-if="question.question_type === 'text'"
                     :question="question"
                     @selectedText="selectAnswer"
                 />
 
-                <RadioButton
+                <RadioAnswerComponent
                     v-if="question.question_type === 'radio'"
                     :question="question"
                     :editable="false"
@@ -101,7 +100,7 @@
                     @selected-radio="selectAnswer"
                 />
 
-                <CheckBox
+                <CheckboxAnswerComponent
                     v-if="question.question_type === 'checkbox'"
                     :question="question"
                     :editable="false"

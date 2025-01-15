@@ -18,7 +18,9 @@
 
         computed: {
             selectedCheckboxes() {
-                return this.question.options.filter((checkbox) => checkbox.checked).map((checkbox) => checkbox.option_text);
+                return this.question.options
+                    .filter((checkbox) => checkbox.checked)
+                    .map((checkbox) => checkbox.option_text);
             },
         },
         methods: {
@@ -45,7 +47,11 @@
 <template>
     <div>
         <div class="w-full mx-auto max-w-md space-y-4">
-            <div v-for="(checkbox, index) in this.question.options" :key="index" class="flex items-center justify-between gap-4">
+            <div
+                v-for="(checkbox, index) in this.question.options"
+                :key="index"
+                class="flex items-center justify-between gap-4"
+            >
                 <input
                     type="checkbox"
                     v-model="checkbox.checked"

@@ -1,5 +1,5 @@
 <script>
-    import PopupComponent from "@/components/PopupComponent.vue";
+    import PopupComponent from "@/components/popup/PopupComponent.vue";
     import { useToast } from "vue-toastification";
     const toaster = useToast();
 
@@ -58,7 +58,7 @@
         <ul class="space-y-4">
             <li v-for="(template, index) in templates" :key="index">
                 <RouterLink
-                    :to="{ name: 'templateDetail', params: { id: template.survey_templateID } }"
+                    :to="{ name: 'adminTemplateView', params: { id: template.survey_templateID } }"
                     class="p-4 block border border-neutral-300 rounded-lg bg-neutral-50 cursor-pointer transition-transform duration-200 ease-in-out hover:bg-neutral-100 hover:-translate-y-1 hover:shadow-md focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-efrei-blue-700"
                 >
                     <button

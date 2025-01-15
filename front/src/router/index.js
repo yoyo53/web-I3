@@ -9,97 +9,89 @@ const router = createRouter({
         {
             path: "/",
             name: "home",
-            component: () => import("../views/HomeView.vue"),
-        },
-        {
-            path: "/login",
-            name: "login",
-            component: () => import("../views/LoginView.vue"),
-        },
-        {
-            path: "/admin/register",
-            name: "register",
-            component: () => import("../views/RegisterView.vue"),
-        },
-        {
-            path: "/teacher",
-            name: "teacher",
-            component: () => import("../views/SurveysListView.vue"),
-        },
-        {
-            path: "/admin",
-            name: "admin",
-            component: () => import("../views/SurveysListView.vue"),
-        },
-        {
-            path: "/admin/templates",
-            name: "templates",
-            component: () => import("../views/TemplateView.vue"),
-        },
-        {
-            path: '/admin/template/:id',
-            name: 'templateDetail',
-            component: () => import('../views/TemplateDetailView.vue'),
-            props: true,
-        },
-        {
-            path: "/admin/templates/create",
-            name: "createTemplate",
-            component: () => import("../views/CreateTemplateView.vue"),
-        },
-        {
-            path: "/admin/surveys/create",
-            name: "createSurvey",
-            component: () => import("../views/CreateSurveyView.vue"),
-        },
-        {
-            props: true,
-            path: "/profile",
-            name: "profile",
-            component: () => import("../views/ProfileView.vue"),
+            component: () => import("@/views/HomeView.vue"),
         },
         {
             path: "/about",
             name: "about",
-            component: () => import("../views/AboutView.vue"),
+            component: () => import("@/views/AboutView.vue"),
         },
         {
-            path: "/admin/survey/:id",
-            name: "adminSurveys",
-            component: () => import("../views/DetailedSurveyView.vue"),
+            path: "/login",
+            name: "login",
+            component: () => import("@/views/LoginView.vue"),
+        },
+        {
+            path: "/profile",
+            name: "profile",
+            component: () => import("@/views/ProfileView.vue"),
+        },
+        {
+            path: "/admin",
+            name: "admin",
+            component: () => import("@/views/surveys/SurveysListView.vue"),
+        },
+        {
+            path: "/admin/users/create",
+            name: "adminUserCreate",
+            component: () => import("@/views/admin/UserCreateView.vue"),
+        },
+        {
+            path: "/admin/surveys/create",
+            name: "adminSurveyCreate",
+            component: () => import("@/views/surveys/SurveyCreateView.vue"),
+        },
+        {
+            path: "/admin/surveys/:id",
+            name: "adminSurveyView",
+            component: () => import("@/views/surveys//SurveyView.vue"),
             props: true,
         },
         {
-            path: "/teacher/survey/:id",
-            name: "teacherSurveys",
-            component: () => import("../views/DetailedSurveyView.vue"),
+            path: "/admin/templates",
+            name: "adminTemplatesList",
+            component: () => import("@/views/templates/TemplatesListView.vue"),
+        },
+        {
+            path: "/admin/templates/create",
+            name: "adminTemplateCreate",
+            component: () => import("@/views/templates/TemplateCreateView.vue"),
+        },
+        {
+            path: "/admin/templates/:id",
+            name: "adminTemplateView",
+            component: () => import("@/views/templates/TemplateView.vue"),
             props: true,
+        },
+        {
+            path: "/teacher",
+            name: "teacher",
+            component: () => import("@/views/surveys/SurveysListView.vue"),
+        },
+        {
+            path: "/teacher/surveys/:id",
+            name: "teacherSurveyView",
+            component: () => import("@/views/surveys/SurveyView.vue"),
+            props: true,
+        },
+        {
+            path: "/student",
+            name: "student",
+            component: () => import("@/views/surveys/SurveysListView.vue"),
         },
         {
             path: "/student/survey/:id",
-            name: "studentSurveys",
-            component: () => import("../views/DetailedSurveyView.vue"),
+            name: "studentSurveyView",
+            component: () => import("@/views/surveys/SurveyView.vue"),
             props: true,
         },
         {
-          path: "/student",
-          name: "student",
-          component: () => import("../views/SurveysListView.vue"),
-        }, 
-        {
-          path: "/student/survey/:id",
-          name: "student-survey",
-          component: () => import("../views/DetailedSurveyView.vue"),
-          props: true,
-        }, 
-        {
             path: "/:pathMatch(.*)*",
             name: "404",
-            component: () => import("../views/404View.vue"),
+            component: () => import("@/views/404View.vue"),
         },
     ],
 });
-
 
 router.beforeEach(async (to, from, next) => {
     document.activeElement.blur();

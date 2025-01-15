@@ -14,11 +14,11 @@
         methods: {
             getSurveyRoute() {
                 if (this.userState.userType === "Admin") {
-                    return "adminSurveys";
+                    return "adminSurveyView";
                 } else if (this.userState.userType === "Teacher") {
-                    return "teacherSurveys";
+                    return "teacherSurveyView";
                 } else {
-                    return "studentSurveys";
+                    return "studentSurveyView";
                 }
             },
             async deleteSurvey(surveyID) {

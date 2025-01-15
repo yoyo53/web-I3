@@ -1,6 +1,6 @@
 <script>
-    import SurveyAnswerComponent from "@/components/surveys/SurveyAnswerComponent.vue";
-    import SurveyAnswerFormComponent from "@/components/surveys/SurveyAnswerFormComponent.vue";
+    import SurveyStatisticsComponent from "@/components/surveys/SurveyStatisticsComponent.vue";
+    import SurveyFormComponent from "@/components/surveys/SurveyFormComponent.vue";
     import { useToast } from "vue-toastification";
     const toaster = useToast();
 
@@ -19,8 +19,8 @@
             };
         },
         components: {
-            SurveyAnswerComponent,
-            SurveyAnswerFormComponent,
+            SurveyStatisticsComponent,
+            SurveyFormComponent,
         },
         methods: {
             async getSurvey(surveyID) {
@@ -72,18 +72,10 @@
             <div class="shadow rounded-lg p-6">
                 <h2 class="text-xl font-semibold mb-4">Questions</h2>
                 <div v-if="userState.userType === 'Admin' || userState.userType === 'Teacher'">
-                    <SurveyAnswerComponent
-                        :questions="survey.questions"
-                        class="mb-4"
-                    >
-                    </SurveyAnswerComponent>
+                    <SurveyStatisticsComponent :questions="survey.questions" class="mb-4" />
                 </div>
                 <div v-else>
-                    <SurveyAnswerFormComponent
-                        :questions="survey.questions"
-                        :surveyID="this.survey.surveyID"
-                        class="mb-4"
-                    />
+                    <SurveyFormComponent :questions="survey.questions" :surveyID="this.survey.surveyID" class="mb-4" />
                 </div>
             </div>
         </section>

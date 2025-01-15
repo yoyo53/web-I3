@@ -77,7 +77,7 @@
                 </li>
                 <li v-if="userState.userType === 'Admin'">
                     <RouterLink
-                        :to="{ name: 'templates' }"
+                        :to="{ name: 'adminTemplatesList' }"
                         class="flex items-center p-2 rounded-lg hover:bg-efrei-blue-700 focus:outline-none focus:ring-offset-0 focus:ring-2 focus:ring-efrei-blue-500"
                     >
                         <img src="@/assets/template.svg" class="size-7" />

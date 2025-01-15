@@ -1,10 +1,10 @@
 <script>
-    import CreateSurveyComponent from "@/components/surveys/CreateSurveyComponent.vue";
+    import SurveyCreateComponent from "@/components/surveys/SurveyCreateComponent.vue";
 
     export default {
-        name: "CreateSurveyView",
+        name: "SurveyCreateView",
         components: {
-            CreateSurveyComponent,
+            SurveyCreateComponent,
         },
     };
 </script>
@@ -13,7 +13,7 @@
     <div>
         <section class="my-6">
             <h1 class="my-6 text-center text-2xl font-semibold">Create Survey</h1>
-            <CreateSurveyComponent />
+            <SurveyCreateComponent />
         </section>
     </div>
 </template>

@@ -1,5 +1,5 @@
 <script>
-    import SideBarComponent from "./sidebar/SideBarComponent.vue";
+    import SideBarComponent from "@/components/sidebar/SideBarComponent.vue";
 
     export default {
         name: "HeaderComponent",

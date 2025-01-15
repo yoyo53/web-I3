@@ -31,8 +31,7 @@
                 this.$emit("update-options", this.question, options);
                 if (this.selectedRadio === index) {
                     this.selectedRadio = null;
-                }
-                else {
+                } else {
                     if (this.selectedRadio > index) {
                         this.selectedRadio -= 1;
                     }

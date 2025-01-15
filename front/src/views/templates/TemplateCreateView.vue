@@ -1,10 +1,10 @@
 <script>
-    import CreateTemplateComponent from "@/components/templates/CreateTemplateComponent.vue";
+    import TemplateCreateComponent from "@/components/templates/TemplateCreateComponent.vue";
 
     export default {
-        name: "CreateTemplateView",
+        name: "TemplateCreateView",
         components: {
-            CreateTemplateComponent,
+            TemplateCreateComponent,
         },
     };
 </script>
@@ -13,7 +13,7 @@
     <div>
         <section class="my-6">
             <h1 class="my-6 text-center text-2xl font-semibold">Create Template</h1>
-            <CreateTemplateComponent />
+            <TemplateCreateComponent />
         </section>
     </div>
 </template>

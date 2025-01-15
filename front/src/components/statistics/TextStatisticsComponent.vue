@@ -52,7 +52,7 @@
                 </div>
                 <div v-else class="text-sm text-neutral-500">Answer #{{ index + 1 }}</div>
             </div>
-    
+
             <div v-if="filteredAnswers.length > itemsPerPage" class="flex justify-center items-center mt-6 space-x-4">
                 <button
                     type="button"
@@ -72,7 +72,7 @@
                     Next
                 </button>
             </div>
-    
+
             <div v-if="question.answers.length <= 0" class="text-center text-neutral-500 text-lg mt-8">
                 No answers available
             </div>

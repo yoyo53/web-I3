@@ -1,7 +1,7 @@
 <script>
     import { Bar } from "vue-chartjs";
     import { Chart, CategoryScale, LinearScale, BarElement } from "chart.js";
-    import TextAnswerComponent from "@/components/statistics/TextAnswerComponent.vue";
+    import TextStatisticsComponent from "@/components/statistics/TextStatisticsComponent.vue";
 
     Chart.register(CategoryScale, LinearScale, BarElement);
 
@@ -31,7 +31,7 @@
         },
         components: {
             Bar,
-            TextAnswerComponent,
+            TextStatisticsComponent,
         },
         methods: {
             countAnswers() {
@@ -75,7 +75,7 @@
                 {{ showDetails ? "Close Details" : "View Details" }}
             </button>
 
-            <TextAnswerComponent v-if="showDetails" :question="question" />
+            <TextStatisticsComponent v-if="showDetails" :question="question" />
         </div>
     </div>
 </template>

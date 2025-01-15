@@ -1,9 +1,9 @@
 <script>
     import { Pie } from "vue-chartjs";
-    import { Chart, ArcElement } from "chart.js";
-    import TextAnswerComponent from "@/components/statistics/TextAnswerComponent.vue";
+    import { Chart, ArcElement, Legend } from "chart.js";
+    import TextStatisticsComponent from "@/components/statistics/TextStatisticsComponent.vue";
 
-    Chart.register(ArcElement);
+    Chart.register(ArcElement, Legend);
 
     export default {
         name: "RadioStatisticsComponent",
@@ -26,7 +26,7 @@
         },
         components: {
             Pie,
-            TextAnswerComponent,
+            TextStatisticsComponent,
         },
         methods: {
             countAnswers() {
@@ -70,7 +70,7 @@
                 {{ showDetails ? "Close Details" : "View Details" }}
             </button>
 
-            <TextAnswerComponent v-if="showDetails" :question="question" />
+            <TextStatisticsComponent v-if="showDetails" :question="question" />
         </div>
     </div>
 </template>

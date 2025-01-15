@@ -1,22 +1,22 @@
 <script>
-    import SelectSearchComponent from "@/components/SelectSearchComponent.vue";
+    import SelectSearchComponent from "@/components/sselect-search/SelectSearchComponent.vue";
     import { useToast } from "vue-toastification";
     const toaster = useToast();
 
     export default {
-        name: "TemplateSelectSearchComponent",
+        name: "SelectSearchModuleComponent",
         data() {
             return {
-                templates: [],
+                modules: [],
             };
         },
         components: {
             SelectSearchComponent,
         },
         methods: {
-            async getAllTemplates() {
+            async getallModules() {
                 try {
-                    const response = await fetch(import.meta.env.VITE_API_URL + 'admin/templates', {
+                    const response = await fetch(import.meta.env.VITE_API_URL + "admin/modules", {
                         method: "GET",
                         headers: {
                             "Content-Type": "application/json",
@@ -28,7 +28,11 @@
                         throw new Error(response.statusText);
                     }
 
-                    this.templates = await response.json();
+                    const data = await response.json();
+                    data.forEach((module) => {
+                        module.name = `${module.subject} - ${module.group} - ${module.teacher_lastname}`;
+                    });
+                    this.modules = data;
                 } catch (error) {
                     console.error(error);
                     toaster.error("Something went wrong");
@@ -36,16 +40,16 @@
             },
         },
         beforeMount() {
-            this.getAllTemplates();
+            this.getallModules();
         },
     };
 </script>
 
 <template>
     <SelectSearchComponent
-        :options="templates"
-        placeholder="Select a template"
-        @option-selected="(option) => this.$emit('template-selected', option)"
+        :options="modules"
+        placeholder="Select a module"
+        @option-selected="(option) => this.$emit('module-selected', option)"
     />
 </template>
 
