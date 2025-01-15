@@ -38,7 +38,7 @@
 
 <template>
     <div class="flex items-center justify-center">
-        <div class="my-12">
+        <section class="my-12">
             <h2 class="text-2xl font-semibold">Personal Information</h2>
             <p class="mt-1 text-sm/6 text-neutral-500">Basic info, like your name and email address</p>
 
@@ -111,7 +111,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
     </div>
 </template>
 

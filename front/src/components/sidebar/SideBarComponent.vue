@@ -84,6 +84,15 @@
                         <span class="ms-3 text-lg text-white">Template</span>
                     </RouterLink>
                 </li>
+                <li v-if="userState.userType === 'Admin'">
+                    <RouterLink
+                        :to="{ name: 'adminUserCreate' }"
+                        class="flex items-center p-2 rounded-lg hover:bg-efrei-blue-700 focus:outline-none focus:ring-offset-0 focus:ring-2 focus:ring-efrei-blue-500"
+                    >
+                        <img src="@/assets/profile.svg" class="size-7" />
+                        <span class="ms-3 text-lg text-white">Create User</span>
+                    </RouterLink>
+                </li>
                 <li class="!mt-auto">
                     <RouterLink
                         @click="this.logout"
