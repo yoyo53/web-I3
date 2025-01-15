@@ -93,7 +93,7 @@
                         >Teacher ID</label
                     >
                     <label
-                        v-else-if="userState.userType === 'Student'"
+                        v-else
                         for="user-id"
                         class="block text-sm/6 font-medium"
                         >Student ID</label

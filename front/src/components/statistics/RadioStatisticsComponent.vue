@@ -60,7 +60,9 @@
 
 <template>
     <div class="space-y-8">
-        <Pie :data="chartData" :options="chartOptions" class="!h-96" />
+        <div>
+            <Pie :data="chartData" :options="chartOptions" class="!h-96" />
+        </div>
 
         <div v-if="userState.userType === 'Admin'" class="space-y-4">
             <button
