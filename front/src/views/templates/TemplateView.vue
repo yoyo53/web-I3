@@ -1,6 +1,7 @@
 <script>
     import RadioAnswerComponent from "@/components/answers/RadioAnswerComponent.vue";
     import CheckboxAnswerComponent from "@/components/answers/CheckboxAnswerComponent.vue";
+    import PopupComponent from "@/components/popup/PopupComponent.vue";
     import { useToast } from "vue-toastification";
     const toaster = useToast();
 
@@ -15,11 +16,13 @@
         data() {
             return {
                 template: null,
+                showPopup: false,
             };
         },
         components: {
             RadioAnswerComponent,
             CheckboxAnswerComponent,
+            PopupComponent,
         },
         methods: {
             async getTemplate(templateID) {
@@ -62,6 +65,12 @@
                     console.error(error);
                     toaster.error("Something went wrong");
                 }
+            },
+            openModal() {
+                this.showPopup = true;
+            },
+            closeModal() {
+                this.showPopup = false;
             },
         },
         async beforeMount() {
@@ -120,13 +129,19 @@
 
             <div class="flex justify-center mt-4">
                 <button
-                    @click="deleteTemplate(id)"
+                    @click="openModal()"
                     class="block py-2.5 px-6 text-sm rounded-lg bg-red-50 text-red-500 cursor-pointer font-semibold text-center hover:bg-red-100 focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-red-700"
                 >
                     Delete Template
                 </button>
             </div>
         </section>
+        <PopupComponent
+            :isOpen="showPopup"
+            popUpText="Are you sure you want to delete this template ? This will also delete all associated surveys and answers"
+            @close-modal="closeModal()"
+            @confirm-action="deleteTemplate(id)"
+        />
     </div>
 </template>
 
