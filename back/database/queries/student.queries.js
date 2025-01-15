@@ -317,8 +317,8 @@ async function answerToSurvey(surveyID, studentID, answers) {
                 surveyID: parseInt(surveyID),
                 studentID: studentID,
                 answer_questions: {
-                    create: Object.entries(answers).flatMap(([questionID, responses]) =>
-                        responses.map(response => ({
+                    create: Object.entries(answers).flatMap(([questionID, responses]) => 
+                        (Array.isArray(responses) ? responses : [responses]).map(response => ({
                             questionID: parseInt(questionID),
                             answer_text: response
                         }))
