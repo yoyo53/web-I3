@@ -55,7 +55,7 @@ describe('student routes', () => {
 
     describe('POST /student/answertosurvey', () => {
         it('should submit answers to a survey', async () => {
-            studentController.answerToSurvey.mockImplementation((req, res) => res.status(200).json(mockResponse));
+            studentController.answerToSurvey.mockImplementation((req, res) => res.status(200));
 
             const response = await request(app).post('/student/answertosurvey').send({ surveyID: 1, answers: [{ questionID: 1, answer_text: 'Answer' }] });
             expect(response.status).toBe(200);
