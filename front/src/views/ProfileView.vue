@@ -92,12 +92,7 @@
                     <label v-if="userState.userType === 'Teacher'" for="user-id" class="block text-sm/6 font-medium"
                         >Teacher ID</label
                     >
-                    <label
-                        v-else
-                        for="user-id"
-                        class="block text-sm/6 font-medium"
-                        >Student ID</label
-                    >
+                    <label v-else for="user-id" class="block text-sm/6 font-medium">Student ID</label>
                     <div class="mt-2">
                         <input
                             disabled

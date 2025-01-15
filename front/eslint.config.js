@@ -5,13 +5,12 @@ import pluginPrettier from "eslint-config-prettier";
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
-  pluginJs.configs.recommended,
-  ...pluginVue.configs["flat/essential"],
-  {files: ["**/*.{js,mjs,cjs,vue}"]},
-  {ignores: ["**/dist/**"]},
-  {files: ["**/*.js"], languageOptions: {sourceType: "module"}},
-  {rules: {"no-unused-vars": ["warn", { argsIgnorePattern: "^_" }]}},
-  {languageOptions: { globals: { ...globals.browser, ...globals.node }}},
-  pluginPrettier,
+    pluginJs.configs.recommended,
+    ...pluginVue.configs["flat/essential"],
+    { files: ["**/*.{js,mjs,cjs,vue}"] },
+    { ignores: ["**/dist/**"] },
+    { files: ["**/*.js"], languageOptions: { sourceType: "module" } },
+    { rules: { "no-unused-vars": ["warn", { argsIgnorePattern: "^_" }] } },
+    { languageOptions: { globals: { ...globals.browser, ...globals.node } } },
+    pluginPrettier,
 ];
-

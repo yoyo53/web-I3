@@ -1,11 +1,10 @@
-import { test } from 'vitest'
-import { render } from '@testing-library/vue'
-import HomeView from '../../src/views/HomeView.vue'
+import { test } from "vitest";
+import { render } from "@testing-library/vue";
+import HomeView from "@/views/HomeView.vue";
 
-test('Page', () => {
-  const page = render(HomeView, {
-    props: {
-    }
-  })
-  page.getAllByText('TeachPoint. Teacher grading made easy')
-})
+test("Page", () => {
+    const page = render(HomeView, {
+        props: {},
+    });
+    page.getAllByText("TeachPoint. Teacher grading made easy");
+});
