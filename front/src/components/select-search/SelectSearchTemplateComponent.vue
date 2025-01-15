@@ -1,5 +1,5 @@
 <script>
-    import SelectSearchComponent from "@/components/sselect-search/SelectSearchComponent.vue";
+    import SelectSearchComponent from "@/components/select-search/SelectSearchComponent.vue";
     import { useToast } from "vue-toastification";
     const toaster = useToast();
 
