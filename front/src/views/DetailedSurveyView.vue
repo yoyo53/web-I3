@@ -1,86 +1,93 @@
+<script>
+    import SurveyAnswerComponent from "@/components/surveys/SurveyAnswerComponent.vue";
+    import SurveyAnswerFormComponent from "@/components/surveys/SurveyAnswerFormComponent.vue";
+    import { useToast } from "vue-toastification";
+    const toaster = useToast();
+
+    export default {
+        name: "SurveyView",
+        inject: ["userState"],
+        props: {
+            id: {
+                type: String,
+                required: true,
+            },
+        },
+        data() {
+            return {
+                survey: null,
+            };
+        },
+        components: {
+            SurveyAnswerComponent,
+            SurveyAnswerFormComponent,
+        },
+        methods: {
+            async getSurvey(surveyID) {
+                try {
+                    let route;
+                    if (this.userState.userType === "Teacher") {
+                        route = "teacher/surveys/";
+                    } else if (this.userState.userType === "Admin") {
+                        route = "admin/surveys/";
+                    } else {
+                        route = "student/surveys/";
+                    }
+                    const response = await fetch(import.meta.env.VITE_API_URL + route + surveyID, {
+                        method: "GET",
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${localStorage.getItem("token")}`,
+                        },
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(response.statusText);
+                    }
+
+                    this.survey = await response.json();
+                } catch (error) {
+                    console.error(error);
+                    toaster.error("Something went wrong");
+                }
+            },
+        },
+        beforeMount() {
+            this.getSurvey(this.id);
+        },
+    };
+</script>
+
 <template>
-  <div class="flex">
-    <!-- Contenu principal -->
-    <div v-if="survey && Object.keys(survey).length > 0" class="flex-grow p-6 bg-gray-50">
-      <!-- Titre et détails du sondage -->
-      <div class="bg-white shadow rounded-lg p-6 mb-6 flex justify-between items-center">
-        <h1 class="text-2xl font-semibold text-gray-800 mb-4"> {{ survey.subject }}-{{ survey.group }}</h1>
-        <div class="text-right">
-          <h3 class="text-lg font-medium text-gray-700">Teachers:</h3>
-            <p class="text-gray-600">{{ survey.teacher.firstname }} {{ survey.teacher.lastname }}</p>
-        </div>
-      </div>
+    <div class="flex justify-center items-center">
+        <section v-if="!survey">
+            <p class="text-2xl font-semibold">Loading survey details...</p>
+        </section>
 
-      <!-- Liste des questions -->
-      <div class="bg-white shadow rounded-lg p-6">
-        <h2 class="text-xl font-semibold text-gray-800 mb-4">Questions</h2>
-        
-        <!-- Composants de réponse Teacher et Admin -->
-        <div v-if="userState.userType === 'Teacher' || userState.userType === 'Admin'">
-          <div v-for="question in survey.questions" :key="question.id"
-            class="mb-6 border-b pb-4 last:border-b-0 last:pb-0">
-            <p class="text-lg font-medium text-gray-700 mb-2">{{ question.question_text }}</p>
-            <SurveyAnswerComponent v-if="userState.userType === 'Teacher' || userState.userType === 'Admin'"
-              :question="question" class="mt-4" />
-          </div>
-        </div>
+        <section v-else class="p-6 w-full max-w-7xl">
+            <h1 class="mb-4 text-2xl font-semibold text-center">
+                {{ survey.subject }} - {{ survey.group }} - {{ survey.teacher.firstname }} {{ survey.teacher.lastname }}
+            </h1>
 
-        <!-- Composants de réponse Student -->
-        <div v-else-if="userState.userType === 'Student'">
-          <!-- Template Name -->
-          <SurveyAnswerFormComponent :questions="survey.questions" :surveyID=this.survey.surveyID class="mt-4" />
-        </div>
-      </div>
+            <div class="shadow rounded-lg p-6">
+                <h2 class="text-xl font-semibold mb-4">Questions</h2>
+                <div v-if="userState.userType === 'Admin' || userState.userType === 'Teacher'">
+                    <SurveyAnswerComponent
+                        :questions="survey.questions"
+                        class="mb-4"
+                    >
+                    </SurveyAnswerComponent>
+                </div>
+                <div v-else>
+                    <SurveyAnswerFormComponent
+                        :questions="survey.questions"
+                        :surveyID="this.survey.surveyID"
+                        class="mb-4"
+                    />
+                </div>
+            </div>
+        </section>
     </div>
-  </div>
 </template>
 
-<script>
-import SurveyAnswerComponent from '@/components/surveys/SurveyAnswerComponent.vue';
-import SurveyAnswerFormComponent from '@/components/surveys/SurveyAnswerFormComponent.vue';
-
-export default {
-  data() {
-    return {
-      survey: {}, // Contiendra les détails du sondage
-    };
-  },
-  inject: ['userState'],
-  components: {
-    SurveyAnswerComponent,
-    SurveyAnswerFormComponent,
-  },
-  name: 'DetailedSurveysComponent',
-  props: {
-    id: {
-      type: String,
-      required: true,
-    },
-  },
-  methods: {
-    // Fonction pour récupérer les questions du sondage via une API
-    async fetchSurvey() {
-      let url;
-      if (this.userState.userType === 'Teacher') {
-        url = `${import.meta.env.VITE_API_URL}teacher/surveys/${this.id}`;
-      } else if (this.userState.userType === 'Admin') {
-        url = `${import.meta.env.VITE_API_URL}admin/surveys/${this.id}`;
-      } else {
-        url = `${import.meta.env.VITE_API_URL}student/surveys/${this.id}`;
-      }
-      const response = await fetch(url, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        });
-        this.survey = await response.json();
-        console.log(this.survey);
-    },
-  },
-  beforeMount() {
-    this.fetchSurvey();
-  },
-};
-</script>
+<style></style>

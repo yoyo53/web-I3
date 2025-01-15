@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import { inject } from "vue";
 import { useToast } from "vue-toastification";
+const toaster = useToast();
 
 const router = createRouter({
     history: createWebHashHistory(import.meta.env.VITE_BASE_PATH),
@@ -99,7 +100,6 @@ const router = createRouter({
     ],
 });
 
-const toast = useToast();
 
 router.beforeEach(async (to, from, next) => {
     document.activeElement.blur();
@@ -118,7 +118,7 @@ router.beforeEach(async (to, from, next) => {
                 },
             });
             if (!response.ok) {
-                toast.error("Session expired, please login again.");
+                toaster.error("Session expired, please login again.");
                 throw new Error(response.statusText);
             }
             const data = await response.json();
@@ -137,27 +137,27 @@ router.beforeEach(async (to, from, next) => {
         if (to.path.startsWith("/admin") || to.path === "/profile") {
             next();
         } else {
-            toast.error("You are not authorized to access this page.");
+            toaster.error("You are not authorized to access this page.");
             next("/admin");
         }
     } else if (userState.userType === "Teacher") {
         if (to.path.startsWith("/teacher") || to.path === "/profile") {
             next();
         } else {
-            toast.error("You are not authorized to access this page.");
+            toaster.error("You are not authorized to access this page.");
             next("/teacher");
         }
     } else if (userState.userType === "Student") {
         if (to.path.startsWith("/student") || to.path === "/profile") {
             next();
         } else {
-            toast.error("You are not authorized to access this page.");
+            toaster.error("You are not authorized to access this page.");
             next("/student");
         }
     } else if (to.path === "/login") {
         next();
     } else {
-        toast.error("You are not authorized to access this page.");
+        toaster.error("You are not authorized to access this page.");
         next("/login");
     }
 });

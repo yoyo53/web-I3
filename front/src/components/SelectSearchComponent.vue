@@ -35,7 +35,7 @@
             closeDropdown() {
                 setTimeout(() => {
                     this.isOpen = false;
-                }, 200);
+                }, 150);
             },
             navigate(direction) {
                 if (!this.isOpen) {
@@ -98,3 +98,5 @@
         </div>
     </div>
 </template>
+
+<style></style>

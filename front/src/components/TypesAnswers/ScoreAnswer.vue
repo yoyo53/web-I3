@@ -1,32 +1,42 @@
+<script>
+    export default {
+        name: "ScoreAnswerComponent",
+        props: {
+            question: {
+                type: Object,
+                required: true,
+            },
+            score: {
+                type: Number,
+                default: 5,
+            },
+        },
+        data() {
+            return {
+                selectedScore: null,
+            };
+        },
+        methods: {
+            selectScore(score) {
+                this.selectedScore = score;
+                this.$emit("selectedScore", [this.selectedScore.toString()], this.question);
+            },
+        },
+    };
+</script>
 <template>
-    <div class="flex justify-center px-6 py-4 lg:px-8">
-        <div v-for="n in 5" :key="n" @click="selectedScore = n" class="inline-block text-4xl select-none mt-10 sm:mx-auto sm:max-w-sm">
-            <span :class="n <= selectedScore ? 'text-efrei-blue-500' : 'text-gray-500'">&#9733;</span>
+    <div class="flex justify-center px-6 py-4">
+        <div
+            v-for="value in score"
+            :key="value"
+            @click="selectScore(value)"
+            @keydown.enter="selectScore(value)"
+            tabindex="0"
+            class="size-10 text-center text-4xl mx-auto cursor-pointer select-none rounded-lg focus:outline-none focus:ring-offset-0 focus:ring-2 focus:ring-efrei-blue-700"
+        >
+            <span :class="value <= selectedScore ? 'text-efrei-blue-500' : 'text-neutral-500'">&#9733;</span>
         </div>
     </div>
 </template>
 
-<script>
-
-export default {
-    name: 'ScoreAnswer',
-    props: {
-        question: {
-            type: Object,
-            required: true,
-        },
-    },
-    data() {
-        return {
-            selectedScore: null,
-        };
-    },
-    watch: {
-        selectedScore() {
-            this.$emit('selectedScore', [this.selectedScore.toString()], this.question);
-        },
-    },
-};
-
-
-</script>
+<style></style>

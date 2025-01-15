@@ -68,7 +68,7 @@ router.get('/surveys/:id', controller.getSurveyByID);
  *       500:
  *         description: Error while deleting the survey
  */
-router.delete('/deleteSurvey/:id', controller.deleteSurveyByID);
+router.delete('/survey/:id', controller.deleteSurveyByID);
 
 /**
  * @swagger

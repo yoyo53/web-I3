@@ -1,86 +1,83 @@
+<script>
+    export default {
+        name: "TextStatisticsComponent",
+        inject: ["userState"],
+        props: {
+            question: {
+                type: Object,
+                required: true,
+            },
+            itemsPerPage: {
+                type: Number,
+                default: 5,
+            },
+        },
+        data() {
+            return {
+                currentPage: 1,
+            };
+        },
+        computed: {
+            totalPages() {
+                return Math.ceil(this.filteredAnswers.length / this.itemsPerPage);
+            },
+            filteredAnswers() {
+                return this.userState.userType === "Admin"
+                    ? this.question.answers
+                    : this.question.answers.filter((answer) => answer.answer_text);
+            },
+            filteredAndPaginatedAnswers() {
+                return this.filteredAnswers.slice(
+                    (this.currentPage - 1) * this.itemsPerPage,
+                    this.currentPage * this.itemsPerPage,
+                );
+            },
+        },
+    };
+</script>
+
 <template>
-    <div class="max-w-3xl mx-auto p-4">
-        <!-- Affichage des réponses -->
-        <div 
-            v-for="(answer, index) in filteredAndPaginatedAnswers" 
-            :key="index" 
-            class="flex items-center p-4 mb-4 bg-white shadow-md border border-gray-300 rounded-lg hover:shadow-lg hover:border-gray-400 transition duration-300"
-        >
-            <div class="ml-4 flex-grow">
-                <p class="text-lg font-medium text-gray-800">{{ answer.answer_text }}</p>
-            </div>
-            <div v-if="userState.userType === 'Admin'">
-                {{ answer.student.firstname }} {{ answer.student.lastname }}
-            </div>
-            <div v-else class="text-sm text-gray-400">
-                Answer #{{ index + 1 }}
-            </div>
-        </div>
-
-        <!-- Pagination -->
-        <div v-if="filteredAnswers.length > 0" class="flex justify-center items-center mt-6 space-x-4">
-            <button 
-                class="px-6 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition duration-300 disabled:bg-gray-300 disabled:cursor-not-allowed" 
-                :disabled="currentPage === 1" 
-                @click="currentPage--"
+    <div>
+        <div class="max-w-3xl mx-auto py-4">
+            <div
+                v-for="(answer, index) in filteredAndPaginatedAnswers"
+                :key="index"
+                class="flex items-center p-4 mb-4 bg-white shadow-md border border-gray-300 rounded-lg hover:shadow-lg hover:border-gray-400 transition duration-300"
             >
-                Previous
-            </button>
-            <span class="text-gray-600 text-sm font-medium">
-                Page {{ currentPage }} of {{ totalPages }}
-            </span>
-            <button 
-                class="px-6 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition duration-300 disabled:bg-gray-300 disabled:cursor-not-allowed" 
-                :disabled="currentPage === totalPages" 
-                @click="currentPage++"
-            >
-                Next
-            </button>
-        </div>
-
-        <!-- Message si aucune réponse -->
-        <div v-else class="text-center text-gray-500 text-lg mt-8">
-            No answers available
+                <div class="ml-4 flex-grow">
+                    <p class="text-lg font-medium">{{ answer.answer_text }}</p>
+                </div>
+                <div v-if="userState.userType === 'Admin'">
+                    {{ answer.student.firstname }} {{ answer.student.lastname }}
+                </div>
+                <div v-else class="text-sm text-neutral-500">Answer #{{ index + 1 }}</div>
+            </div>
+    
+            <div v-if="filteredAnswers.length > itemsPerPage" class="flex justify-center items-center mt-6 space-x-4">
+                <button
+                    type="button"
+                    class="py-2 px-4 bg-efrei-blue-500 font-semibold text-white rounded-md shadow-md hover:bg-efrei-blue-950 focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-efrei-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed"
+                    :disabled="currentPage === 1"
+                    @click="currentPage--"
+                >
+                    Previous
+                </button>
+                <span class="text-sm text-neutral-500 font-medium">Page {{ currentPage }} of {{ totalPages }}</span>
+                <button
+                    type="button"
+                    class="py-2 px-4 bg-efrei-blue-500 font-semibold text-white rounded-md shadow-md hover:bg-efrei-blue-950 focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-efrei-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed"
+                    :disabled="currentPage === totalPages"
+                    @click="currentPage++"
+                >
+                    Next
+                </button>
+            </div>
+    
+            <div v-if="question.answers.length <= 0" class="text-center text-neutral-500 text-lg mt-8">
+                No answers available
+            </div>
         </div>
     </div>
 </template>
 
-<script>
-export default {
-    props: {
-        question: {
-            type: Object,
-            required: true
-        }
-    },
-    data() {
-        return {
-            currentPage: 1, // Page actuelle
-            itemsPerPage: 5, // Nombre de réponses par page
-            isTeacher: false, // Rôle de l'utilisateur
-        };
-    },
-    inject: ['userState'],
-    computed: {
-        totalPages() {
-            // Calcul du nombre total de pages
-            return Math.ceil(this.filteredAnswers.length / this.itemsPerPage);
-        },
-        filteredAnswers() {
-            // Filtre les réponses en fonction du rôle de l'utilisateur
-            return this.isTeacher
-                ? this.question.answers.filter(answer => answer.answer_text)
-                : this.question.answers;
-        },
-        filteredAndPaginatedAnswers() {
-            // Retourne les réponses filtrées pour la page actuelle
-            const start = (this.currentPage - 1) * this.itemsPerPage;
-            const end = start + this.itemsPerPage;
-            return this.filteredAnswers.slice(start, end);
-        },
-    },
-    beforeMount() {
-        this.isTeacher = this.userState.userType === 'Teacher';
-    },
-};
-</script>
+<style></style>

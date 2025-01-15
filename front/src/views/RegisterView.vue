@@ -3,6 +3,7 @@
     const toaster = useToast();
 
     export default {
+        name: "CreateUserView",
         data() {
             return {
                 email: "",
@@ -33,9 +34,8 @@
                     if (!response.ok) {
                         throw new Error(response.statusText);
                     }
-                    else {
-                        toaster.success("Account created successfully");
-                    }
+
+                    toaster.success("Account created successfully");
                 } catch (error) {
                     console.error(error);
                     toaster.error("Something went wrong");

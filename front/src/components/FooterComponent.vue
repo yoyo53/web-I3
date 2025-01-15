@@ -1,3 +1,5 @@
+<script></script>
+
 <template>
     <footer class="p-4 sm:p-6">
         <div class="sm:flex sm:justify-between">
@@ -126,3 +128,5 @@
         </div>
     </footer>
 </template>
+
+<style></style>

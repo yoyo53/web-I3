@@ -1,161 +1,149 @@
+<script>
+    import RadioButton from "@/components/TypesAnswers/RadioButton.vue";
+    import CheckBox from "@/components/TypesAnswers/CheckBox.vue";
+    import { useToast } from "vue-toastification";
+    const toaster = useToast();
+
+    export default {
+        name: "CreateTemplateComponent",
+        data() {
+            return {
+                templateName: "",
+                questions: [],
+            };
+        },
+        components: {
+            RadioButton,
+            CheckBox,
+        },
+        methods: {
+            addQuestion() {
+                this.questions.push({ question_text: "", question_type: "text", options: [] });
+            },
+            removeQuestion(index) {
+                this.questions.splice(index, 1);
+            },
+            updateOptions(question, options) {
+                question.options = options;
+            },
+            async postTemplate() {
+                if (this.questions.length === 0) {
+                    toaster.error("Please add at least one question");
+                }
+                else {
+                    try {
+                        const response = await fetch(import.meta.env.VITE_API_URL + 'admin/templates/create', {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                Authorization: `Bearer ${localStorage.getItem("token")}`,
+                            },
+                            body: JSON.stringify({
+                                name: this.templateName,
+                                questions: this.questions,
+                            }),
+                        });
+    
+                        if (!response.ok) {
+                            throw new Error(response.statusText);
+                        }
+    
+                        toaster.success("Template created successfully");
+                        this.$router.push({ name: "templates" });
+                    } catch (error) {
+                        console.error(error);
+                        toaster.error("Something went wrong");
+                    }
+                }
+            },
+        },
+    };
+</script>
+
 <template>
-  <form>
-    <!-- Template Name -->
-    <div class="mb-6">
-          <label for="template-name" class="block text-sm font-medium text-gray-700 mb-2">
-            Template Name
-          </label>
-          <input
-            type="text"
-            id="template-name"
-            v-model="templateName"
-            class="block w-full px-4 py-2 border rounded-md shadow-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            placeholder="Enter template name"
-          />
-          <div v-if="errors.templateName" class="text-red-500 text-sm mt-1">
-            {{ errors.templateName }}
-        </div>
+    <div class="p-6 max-w-3xl rounded-lg shadow-md mx-auto">
+        <form @submit.prevent="postTemplate">
+            <div class="mb-6">
+                <label for="template-name" class="block mb-2 text-sm"> Template Name </label>
+                <input
+                    type="text"
+                    id="template-name"
+                    v-model="templateName"
+                    required
+                    class="block w-full px-4 py-2 rounded-md border border-neutral-300 focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-efrei-blue-700"
+                    placeholder="Enter template name"
+                />
+            </div>
+            <div
+                v-for="(question, index) in questions"
+                :key="index"
+                class="mb-4 p-4 border-2 border-dashed border-neutral-200 rounded-lg"
+            >
+                <div class="flex text-sm justify-between items-center mb-2">
+                    <label class="block">Question {{ index + 1 }}</label>
+                    <button
+                        type="button"
+                        @click="removeQuestion(index)"
+                        class="text-red-400 hover:text-red-500 font-semibold rounded-lg focus:outline-none focus:ring-offset-4 focus:ring-2 focus:ring-red-700"
+                    >
+                        Remove
+                    </button>
+                </div>
+                <input
+                    type="text"
+                    v-model="question.question_text"
+                    required
+                    class="block w-full mb-2 px-4 py-2 border border-neutral-300 rounded-md shadow-sm focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-efrei-blue-700"
+                    placeholder="Enter question"
+                />
+
+                <label class="block text-sm mb-2">Response Type</label>
+                <select
+                    v-model="question.question_type"
+                    required
+                    class="block w-full px-4 py-2 bg-transparent border border-neutral-300 rounded-md focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-efrei-blue-700 disabled:bg-neutral-100"
+                >
+                    <option value="text">Text Input</option>
+                    <option value="score">Star Rating (1-5)</option>
+                    <option value="radio">Radio Buttons</option>
+                    <option value="checkbox">Checkbox</option>
+                </select>
+
+                <RadioButton
+                    v-if="question.question_type === 'radio'"
+                    :question="question"
+                    :editable="true"
+                    :answerable="false"
+                    @update-options="updateOptions"
+                    class="my-4"
+                />
+
+                <CheckBox
+                    v-if="question.question_type === 'checkbox'"
+                    :question="question"
+                    :editable="true"
+                    :answerable="false"
+                    @update-options="updateOptions"
+                    class="my-4"
+                />
+            </div>
+
+            <button
+                type="button"
+                @click="addQuestion"
+                class="w-full py-2 px-4 bg-efrei-blue-500 font-semibold text-white rounded-md shadow-md hover:bg-efrei-blue-950 focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-efrei-blue-700"
+            >
+                Add Question
+            </button>
+
+            <button
+                type="submit"
+                class="mt-4 w-full py-2 px-4 bg-efrei-blue-100 font-semibold rounded-md hover:bg-efrei-blue-200 focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-efrei-blue-700"
+            >
+                Save Template
+            </button>
+        </form>
     </div>
-    <!-- Dynamic Questions -->
-    <div v-for="(question, index) in questions" :key="index" class="mb-4 p-4 border-2 border-dashed border-transparent-hover rounded-lg">
-          <!-- <label class="block text-sm font-medium text-gray-700 mb-2">Question {{ index + 1 }}</label> -->
-          <div class="flex justify-between items-center mb-2">
-        <label class="block text-sm font-medium text-gray-700">Question {{ index + 1 }}</label>
-        <button @click="removeQuestion(index)" class="text-red-400 hover:text-red-500 transition duration-300">
-          Remove
-        </button>
-      </div>
-          <input
-            type="text"
-            v-model="question.question_text"
-            class="block w-full px-4 py-2 border rounded-md shadow-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 mb-2"
-            placeholder="Enter question"
-          />
-          <div v-if="errors[`question_${question.id}`]" class="text-red-500 text-sm mt-1">
-            {{ errors[`question_${question.id}`] }}
-        </div>
-  
-          <label class="block text-sm font-medium text-gray-700 mb-2">Response Type</label>
-          <select
-            v-model="question.question_type"
-            class="block w-full px-4 py-2 border rounded-md shadow-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-          >
-            <option value="text">Text Input</option>
-            <option value="score">Star Rating (1-5)</option>
-            <option value="radio">Radio Buttons</option>
-            <option value="checkbox">Checkbox</option>
-          </select>
-
-            <RadioButton 
-                v-if="question.question_type === 'radio'"
-                :question="question"
-                @update-options="updateOptions"
-            />
-
-            <CheckBox 
-                v-if="question.question_type === 'checkbox'"
-                :question="question"
-                @update-options="updateOptions"
-            />
-        </div>
-  
-        <!-- Add Question Button -->
-        <button
-          @click="addQuestion"
-            class="w-full py-2 px-4 bg-primary font-semibold text-[white] rounded-md shadow-md hover:bg-primary-hover transition duration-300"
-          >
-            Add Question
-          </button>
-        
-          <!-- Submit Form Button -->
-          <button
-            @click="submitTemplate"
-            class="mt-4 w-full py-2 px-4 bg-transparent font-semibold text-[primary] rounded-md shadow-md hover:bg-transparent-hover transition duration-300"
-        >
-          Submit Template
-        </button>
-           
-  </form> 
 </template>
 
-<script>
-    import RadioButton from '@/components/TypesAnswers/RadioButton.vue';
-    import CheckBox from '@/components/TypesAnswers/CheckBox.vue';
-
-  export default {
-    data() {
-      return {
-        templateName: '',
-        id: 0,
-        questions: [],
-        errors: {},
-      };
-    },
-    components: {
-      RadioButton,
-      CheckBox,
-    },
-    methods: {
-      addQuestion() {
-        this.id += 1;
-        this.questions.push({ id: this.id, question_text: '', question_type: 'text', options: [] });
-        console.log(this.questions);
-      },
-      removeQuestion(index) {
-        this.questions.splice(index, 1);
-      },
-      updateOptions(question, options) {
-      question.options = options; // Mettre à jour les options de la question
-      // const question = this.questions.find((q) => q.id === questionId);
-      // if (question) {
-      //   question.options = options;
-      // }
-    },
-    validateFields() {
-      this.errors = {}; // Réinitialiser les erreurs
-      let isValid = true;
-
-      // Validation du template name
-      if (!this.templateName.trim()) {
-        this.errors.templateName = 'Template name is required.';
-        isValid = false;
-      }
-
-      // Validation des questions
-      this.questions.forEach((question) => {
-        if (question.question_type === 'text' && !question.question_text.trim()) {
-          this.errors[`question_${question.id}`] = 'Question text is required.';
-          isValid = false;
-        }
-      });
-
-      return isValid;
-    },
-      async submitTemplate() {
-        console.log(this.templateName, this.questions);
-        try{
-          if (this.validateFields()) {
-            const response = await fetch(`${import.meta.env.VITE_API_URL}admin/templates/create`, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                "Authorization": `Bearer ${localStorage.getItem("token")}`,
-              },
-              body: JSON.stringify({
-                name: this.templateName,
-                questions: this.questions,
-              }),
-            });
-
-            if (!response.ok) {
-                throw new Error("Network response was not ok");
-            }
-          }
-        } catch (error) {
-            console.error("There was a problem while creating the template:", error);
-            alert("Creation failed. Please try again.");
-        }
-      },
-    },
-  };
-</script>
+<style></style>

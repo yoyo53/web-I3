@@ -14,7 +14,7 @@
                 } else if (this.userState.userType === "Teacher") {
                     return { name: "teacher" };
                 } else {
-                    return { name: "teacher" };
+                    return { name: "student" };
                 }
             },
         },

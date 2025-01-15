@@ -1,103 +1,133 @@
-<!-- This is the where we are : /admin/template/:id -->
-<!-- id is the id of the template -->
+<script>
+    import RadioButton from "@/components/TypesAnswers/RadioButton.vue";
+    import CheckBox from "@/components/TypesAnswers/CheckBox.vue";
+    import { useToast } from "vue-toastification";
+    const toaster = useToast();
+
+    export default {
+        name: "TemplateView",
+        props: {
+            id: {
+                type: String,
+                required: true,
+            },
+        },
+        data() {
+            return {
+                template: null,
+            };
+        },
+        components: {
+            RadioButton,
+            CheckBox,
+        },
+        methods: {
+            async getTemplate(templateID) {
+                try {
+                    const response = await fetch(import.meta.env.VITE_API_URL + "admin/templates/" + templateID, {
+                        method: "GET",
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${localStorage.getItem("token")}`,
+                        },
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(response.statusText);
+                    }
+
+                    this.template = await response.json();
+                } catch (error) {
+                    console.error(error);
+                    toaster.error("Something went wrong");
+                }
+            },
+            async deleteTemplate(templateID) {
+                try {
+                    const response = await fetch(import.meta.env.VITE_API_URL + "admin/template/" + templateID, {
+                        method: "DELETE",
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${localStorage.getItem("token")}`,
+                        },
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(response.statusText);
+                    }
+
+                    toaster.success("Template deleted successfully");
+                    this.$router.push({ name: "templates" });
+                } catch (error) {
+                    console.error(error);
+                    toaster.error("Something went wrong");
+                }
+            },
+        },
+        async beforeMount() {
+            this.getTemplate(this.id);
+        },
+    };
+</script>
 
 <template>
-    <!-- Survey Name -->
-    <div v-if="!template" class="mb-6">
-        <p class="text-2xl font-semibold text-[primary] mb-4 p-6 w-full max-w-3xl">Loading template details...</p>
+    <div class="flex justify-center items-center">
+        <section v-if="!template">
+            <p class="text-2xl font-semibold">Loading template details...</p>
+        </section>
+        <section v-else class="w-full max-w-7xl mx-auto">
+            <h1 class="mb-4 text-2xl font-semibold text-center">{{ template.name }}</h1>
+            <div
+                v-for="(question, index) in template.questions"
+                :key="index"
+                class="mb-4 p-4 border-2 border-dashed border-neutral-200 rounded-lg"
+            >
+                <label class="block mb-2 text-sm">Question {{ index + 1 }}</label>
+                <input
+                    type="text"
+                    v-model="question.question_text"
+                    disabled
+                    class="block w-full mb-2 px-4 py-2 border border-neutral-300 rounded-md"
+                />
+                <label class="mb-2 block text-sm">Response Type</label>
+                <select
+                    v-model="question.question_type"
+                    disabled
+                    class="block w-full px-4 py-2 bg-transparent border border-neutral-300 rounded-md focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-efrei-blue-700 disabled:bg-neutral-100"
+                >
+                    <option value="text">Text Input</option>
+                    <option value="score">Star Rating (1-5)</option>
+                    <option value="radio">Radio Buttons</option>
+                    <option value="checkbox">Checkbox</option>
+                </select>
+
+                <RadioButton
+                    v-if="question.question_type === 'radio'"
+                    :question="question"
+                    :editable="false"
+                    :answerable="false"
+                    class="my-4"
+                />
+
+                <CheckBox
+                    v-if="question.question_type === 'checkbox'"
+                    :question="question"
+                    :editable="false"
+                    :answerable="false"
+                    class="my-4"
+                />
+            </div>
+
+            <div class="flex justify-center mt-4">
+                <button
+                    @click="deleteTemplate(id)"
+                    class="block py-2.5 px-6 text-sm rounded-lg bg-red-50 text-red-500 cursor-pointer font-semibold text-center hover:bg-red-100 focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-red-700"
+                >
+                    Delete Template
+                </button>
+            </div>
+        </section>
     </div>
-    <div v-else class="mb-6">
-        <h1 class="text-2xl font-semibold text-[primary] mb-4 p-6 w-full max-w-3xl">{{ template.name }}</h1>
-        <!-- Dynamic Questions -->
-        <div v-for="(question, index) in template.questions" :key="index"
-            class="mb-4 p-4 border-2 border-dashed border-transparent-hover rounded-lg">
-            <label class="block text-sm font-medium text-gray-700 mb-2">Question {{ index + 1 }}</label>
-            <input type="text" v-model="question.question_text" disabled
-                class="block w-full px-4 py-2 border rounded-md shadow-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 mb-2 font-semibold"/>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Response Type</label>
-            <select v-model="question.question_type" disabled
-                class="block w-full px-4 py-2 border rounded-md shadow-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-gray-100">
-                <option value="text">Text Input</option>
-                <option value="score">Star Rating (1-5)</option>
-                <option value="radio">Radio Buttons</option>
-                <option value="checkbox">Checkbox</option>
-            </select>
-
-            <RadioButton v-if="question.question_type === 'radio'" :question="question"
-                :isEditable="false"/>
-
-            <CheckBox v-if="question.question_type === 'checkbox'" :question="question"
-                :isEditable="false" />
-        </div>
-
-        <div class="flex justify-center mt-4">
-            <button @click="removeTemplate(id)"
-            class="py-2.5 px-6 text-sm rounded-lg bg-red-50 text-red-500 cursor-pointer font-semibold text-center shadow-xs transition-all duration-300 hover:bg-red-100 hover:text-red-700">
-            Delete Template
-            </button>
-        </div>
-    </div>
-
 </template>
 
-
-<script>
-import RadioButton from '@/components/TypesAnswers/RadioButton.vue';
-import CheckBox from '@/components/TypesAnswers/CheckBox.vue';
-
-export default {
-    components: {
-        RadioButton,
-        CheckBox,
-    },
-    name: 'DetailedSurveysComponent',
-    props: {
-        id: {
-            type: String,
-            required: true,
-        },
-    },
-    data() {
-        return {
-            template: null,
-        };
-    },
-    methods:{
-        async removeTemplate(templateID){
-                const response = await fetch(`${import.meta.env.VITE_API_URL}admin/deleteTemplate/${templateID}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                    },
-                });
-                if (!response.ok) {
-                    console.log('Error deleting template');
-                    return;
-                }
-                this.$router.push({ path: '/admin/templates' });
-            },
-    },
-
-    async mounted() {
-        try {
-            const response = await fetch(`${import.meta.env.VITE_API_URL}admin/templates/${this.id}`,
-                {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: `Bearer ${localStorage.getItem('token')}`,
-                    },
-                }
-            );
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            this.template = await response.json();
-        } catch (error) {
-            console.error('There was a problem with the fetch operation:', error);
-        }
-    },
-
-};
-</script>
+<style></style>
