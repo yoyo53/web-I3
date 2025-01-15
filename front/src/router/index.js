@@ -10,6 +10,7 @@ const router = createRouter({
             path: "/",
             name: "home",
             component: () => import("@/views/HomeView.vue"),
+            alias: ["/home"],
         },
         {
             path: "/about",
@@ -30,6 +31,7 @@ const router = createRouter({
             path: "/admin",
             name: "admin",
             component: () => import("@/views/surveys/SurveysListView.vue"),
+            alias: ["/admin/surveys"],
         },
         {
             path: "/admin/users/create",
@@ -67,6 +69,7 @@ const router = createRouter({
             path: "/teacher",
             name: "teacher",
             component: () => import("@/views/surveys/SurveysListView.vue"),
+            alias: ["/teacher/surveys"],
         },
         {
             path: "/teacher/surveys/:id",
@@ -78,6 +81,7 @@ const router = createRouter({
             path: "/student",
             name: "student",
             component: () => import("@/views/surveys/SurveysListView.vue"),
+            alias: ["/student/surveys"],
         },
         {
             path: "/student/survey/:id",
@@ -96,7 +100,7 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
     document.activeElement.blur();
     const userState = inject("userState");
-    const publicPages = ["/", "/about", "/404"];
+    const publicPages = ["home", "about", "login"];
     const token = localStorage.getItem("token");
     userState.userType = null;
     userState.userId = null;
@@ -123,34 +127,34 @@ router.beforeEach(async (to, from, next) => {
     }
     if (to.matched.some((route) => route.name === "404")) {
         next();
-    } else if (publicPages.includes(to.path)) {
+    } else if (publicPages.includes(to.name)) {
         next();
     } else if (userState.userType === "Admin") {
-        if (to.path.startsWith("/admin") || to.path === "/profile") {
+        if (to.path.startsWith("/admin") || to.name === "profile") {
             next();
         } else {
             toaster.error("You are not authorized to access this page.");
-            next("/admin");
+            next({ name: "admin" });
         }
     } else if (userState.userType === "Teacher") {
-        if (to.path.startsWith("/teacher") || to.path === "/profile") {
+        if (to.path.startsWith("/teacher") || to.name === "profile") {
             next();
         } else {
             toaster.error("You are not authorized to access this page.");
-            next("/teacher");
+            next({ name: "teacher" });
         }
     } else if (userState.userType === "Student") {
-        if (to.path.startsWith("/student") || to.path === "/profile") {
+        if (to.path.startsWith("/student") || to.name === "profile") {
             next();
         } else {
             toaster.error("You are not authorized to access this page.");
-            next("/student");
+            next({ name: "student" });
         }
-    } else if (to.path === "/login") {
+    } else if (to.name === "login") {
         next();
     } else {
         toaster.error("You are not authorized to access this page.");
-        next("/login");
+        next({ name: "home" });
     }
 });
 
