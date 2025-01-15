@@ -29,7 +29,7 @@
                 :to="{ name: 'home' }"
                 class="flex items-center ml-2 rounded-lg focus:outline-none focus:ring-offset-4 focus:ring-2 focus:ring-efrei-blue-700"
             >
-                <img src="@/assets/logo.svg" class="h-9" alt="TeachPoint Logo" />
+                <img src="@/assets/icons/logo.svg" class="h-9" alt="TeachPoint Logo" />
                 <span class="ml-1 text-xl font-semibold">TeachPoint</span>
             </RouterLink>
             <RouterLink

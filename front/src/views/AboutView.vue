@@ -1,9 +1,9 @@
 <script>
-    import avatarHugo from "@/assets/avatar-hugo.jpg";
-    import avatarYohan from "@/assets/avatar-yohan.jpg";
-    import avatarLucas from "@/assets/avatar-lucas.jpg";
-    import avatarArnaud from "@/assets/avatar-arnaud.jpg";
-    import avatarLudovic from "@/assets/avatar-ludovic.jpg";
+    import avatarHugo from "@/assets/images/avatar-hugo.jpg";
+    import avatarYohan from "@/assets/images/avatar-yohan.jpg";
+    import avatarLucas from "@/assets/images/avatar-lucas.jpg";
+    import avatarArnaud from "@/assets/images/avatar-arnaud.jpg";
+    import avatarLudovic from "@/assets/images/avatar-ludovic.jpg";
 
     export default {
         name: "AboutView",

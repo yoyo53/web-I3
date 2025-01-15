@@ -56,7 +56,7 @@
     <div class="flex flex-col justify-center">
         <section>
             <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-                <img class="mx-auto h-20 w-auto" src="@/assets/logo.svg" alt="TeachPoint Logo" />
+                <img class="mx-auto h-20 w-auto" src="@/assets/icons/logo.svg" alt="TeachPoint Logo" />
                 <h2 class="mt-10 text-center text-2xl/9 font-bold tracking-tight">Sign in to your account</h2>
             </div>
 

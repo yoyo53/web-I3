@@ -58,19 +58,19 @@
                             href="https://www.hec.edu/"
                             class="rounded-lg focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-efrei-blue-700"
                         >
-                            <img class="h-20" src="@/assets/logo-hec.svg" alt="HEC Logo" />
+                            <img class="h-20" src="@/assets/icons/logo-hec.svg" alt="HEC Logo" />
                         </a>
                         <a
                             href="https://www.polytechnique.edu/"
                             class="rounded-lg focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-efrei-blue-700"
                         >
-                            <img class="h-20" src="@/assets/logo-polytech.svg" alt="HEC Logo" />
+                            <img class="h-20" src="@/assets/icons/logo-polytech.svg" alt="HEC Logo" />
                         </a>
                         <a
                             href="https://ecoledesponts.fr/"
                             class="rounded-lg focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-efrei-blue-700"
                         >
-                            <img class="h-20" src="@/assets/logo-ponts.svg" alt="HEC Logo" />
+                            <img class="h-20" src="@/assets/icons/logo-ponts.svg" alt="HEC Logo" />
                         </a>
                     </div>
                 </div>
