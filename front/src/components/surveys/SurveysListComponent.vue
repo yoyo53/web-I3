@@ -1,4 +1,5 @@
 <script>
+    import PopupComponent from "@/components/popup/PopupComponent.vue";
     import { useToast } from "vue-toastification";
     const toaster = useToast();
 
@@ -10,6 +11,15 @@
                 type: Array,
                 required: true,
             },
+        },
+        data() {
+            return {
+                showPopup: false,
+                selectedSurvey: null,
+            };
+        },
+        components: {
+            PopupComponent,
         },
         methods: {
             getSurveyRoute() {
@@ -40,6 +50,13 @@
                     toaster.error("Something went wrong");
                 }
             },
+            openModal(survey) {
+                this.selectedSurvey = survey;
+                this.showPopup = true;
+            },
+            closeModal() {
+                this.showPopup = false;
+            },
         },
     };
 </script>
@@ -55,7 +72,7 @@
                     <button
                         v-if="userState.userType === 'Admin'"
                         type="button"
-                        @click.prevent="deleteSurvey(survey.surveyID)"
+                        @click.prevent="openModal(survey)"
                         class="text-red-400 hover:text-red-500 font-semibold rounded-lg focus:outline-none focus:ring-offset-4 focus:ring-2 focus:ring-red-700"
                     >
                         Remove
@@ -73,6 +90,12 @@
                 </RouterLink>
             </li>
         </ul>
+        <PopupComponent
+            :isOpen="showPopup"
+            popUpText="Are you sure you want to delete this template ? This will also delete all associated answers"
+            @close-modal="closeModal"
+            @confirm-action="deleteSurvey(selectedSurvey.surveyID)"
+        />
     </div>
 </template>
 

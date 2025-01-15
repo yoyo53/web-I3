@@ -81,7 +81,7 @@
         </ul>
         <PopupComponent
             :isOpen="showPopup"
-            popUpText="Are you sure you want to delete this template ? This will also delete all associated surveys"
+            popUpText="Are you sure you want to delete this template ? This will also delete all associated surveys and answers"
             @close-modal="closeModal"
             @confirm-action="deleteTemplate(selectedTemplate.survey_templateID)"
         />
