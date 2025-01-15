@@ -1,5 +1,3 @@
-import {expect, it, jest} from '@jest/globals';
-
 const request = require('supertest');
 const express = require('express');
 const authRoutes = require('../../../routes/auth.routes');
@@ -19,6 +17,11 @@ app.use('/auth', authRoutes);
 jest.mock('../../../controllers/auth.controller');
 jest.mock('../../../middlewares/security');
 jest.mock('../../../middlewares/adminAccess');
+jest.mock('../../../database/queries/user.queries');
+jest.mock('../../../database/queries/teacher.queries');
+jest.mock('../../../database/queries/admin.queries');
+jest.mock('../../../database/queries/student.queries');
+jest.mock('jsonwebtoken');
 
 describe('auth routes', () => {
     describe('POST /auth/register', () => {
@@ -149,7 +152,7 @@ describe('auth routes', () => {
                 });
             
             expect(response.status).toBe(400);
-            expect(response.body.token).toBe(null);
+            expect(response.body.token).toBe(undefined);
         });
     });
 
