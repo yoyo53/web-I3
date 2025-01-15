@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const studentController = require('../controllers/student.controller.js');
-const securityMiddleware = require('../middlewares/security');
+const studentController = require('../controllers/student.controller');
 
 /**
  * @swagger
@@ -50,7 +49,7 @@ const securityMiddleware = require('../middlewares/security');
  *       500:
  *         description: Error while fetching surveys.
  */
-router.get('/surveys', securityMiddleware.verifyToken, studentController.getStudentSurveys);
+router.get('/surveys', studentController.getStudentSurveys);
 
 /**
  * @swagger
@@ -77,7 +76,7 @@ router.get('/surveys', securityMiddleware.verifyToken, studentController.getStud
  *       500:
  *         description: Error while fetching survey.
  */
-router.get('/surveys/:id', securityMiddleware.verifyToken, studentController.getSurveyByID);
+router.get('/surveys/:id', studentController.getSurveyByID);
 
 /**
  * @swagger
@@ -117,6 +116,6 @@ router.get('/surveys/:id', securityMiddleware.verifyToken, studentController.get
  *       500:
  *         description: Error while answering survey.
  */
-router.post('/answertosurvey', securityMiddleware.verifyToken, studentController.answerToSurvey);
+router.post('/answertosurvey', studentController.answerToSurvey);
 
 module.exports = router;

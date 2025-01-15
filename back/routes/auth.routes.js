@@ -1,8 +1,7 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const authActions = require('../controllers/auth.controller.js');
-const securityMiddleware = require('../middlewares/security')
-const adminAccess = require('../middlewares/adminAccess')
+const authController = require("../controllers/auth.controller");
+const securityMiddleware = require("../middlewares/security");
 
 /**
  * @swagger
@@ -28,7 +27,7 @@ const adminAccess = require('../middlewares/adminAccess')
  *       500:
  *         description: Internal server error
  */
-router.post("/register", adminAccess.adminToken, authActions.createUserAction);
+router.post("/register", securityMiddleware.verifyAdminToken, authController.createUserAction);
 
 /**
  * @swagger
@@ -61,7 +60,7 @@ router.post("/register", adminAccess.adminToken, authActions.createUserAction);
  *       500:
  *         description: Internal server error
  */
-router.post("/login", authActions.loginUserAction);
+router.post("/login", authController.loginUserAction);
 
 /**
  * @swagger
@@ -79,6 +78,6 @@ router.post("/login", authActions.loginUserAction);
  *       500:
  *         description: Internal server error
  */
-router.get("/verifyToken", securityMiddleware.verifyToken, authActions.verifyTokenAction);
+router.get("/verifyToken", securityMiddleware.verifyToken, authController.verifyTokenAction);
 
 module.exports = router;

@@ -11,7 +11,7 @@ const swaggerJsdoc = require("swagger-jsdoc");
  *     description: Teacher routes
  *   - name: Student
  *     description: Student routes
- * 
+ *
  * components:
  *   schemas:
  *     User:
@@ -182,7 +182,7 @@ const specs = swaggerJsdoc({
         info: {
             title: "TeachPoint API",
             version: "1.0.0",
-            description: "A simple Express Library API",
+            description: "API for TeachPoint Web Application",
         },
     },
     apis: ["./swagger.js", "./routes/*.js"],

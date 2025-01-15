@@ -1,6 +1,6 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const controller = require('../controllers/admin.controller');
+const adminController = require("../controllers/admin.controller");
 
 /**
  * @swagger
@@ -20,9 +20,7 @@ const controller = require('../controllers/admin.controller');
  *       500:
  *         description: Error while fetching surveys
  */
-router.get('/surveys', (req, res) => {
-  controller.getAdminSurveys(req, res); 
-});
+router.get("/surveys", adminController.getAdminSurveys);
 
 /**
  * @swagger
@@ -47,7 +45,7 @@ router.get('/surveys', (req, res) => {
  *       500:
  *         description: Error while fetching the survey
  */
-router.get('/surveys/:id', controller.getSurveyByID);
+router.get("/surveys/:id", adminController.getSurveyByID);
 
 /**
  * @swagger
@@ -68,7 +66,7 @@ router.get('/surveys/:id', controller.getSurveyByID);
  *       500:
  *         description: Error while deleting the survey
  */
-router.delete('/survey/:id', controller.deleteSurveyByID);
+router.delete("/survey/:id", adminController.deleteSurveyByID);
 
 /**
  * @swagger
@@ -88,9 +86,7 @@ router.delete('/survey/:id', controller.deleteSurveyByID);
  *       500:
  *         description: Error while fetching templates
  */
-router.get('/templates', (req, res) => {
-  controller.getSurveyTemplates(req, res); 
-});
+router.get("/templates", adminController.getSurveyTemplates);
 
 /**
  * @swagger
@@ -106,9 +102,7 @@ router.get('/templates', (req, res) => {
  *       500:
  *         description: Internal server error
  */
-router.post('/templates/create', (req, res) => {
-  controller.createTemplate(req, res);
-});
+router.post("/templates/create", adminController.createTemplate);
 
 /**
  * @swagger
@@ -133,9 +127,7 @@ router.post('/templates/create', (req, res) => {
  *       500:
  *         description: Error while fetching the template
  */
-router.get('/templates/:id', (req, res) => {
-  controller.getTemplateByID(req, res);
-});
+router.get("/templates/:id", adminController.getTemplateByID);
 
 /**
  * @swagger
@@ -155,9 +147,7 @@ router.get('/templates/:id', (req, res) => {
  *       500:
  *         description: Error while fetching modules
  */
-router.get('/modules', (req, res) => {
-  controller.getAllModules(req, res);
-});
+router.get("/modules", adminController.getAllModules);
 
 /**
  * @swagger
@@ -177,7 +167,7 @@ router.get('/modules', (req, res) => {
  *       500:
  *         description: Internal server error
  */
-router.post('/createfromtemplate', controller.createSurveyFromTemplate);
+router.post("/createfromtemplate", adminController.createSurveyFromTemplate);
 
 /**
  * @swagger
@@ -197,11 +187,8 @@ router.post('/createfromtemplate', controller.createSurveyFromTemplate);
  *       500:
  *         description: Internal server error
  */
-router.post('/createfromnothing', controller.createSurveyFromNothing);
+router.post("/createfromnothing", adminController.createSurveyFromNothing);
 
-
-
-router.delete('/template/:id', controller.deleteTemplateByID);
-
+router.delete("/template/:id", adminController.deleteTemplateByID);
 
 module.exports = router;
