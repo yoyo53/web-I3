@@ -271,9 +271,10 @@ async function main() {
         module3,
     });
 }
+
 main()
-    .catch((e) => {
-        throw e;
+    .catch((error) => {
+        throw error;
     })
     .finally(async () => {
         await prisma.$disconnect();
