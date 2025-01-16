@@ -94,7 +94,7 @@ model questions {
   question_text     String?
   answer_questions  answer_questions[]
   options           options[]
-  question_type     question_types      @relation(fields: [question_typeID], references: [question_typeID], onDelete: Cascade, onUpdate: NoAction)
+  question_type     question_types     @relation(fields: [question_typeID], references: [question_typeID], onDelete: Cascade, onUpdate: NoAction)
   survey_template   survey_templates   @relation(fields: [survey_templateID], references: [survey_templateID], onDelete: Cascade, onUpdate: NoAction)
 }
 
@@ -103,7 +103,6 @@ model options {
   questionID  Int
   option_text String?
   question    questions @relation(fields: [questionID], references: [questionID], onDelete: Cascade, onUpdate: NoAction)
-
 }
 
 model survey_answers {
@@ -116,10 +115,10 @@ model survey_answers {
 }
 
 model answer_questions {
-  answer_questionID Int             @id @default(autoincrement())
-  survey_answerID Int
-  questionID      Int
-  answer_text     String
-  question        questions      @relation(fields: [questionID], references: [questionID], onDelete: Cascade, onUpdate: NoAction)
-  survey_answer   survey_answers @relation(fields: [survey_answerID], references: [survey_answerID], onDelete: Cascade, onUpdate: NoAction)
+  answer_questionID Int            @id @default(autoincrement())
+  survey_answerID   Int
+  questionID        Int
+  answer_text       String
+  question          questions      @relation(fields: [questionID], references: [questionID], onDelete: Cascade, onUpdate: NoAction)
+  survey_answer     survey_answers @relation(fields: [survey_answerID], references: [survey_answerID], onDelete: Cascade, onUpdate: NoAction)
 }
