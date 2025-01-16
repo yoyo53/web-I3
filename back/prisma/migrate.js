@@ -28,8 +28,7 @@ command.stderr.on("data", (data) => {
 command.on("close", (code) => {
     if (code !== 0) {
         process.exit(code);
-    }
-    else if (migrationName) {
+    } else if (migrationName) {
         const migrationDir = path.join("prisma", "migrations", migrationName);
 
         if (!fs.existsSync(migrationDir)) {
@@ -37,17 +36,19 @@ command.on("close", (code) => {
             process.exit(1);
         }
 
-        exec(`npx prisma migrate diff --from-schema-datamodel prisma/schema.prisma --to-schema-datasource prisma/schema.prisma --script`, (error, stdout, stderr) => {
-            if (error) {
-                console.error(`Error generating down migration SQL: ${stderr}`);
-                process.exit(1);
-            }
+        exec(
+            `npx prisma migrate diff --from-schema-datamodel prisma/schema.prisma --to-schema-datasource prisma/schema.prisma --script`,
+            (error, stdout, stderr) => {
+                if (error) {
+                    console.error(`Error generating down migration SQL: ${stderr}`);
+                    process.exit(1);
+                }
 
-            const downSqlPath = path.join(migrationDir, "down.sql");
-            fs.writeFileSync(downSqlPath, stdout);
+                const downSqlPath = path.join(migrationDir, "down.sql");
+                fs.writeFileSync(downSqlPath, stdout);
 
-            console.log(`Up and down migrations created successfully in ${migrationDir}`);
-        }
-    );
-  }
+                console.log(`Up and down migrations created successfully in ${migrationDir}`);
+            },
+        );
+    }
 });

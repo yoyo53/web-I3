@@ -23,7 +23,7 @@
         methods: {
             async deleteTemplate(templateID) {
                 try {
-                    const response = await fetch(import.meta.env.VITE_API_URL + "admin/template/" + templateID, {
+                    const response = await fetch(import.meta.env.VITE_API_URL + "admin/templates/" + templateID, {
                         method: "DELETE",
                         headers: {
                             "Content-Type": "application/json",
@@ -58,7 +58,7 @@
         <ul class="space-y-4">
             <li v-for="(template, index) in templates" :key="index">
                 <RouterLink
-                    :to="{ name: 'adminTemplateView', params: { id: template.survey_templateID } }"
+                    :to="{ name: 'adminTemplateView', params: { id: template.templateID } }"
                     class="p-4 block border border-neutral-300 rounded-lg bg-neutral-50 cursor-pointer transition-transform duration-200 ease-in-out hover:bg-neutral-100 hover:-translate-y-1 hover:shadow-md focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-efrei-blue-700"
                 >
                     <button
@@ -71,7 +71,7 @@
                     <div class="flex min-w-0 gap-x-4">
                         <div class="min-w-0 flex-auto">
                             <p class="text-sm/6 font-semibold">
-                                {{ template.survey_templateID }}
+                                {{ template.templateID }}
                                 {{ template.name }}
                             </p>
                         </div>
@@ -83,7 +83,7 @@
             :isOpen="showPopup"
             popUpText="Are you sure you want to delete this template ? This will also delete all associated surveys and answers"
             @close-modal="closeModal"
-            @confirm-action="deleteTemplate(selectedTemplate.survey_templateID)"
+            @confirm-action="deleteTemplate(selectedTemplate.templateID)"
         />
     </div>
 </template>

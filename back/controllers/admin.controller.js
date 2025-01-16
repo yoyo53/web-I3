@@ -1,122 +1,121 @@
-const adminQueries = require('../database/queries/admin.queries');
-const templateQueries = require('../database/queries/templates.queries');
+const modulesQueries = require("../database/queries/modules.queries");
+const templatesQueries = require("../database/queries/templates.queries");
+const surveysQueries = require("../database/queries/surveys.queries");
 
-async function getAdminSurveys(req, res) {
-    const surveys = await adminQueries.getAllSurveys()
-    if (surveys != null) {
-        res.status(200).json(surveys);
+async function getAllModules(request, response) {
+    const modules = await modulesQueries.getAllModules();
+    if (modules != null) {
+        response.status(200).json(modules);
     } else {
-        res.status(500).send('Error while fetching surveys');
+        response.status(500).json({ error: "getting modules failed" });
     }
 }
 
-async function getSurveyTemplates(req, res) {
-    const surveys = await templateQueries.getAllTemplates()
-    if (surveys != null) {
-        res.status(200).json(surveys);
+async function getAllTemplates(request, response) {
+    const surveys = await templatesQueries.getAllTemplates();
+    if (surveys !== null) {
+        response.status(200).json(surveys);
     } else {
-        res.status(500).send('Error while fetching templates');
+        response.status(500).json({ error: "getting templates failed" });
     }
 }
 
-async function createTemplate(req, res) {
-    const response = await templateQueries.createTemplate(req.body.name, req.body.questions)
-    if (response != null) {
-        res.status(200).json(response);
+async function getTemplateByID(request, response) {
+    const templateID = parseInt(request.params.id);
+    const template = await templatesQueries.getTemplateByID(templateID);
+    if (template != null) {
+        response.status(200).json(template);
     } else {
-        res.status(500).send('Error while fetching templates');
-    }
-};
-
-async function getTemplateByID(req, res) {
-    const survey = await templateQueries.getTemplateByID(req.params.id)
-    if (survey != null) {
-        res.status(200).json(survey);
-        console.log(survey);
-    } else {
-        res.status(500).send('Error while fetching this template');
+        response.status(404).json({ error: "template not found" });
     }
 }
 
-async function getAllModules(req, res) {
-    const module = await adminQueries.getAllModules();
-    if (module != null) {
-        res.status(200).json(module);
+async function createTemplate(request, response) {
+    const templateID = await templatesQueries.createTemplate(request.body.name, request.body.questions);
+    if (response !== null) {
+        response.status(200).json({ templateID: templateID });
     } else {
-        res.status(500).send('Error while fetching this module');
+        response.status(500).json({ error: "creating template failed" });
     }
 }
 
-async function createSurveyFromTemplate(req, res) {
-    const { moduleID, survey_templateID } = req.body;
-    const survey = await adminQueries.createSurveyFromTemplate(moduleID, survey_templateID);
+async function deleteTemplateByID(request, response) {
+    const templateID = parseInt(request.params.id);
+    const deletedTemplateID = await templatesQueries.deleteTemplateByID(templateID);
+    if (deletedTemplateID !== null) {
+        response.status(200).json({ templateID: deletedTemplateID });
+    } else {
+        response.status(500).json({ error: "deleting template failed" });
+    }
+}
+
+async function getAdminSurveys(request, response) {
+    const surveys = await surveysQueries.getAllSurveys();
+    if (surveys !== null) {
+        response.status(200).json(surveys);
+    } else {
+        response.status(500).json({ error: "getting surveys failed" });
+    }
+}
+
+async function getSurveyByID(request, response) {
+    const surveyID = parseInt(request.params.id);
+    const survey = await surveysQueries.getAdminSurveyByID(surveyID);
     if (survey !== null) {
-        res.status(200).json(survey);
+        response.status(200).json(survey);
     } else {
-        res.status(500).send('Error');
-    }
-};
-
-async function createSurveyFromNothing(req, res) {
-    const { name, moduleID , questions} = req.body;
-    if (moduleID === undefined) {
-        res.status(400).send('moduleID is required');
-        return;
-    }
-    if (name === undefined) {
-        res.status(400).send('name is required');
-        return;
-    }
-    if (questions === undefined) {
-        res.status(400).send('questions is required');
-        return;
-    }
-    const template = await templateQueries.createTemplate(name, questions);
-    console.log(template.survey_templateID);
-    const survey = await adminQueries.createSurveyFromTemplate(moduleID, template.survey_templateID);
-    if (survey !== null) {
-        res.status(200).json(survey);
-    } else {
-        res.status(500).send('Error');
+        response.status(500).send("Error");
     }
 }
 
-async function getSurveyByID (req, res) {
-      const survey = await adminQueries.getSurveyByID(req.params.id);
-      if (survey !== null) {
-          res.status(200).json(survey);
-      } else {
-          res.status(500).send('Error');
-      }
-};
-
-async function deleteSurveyByID (req, res) {
-    const survey = await adminQueries.deleteSurveyByID(req.params.id);
-    if (survey !== null) {
-        res.status(200).json(survey);
+async function createSurveyFromTemplate(request, response) {
+    const { moduleID, templateID } = request.body;
+    const surveyID = await surveysQueries.createSurvey(moduleID, templateID);
+    if (surveyID !== null) {
+        response.status(200).json({ surveyID: surveyID });
     } else {
-        res.status(500).send('Error');
+        response.status(500).json({ error: "creating survey failed" });
     }
-};
+}
 
-async function deleteTemplateByID (req, res) {
-    const survey = await adminQueries.deleteTemplateByID(req.params.id);
-    if (survey !== null) {
-        res.status(200).json(survey);
+async function createSurveyFromNothing(request, response) {
+    const { name, moduleID, questions } = request.body;
+    if (name && moduleID && questions) {
+        const templateID = await templatesQueries.createTemplate(name, questions);
+        if (templateID !== null) {
+            const surveyID = await surveysQueries.createSurvey(moduleID, templateID);
+            if (surveyID !== null) {
+                response.status(200).json({ surveyID: surveyID });
+            } else {
+                response.status(500).json({ error: "creating survey failed" });
+            }
+        } else {
+            response.status(500).json({ error: "creating template failed" });
+        }
     } else {
-        res.status(500).send('Error');
+        response.status(400).json({ error: "missing fields" });
     }
-};
+}
+
+async function deleteSurveyByID(request, response) {
+    const surveyID = parseInt(request.params.id);
+    const deletedSurveyID = await surveysQueries.deleteSurveyByID(surveyID);
+    if (deletedSurveyID !== null) {
+        response.status(200).json({ surveyID: deletedSurveyID });
+    } else {
+        response.status(500).json({ error: "deleting survey failed" });
+    }
+}
 
 module.exports = {
-    getAdminSurveys,
-    getSurveyTemplates,
-    createTemplate,
-    getTemplateByID,
     getAllModules,
+    getAllTemplates,
+    getTemplateByID,
+    createTemplate,
+    deleteTemplateByID,
+    getAdminSurveys,
+    getSurveyByID,
     createSurveyFromTemplate,
     createSurveyFromNothing,
-    getSurveyByID,
     deleteSurveyByID,
-    deleteTemplateByID
 };

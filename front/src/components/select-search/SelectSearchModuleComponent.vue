@@ -30,7 +30,7 @@
 
                     const data = await response.json();
                     data.forEach((module) => {
-                        module.name = `${module.subject} - ${module.group} - ${module.teacher_lastname}`;
+                        module.name = `${module.subject} - ${module.group} - ${module.teacher.lastname}`;
                     });
                     this.modules = data;
                 } catch (error) {

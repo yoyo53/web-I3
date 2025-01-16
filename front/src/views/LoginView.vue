@@ -32,9 +32,9 @@
                         const data = await response.json();
                         localStorage.setItem("token", data.token);
                         toaster.success("Login successful");
-                        if (data.type === "Admin") {
+                        if (data.user_type === "Admin") {
                             this.$router.push({ name: "admin" });
-                        } else if (data.type === "Teacher") {
+                        } else if (data.user_type === "Teacher") {
                             this.$router.push({ name: "teacher" });
                         } else {
                             this.$router.push({ name: "student" });

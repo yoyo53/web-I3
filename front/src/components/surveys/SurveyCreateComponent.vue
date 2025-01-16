@@ -39,8 +39,8 @@
             },
             handleTemplateSelected(template) {
                 this.editable = false;
-                this.templateID = template.survey_templateID;
-                this.getTemplate(template.survey_templateID);
+                this.templateID = template.templateID;
+                this.getTemplate(template.templateID);
             },
             handleModuleSelected(module) {
                 this.moduleID = module.moduleID;
@@ -70,14 +70,14 @@
             async postSurvey() {
                 try {
                     if (JSON.stringify(this.templateQuestions) === JSON.stringify(this.questions)) {
-                        const response = await fetch(import.meta.env.VITE_API_URL + "admin/createfromtemplate", {
+                        const response = await fetch(import.meta.env.VITE_API_URL + "admin/surveys/create", {
                             method: "POST",
                             headers: {
                                 "Content-Type": "application/json",
                                 Authorization: `Bearer ${localStorage.getItem("token")}`,
                             },
                             body: JSON.stringify({
-                                survey_templateID: this.templateID,
+                                templateID: this.templateID,
                                 moduleID: this.moduleID,
                             }),
                         });
@@ -89,7 +89,7 @@
                         toaster.success("Survey created successfully");
                         this.$router.push({ name: "admin" });
                     } else {
-                        const response = await fetch(import.meta.env.VITE_API_URL + "admin/createfromnothing", {
+                        const response = await fetch(import.meta.env.VITE_API_URL + "admin/surveys/create/custom", {
                             method: "POST",
                             headers: {
                                 "Content-Type": "application/json",
@@ -105,6 +105,9 @@
                         if (!response.ok) {
                             throw new Error(response.statusText);
                         }
+
+                        toaster.success("Survey created successfully");
+                        this.$router.push({ name: "admin" });
                     }
                 } catch (error) {
                     console.error(error);

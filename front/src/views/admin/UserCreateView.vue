@@ -7,8 +7,8 @@
         data() {
             return {
                 email: "",
-                firstName: "",
-                lastName: "",
+                firstname: "",
+                lastname: "",
                 accountNumber: "",
                 accountType: "Student",
             };
@@ -16,7 +16,7 @@
         methods: {
             async registerUser() {
                 try {
-                    const response = await fetch(`${import.meta.env.VITE_API_URL}auth/register`, {
+                    const response = await fetch(import.meta.env.VITE_API_URL + "auth/register", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",
@@ -24,10 +24,10 @@
                         },
                         body: JSON.stringify({
                             email: this.email,
-                            firstName: this.firstName,
-                            lastName: this.lastName,
-                            accountNumber: this.accountNumber,
-                            accountType: this.accountType,
+                            firstname: this.firstname,
+                            lastname: this.lastname,
+                            account_number: this.accountNumber,
+                            account_type: this.accountType,
                         }),
                     });
 
@@ -73,7 +73,7 @@
                     <input
                         type="text"
                         id="first-name"
-                        v-model="firstName"
+                        v-model="firstname"
                         autocomplete="given-name"
                         placeholder="John"
                         class="block w-full p-2.5 text-sm rounded-lg border border-gray-300 focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-efrei-blue-700 placeholder-neutral-400"
@@ -85,7 +85,7 @@
                     <input
                         type="text"
                         id="last-name"
-                        v-model="lastName"
+                        v-model="lastname"
                         autocomplete="last-name"
                         placeholder="Doe"
                         class="block w-full p-2.5 text-sm rounded-lg border border-gray-300 focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-efrei-blue-700 placeholder-neutral-400"

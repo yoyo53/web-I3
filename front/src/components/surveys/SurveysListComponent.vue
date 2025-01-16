@@ -33,7 +33,7 @@
             },
             async deleteSurvey(surveyID) {
                 try {
-                    const response = await fetch(import.meta.env.VITE_API_URL + "admin/survey/" + surveyID, {
+                    const response = await fetch(import.meta.env.VITE_API_URL + "admin/surveys/" + surveyID, {
                         method: "DELETE",
                         headers: {
                             "Content-Type": "application/json",
@@ -80,7 +80,9 @@
                     <div class="flex min-w-0 gap-x-4">
                         <div class="min-w-0 flex-auto">
                             <p class="text-sm/6 font-semibold">Subject: {{ survey.subject }}</p>
-                            <p class="mt-1 text-xs/5 text-neutral-500">{{ survey.firstname }} {{ survey.lastname }}</p>
+                            <p class="mt-1 text-xs/5 text-neutral-500">
+                                {{ survey.teacher.firstname }} {{ survey.teacher.lastname }}
+                            </p>
                         </div>
                         <div class="text-end">
                             <p class="text-sm/6">Group</p>

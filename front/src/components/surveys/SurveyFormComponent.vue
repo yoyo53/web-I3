@@ -38,17 +38,19 @@
                     toaster.error("Please answer all questions");
                 } else {
                     try {
-                        const response = await fetch(import.meta.env.VITE_API_URL + "student/answertosurvey", {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json",
-                                Authorization: `Bearer ${localStorage.getItem("token")}`,
+                        const response = await fetch(
+                            import.meta.env.VITE_API_URL + "student/surveys/" + this.surveyID + "/answer",
+                            {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                                },
+                                body: JSON.stringify({
+                                    answers: this.answers,
+                                }),
                             },
-                            body: JSON.stringify({
-                                surveyID: this.surveyID,
-                                answers: this.answers,
-                            }),
-                        });
+                        );
                         const data = await response.json();
 
                         if (!response.ok) {

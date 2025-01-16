@@ -8,8 +8,8 @@
         data() {
             return {
                 user: {
-                    firstName: "",
-                    lastName: "",
+                    firstname: "",
+                    lastname: "",
                     email: "",
                     id: null,
                 },
@@ -18,7 +18,7 @@
         methods: {
             async fetchUserData() {
                 try {
-                    const response = await fetch(`${import.meta.env.VITE_API_URL}user/data`, {
+                    const response = await fetch(import.meta.env.VITE_API_URL + "user/data", {
                         headers: {
                             Authorization: `Bearer ${localStorage.getItem("token")}`,
                         },
@@ -52,7 +52,7 @@
                             name="first-name"
                             id="first-name"
                             autocomplete="given-name"
-                            :placeholder="user.firstName"
+                            :placeholder="user.firstname"
                             class="block w-full rounded-md bg-white px-3 py-1.5 text-sm/6 border border-neutral-300 placeholder-neutral-400 cursor-not-allowed"
                         />
                     </div>
@@ -67,7 +67,7 @@
                             name="last-name"
                             id="last-name"
                             autocomplete="family-name"
-                            :placeholder="user.lastName"
+                            :placeholder="user.lastname"
                             class="block w-full rounded-md bg-white px-3 py-1.5 text-sm/6 border border-neutral-300 placeholder-neutral-400 cursor-not-allowed"
                         />
                     </div>

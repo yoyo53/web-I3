@@ -1,6 +1,6 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const studentController = require('../controllers/student.controller');
+const studentController = require("../controllers/student.controller");
 
 /**
  * @swagger
@@ -49,7 +49,7 @@ const studentController = require('../controllers/student.controller');
  *       500:
  *         description: Error while fetching surveys.
  */
-router.get('/surveys', studentController.getStudentSurveys);
+router.get("/surveys", studentController.getStudentSurveys);
 
 /**
  * @swagger
@@ -76,7 +76,7 @@ router.get('/surveys', studentController.getStudentSurveys);
  *       500:
  *         description: Error while fetching survey.
  */
-router.get('/surveys/:id', studentController.getSurveyByID);
+router.get("/surveys/:id", studentController.getSurveyByID);
 
 /**
  * @swagger
@@ -116,6 +116,6 @@ router.get('/surveys/:id', studentController.getSurveyByID);
  *       500:
  *         description: Error while answering survey.
  */
-router.post('/answertosurvey', studentController.answerToSurvey);
+router.post("/surveys/:id/answer", studentController.answerSurvey);
 
 module.exports = router;

@@ -1,42 +1,44 @@
-const teacherQueries = require('../database/queries/teacher.queries.js');
-const studentQueries = require('../database/queries/student.queries.js');
-const userQueries = require('../database/queries/user.queries.js');
+const teacherQueries = require("../database/queries/teacher.queries");
+const studentQueries = require("../database/queries/student.queries");
+const userQueries = require("../database/queries/user.queries");
 
-
-async function getUserData (req, res) {
-    let user = null 
-    let newUser = null
-    if (req.user_type === 'Teacher') {
-        user = await teacherQueries.getUserByTeacherID(req.user_id);
-        newUser = {
-            firstName: user.user.firstname,
-            lastName: user.user.lastname,
-            email: user.user.email,
-            id: user.teacher_number
+async function getUserData(request, response) {
+    if (request.user_type === "Admin") {
+        let user = await userQueries.getUserById(request.user_id);
+        if (user !== null) {
+            response.status(200).json({ firstname: user.firstname, lastname: user.lastname, email: user.email });
+        } else {
+            response.status(500).json({ error: "invalid user account" });
         }
-    } else if (req.user_type === 'Student') {
-        user = await studentQueries.getUserByStudentID(req.user_id);
-        newUser = {
-            firstName: user.user.firstname,
-            lastName: user.user.lastname,
-            email: user.user.email,
-            id: user.student_number
+    } else if (request.user_type === "Teacher") {
+        let user = await teacherQueries.getUserByTeacherID(request.user_id);
+        if (user !== null) {
+            response.status(200).json({
+                firstname: user.user.firstname,
+                lastname: user.user.lastname,
+                email: user.user.email,
+                id: user.teacher_number,
+            });
+        } else {
+            response.status(500).json({ error: "invalid user account" });
+        }
+    } else if (request.user_type === "Student") {
+        let user = await studentQueries.getUserByStudentID(request.user_id);
+        if (user !== null) {
+            response.status(200).json({
+                firstname: user.user.firstname,
+                lastname: user.user.lastname,
+                email: user.user.email,
+                id: user.student_number,
+            });
+        } else {
+            response.status(500).json({ error: "invalid user account" });
         }
     } else {
-        user = await userQueries.getUserById(req.user_id);
-        newUser = {
-            firstName: user.firstname,
-            lastName: user.lastname,
-            email: user.email,
-        }
+        response.status(500).json({ error: "invalid user account" });
     }
-    if (newUser !== null) {
-        res.status(200).json(newUser);
-    } else {
-        res.status(500).send('Error');
-    }
-  };
+}
 
 module.exports = {
-    getUserData
+    getUserData,
 };

@@ -47,7 +47,7 @@
             },
             async deleteTemplate(templateID) {
                 try {
-                    const response = await fetch(import.meta.env.VITE_API_URL + "admin/template/" + templateID, {
+                    const response = await fetch(import.meta.env.VITE_API_URL + "admin/templates/" + templateID, {
                         method: "DELETE",
                         headers: {
                             "Content-Type": "application/json",

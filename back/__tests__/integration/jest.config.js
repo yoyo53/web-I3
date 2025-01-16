@@ -1,4 +1,4 @@
 module.exports = {
-  setupFiles: ["dotenv/config"],
-  testMatch: ["**/*.test.js"],
+    setupFiles: ["dotenv/config"],
+    testMatch: ["**/*.test.js"],
 };

@@ -1,214 +1,66 @@
-const { prisma } = require('../db.connection')
+const { prisma } = require("../db.connection");
 
 async function checkExistsTeacher(teacherID) {
     try {
-        return await prisma.teachers.count({where: {teacherID}}) > 0;
+        const result = await prisma.teachers.findFirst({
+            where: { teacherID: teacherID },
+            select: { teacherID: true },
+        });
+        return result !== null;
+    } catch (error) {
+        console.error(error);
+        return false;
     }
-    catch {return false}
 }
 
 async function checkExistsTeacherNumber(teacher_number) {
     try {
-        return await prisma.teachers.count({where: {teacher_number}}) > 0;
+        const result = await prisma.teachers.findFirst({
+            where: { teacher_number: teacher_number },
+            select: { teacherID: true },
+        });
+        return result !== null;
+    } catch (error) {
+        console.error(error);
+        return false;
     }
-    catch {return false}
 }
 
-async function getUserByTeacherNumber(teacher_number) {
+async function getUserByTeacherID(teacherID) {
     try {
         return await prisma.teachers.findUnique({
-            where: {teacher_number},
+            where: { teacherID: teacherID },
             select: {
                 teacherID: true,
                 teacher_number: true,
-                user: {
-                    select: {
-                        userID: true,
-                        firstname: true,
-                        lastname: true,
-                        email: true
-                    }
-                }
-            }
-        });
-    }
-    catch {return null}
-}
-
-async function getUserByTeacherID(id) {
-    try {
-        return await prisma.teachers.findUnique({
-            where: {teacherID: id},
-            select: {
-                teacherID: true,
-                teacher_number: true,
-                user: {
-                    select: {
-                        userID: true,
-                        firstname: true,
-                        lastname: true,
-                        email: true
-                    }
-                }
-            }
-        });
-    }
-    catch {return null}
-}
-async function createTeacher(userID, teacher_number) {
-    try {
-        const query = await prisma.teachers.create({
-            data: {
-                teacher_number,
-                user: {connect: {userID}}
+                user: { select: { userID: true, firstname: true, lastname: true, email: true } },
             },
-            select: {teacherID: true}
         });
-        return query.teacherID;
-    }
-    catch {return null}
-}
-async function updateTeacher(id, teacher_number) {
-    try {
-        const query = await prisma.teachers.update({
-            where: {teacherID: id},
-            data: {teacher_number},
-            select: {teacherID: true}
-        });
-        return query.teacherID;
-    }
-    catch {return null}
-}
-
-async function deleteTeacher(id) {
-    try {
-        const response = await prisma.teachers.delete({
-            where: {teacherID: id},
-            select: {teacherID: true}
-        });
-        return response.teacherID;
-    }
-    catch {return null}
-}
-
-async function getSurveysByTeacherID(id) {
-    try {
-        const surveys = await prisma.surveys.findMany({
-            where: {module: {teacherID: id}},
-            select: {
-            surveyID: true,
-            module: {
-                select: {
-                    subject: {
-                        select: {
-                            name: true
-                        }
-                    },
-                    group: {
-                        select: {
-                            name: true
-                        }
-                    },
-                    teacher: {
-                        select: {
-                            user: {
-                                select: {
-                                    firstname: true,
-                                    lastname: true
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    });
-    return surveys.map(survey => ({
-        surveyID: survey.surveyID,
-        subject: survey.module.subject.name,
-        group: survey.module.group.name,
-        firstname: survey.module.teacher.user.firstname,
-        lastname: survey.module.teacher.user.lastname
-    }));
     } catch (error) {
         console.error(error);
         return null;
     }
-
 }
 
-async function getSurveyByID(surveyID) {
+async function createTeacher(teacher_number, firstname, lastname, email, hashed_password) {
     try {
-        const result = await prisma.surveys.findUnique({
-            where: {
-                surveyID: parseInt(surveyID),
-            },
-            select: {
-                surveyID: true,
-                survey_template: {
-                    select: {
-                        name: true,
-                        questions: {
-                            select: {
-                                questionID: true,
-                                question_text: true,
-                                options: { select: { option_text: true } },
-                                question_type: { select: { question_type: true } },
-                                answer_questions: {
-                                    where: {
-                                        survey_answer: {
-                                            surveyID: parseInt(surveyID),
-                                        },
-                                    },        
-                                    select: {
-                                        survey_answerID: true,
-                                        answer_text: true,
-                                    },
-                                },
-                            },
-                        },
-                    },
-                },
-                module: {
-                    select: {
-                        subject: { select: { name: true } },
-                        group: { select: { name: true } },
-                        teacher: { select: { user: { select: { firstname: true, lastname: true } } } },
+        const result = await prisma.teachers.create({
+            data: {
+                teacher_number: teacher_number,
+                user: {
+                    create: {
+                        firstname: firstname,
+                        lastname: lastname,
+                        email: email,
+                        hashed_password: hashed_password,
                     },
                 },
             },
+            select: { teacherID: true },
         });
-
-        if (!result) {
-            console.error(`Survey with ID ${surveyID} not found.`);
-            return null;
-        }
-
-        const transformedData = {
-            surveyID: result.surveyID,
-            template_name: result.survey_template.name,
-            questions: result.survey_template.questions.map((question) => ({
-                questionID: question.questionID,
-                question_text: question.question_text,
-                question_type: question.question_type.question_type,
-                options: question.options.map((option) => ({
-                    option_text: option.option_text,
-                })),
-                answers: question.answer_questions.map((answer) => ({
-                    survey_answerID: answer.survey_answerID,
-                    answer_text: answer.answer_text,
-                })),
-            })),
-            subject: result.module.subject.name,
-            group: result.module.group.name,
-            teacher: {
-                firstname: result.module.teacher.user.firstname,
-                lastname: result.module.teacher.user.lastname,
-            },
-        };
-        return transformedData;
+        return result.teacherID;
     } catch (error) {
-        console.error('Error fetching survey by ID:', error);
+        console.error(error);
         return null;
     }
 }
@@ -216,11 +68,6 @@ async function getSurveyByID(surveyID) {
 module.exports = {
     checkExistsTeacher,
     checkExistsTeacherNumber,
-    getUserByTeacherNumber,
     getUserByTeacherID,
     createTeacher,
-    updateTeacher,
-    deleteTeacher,
-    getSurveysByTeacherID,
-    getSurveyByID
-}
+};

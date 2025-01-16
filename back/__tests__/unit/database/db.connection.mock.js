@@ -6,7 +6,7 @@ const prismaMock = prisma;
 jest.mock("../../../database/db.connection", () => mockDeep());
 
 beforeEach(() => {
-  mockReset(prismaMock);
+    mockReset(prismaMock);
 });
 
 module.exports = { prismaMock };

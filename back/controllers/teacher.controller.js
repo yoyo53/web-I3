@@ -1,22 +1,23 @@
-const queries = require('../database/queries/teacher.queries.js');
+const surveysQueries = require("../database/queries/surveys.queries");
 
-async function getTeacherSurveys (req, res) {
-    const surveys = await queries.getSurveysByTeacherID(req.user_id);
+async function getTeacherSurveys(request, response) {
+    const surveys = await surveysQueries.getSurveysByTeacherID(request.user_id);
     if (surveys !== null) {
-        res.status(200).json(surveys);
+        response.status(200).json(surveys);
     } else {
-        res.status(500).send('Error');
+        response.status(500).json({ error: "error getting surveys" });
     }
-  };
+}
 
-async function getSurveyByID (req, res) {
-      const survey = await queries.getSurveyByID(req.params.id);
-      if (survey !== null) {
-          res.status(200).json(survey);
-      } else {
-          res.status(500).send('Error');
-      }
-};
+async function getSurveyByID(request, response) {
+    const surveyID = parseInt(request.params.id);
+    const survey = await surveysQueries.getTeacherSurveyByID(surveyID, request.user_id);
+    if (survey !== null) {
+        response.status(200).json(survey);
+    } else {
+        response.status(404).json({ error: "survey not found" });
+    }
+}
 
 module.exports = {
     getTeacherSurveys,

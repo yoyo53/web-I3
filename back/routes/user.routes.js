@@ -1,6 +1,6 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const userController = require('../controllers/user.controller');
+const userController = require("../controllers/user.controller");
 
 /**
  * @swagger
@@ -27,6 +27,6 @@ const userController = require('../controllers/user.controller');
  *       500:
  *         description: Internal server error
  */
-router.get('/data', userController.getUserData);
+router.get("/data", userController.getUserData);
 
 module.exports = router;
