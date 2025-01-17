@@ -9,7 +9,7 @@ async function answerSurvey(surveyID, studentID, answers) {
                 answer_questions: {
                     create: Object.entries(answers).flatMap(([questionID, responses]) =>
                         responses.map((response) => ({
-                            questionID: questionID,
+                            questionID: parseInt(questionID),
                             answer_text: response,
                         })),
                     ),
@@ -20,7 +20,7 @@ async function answerSurvey(surveyID, studentID, answers) {
         return result.survey_answerID;
     } catch (error) {
         console.error(error);
-        return false;
+        return null;
     }
 }
 
