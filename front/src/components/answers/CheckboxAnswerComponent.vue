@@ -18,9 +18,7 @@
 
         computed: {
             selectedCheckboxes() {
-                return this.question.options
-                    .filter((checkbox) => checkbox.checked)
-                    .map((checkbox) => checkbox.option_text);
+                return this.question.options.filter(({ checked }) => checked).map(({ option_text }) => option_text);
             },
         },
         methods: {
@@ -35,16 +33,9 @@
                     this.addCheckbox();
                 }
             },
-            selectCheckbox(checkbox) {
-                checkbox.checked = !checkbox.checked;
-                let checkboxes = this.question.options.map((option) => {
-                    if (option.option_text === checkbox.option_text) {
-                        return checkbox;
-                    }
-                    return option;
-                });
-                checkboxes = checkboxes.filter((checkbox) => checkbox.checked).map((checkbox) => checkbox.option_text);
-                this.$emit("selected-checkbox", checkboxes, this.question);
+            selectCheckbox(event, checkbox) {
+                checkbox.checked = event.target.checked;
+                this.$emit("selected-checkbox", this.selectedCheckboxes, this.question);
             },
         },
         beforeMount() {
@@ -67,7 +58,7 @@
                     type="checkbox"
                     v-model="checkbox.checked"
                     :disabled="!answerable"
-                    @click="selectCheckbox(checkbox)"
+                    @input="(event) => this.selectCheckbox(event, checkbox)"
                     class="size-4 border border-neutral-300 focus:ring-none focus:outline-offset-4 focus:outline-2 focus:outline-efrei-blue-700"
                 />
                 <input
