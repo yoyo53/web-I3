@@ -28,7 +28,10 @@ async function answerSurvey(request, response) {
         if (survey) {
             if (
                 Object.keys(answers).length === survey.questions.length &&
-                Set(Object.keys(answers)) === Set(survey.questions.map(({ questionID }) => questionID.toString())) &&
+                Object.keys(answers).every((questionID) =>
+                    survey.questions.some((question) => question.questionID.toString() === questionID),
+                ) &&
+                survey.questions.every((question) => Object.keys(answers).includes(question.questionID.toString())) &&
                 Object.values(answers).every(
                     (responses) =>
                         Array.isArray(responses) &&

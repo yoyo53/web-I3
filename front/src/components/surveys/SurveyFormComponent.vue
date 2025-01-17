@@ -115,7 +115,7 @@
                 type="submit"
                 class="w-full py-2 px-4 bg-efrei-blue-500 font-semibold text-white rounded-md shadow-md hover:bg-efrei-blue-950 focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-efrei-blue-700"
             >
-                Submit Template
+                Submit Answers
             </button>
         </form>
     </div>
