@@ -72,6 +72,10 @@ Assurez-vous d'avoir Node.js et Git installés sur votre machine avant de commen
 2. Exécutez la commande suivante pour installer les dépendances :
     ```bash
     npm install
+
+3. Exécutez la commande suivante pour initialiser l'ORM prisma :
+    ```bash
+    npm run build
     ```
 
 
