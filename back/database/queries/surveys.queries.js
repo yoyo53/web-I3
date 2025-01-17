@@ -175,8 +175,8 @@ async function getTeacherSurveyByID(surveyID, teacherID) {
                             select: {
                                 questionID: true,
                                 question_text: true,
-                                options: { select: { option_text: true } },
                                 question_type: { select: { question_type: true } },
+                                options: { select: { option_text: true } },
                                 answer_questions: {
                                     where: { survey_answer: { surveyID: surveyID } },
                                     select: { answer_text: true },
@@ -229,8 +229,9 @@ async function getStudentSurveyByID(surveyID, studentID) {
                         questions: {
                             select: {
                                 questionID: true,
-                                options: { select: { option_text: true } },
+                                question_text: true,
                                 question_type: { select: { question_type: true } },
+                                options: { select: { option_text: true } },
                             },
                         },
                     },
