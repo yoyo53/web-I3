@@ -35,6 +35,17 @@
                     this.addCheckbox();
                 }
             },
+            selectCheckbox(checkbox) {
+                checkbox.checked = !checkbox.checked;
+                let checkboxes = this.question.options.map((option) => {
+                    if (option.option_text === checkbox.option_text) {
+                        return checkbox;
+                    }
+                    return option;
+                });
+                checkboxes = checkboxes.filter((checkbox) => checkbox.checked).map((checkbox) => checkbox.option_text);
+                this.$emit("selected-checkbox", checkboxes, this.question);
+            },
         },
         beforeMount() {
             if (this.question.options.length === 0) {
@@ -56,7 +67,7 @@
                     type="checkbox"
                     v-model="checkbox.checked"
                     :disabled="!answerable"
-                    @click="$emit('selected-checkbox', selectedCheckboxes, question)"
+                    @click="selectCheckbox(checkbox)"
                     class="size-4 border border-neutral-300 focus:ring-none focus:outline-offset-4 focus:outline-2 focus:outline-efrei-blue-700"
                 />
                 <input
