@@ -40,19 +40,19 @@ async function answerSurvey(request, response) {
                 ) &&
                 survey.questions.every((question) => {
                     const responses = answers[question.questionID];
-                    if (question.question_type.question_type === "checkbox") {
+                    if (question.question_type === "checkbox") {
                         return responses.every((response) =>
                             question.options.some(({ option_text }) => option_text === response),
                         );
-                    } else if (question.question_type.question_type === "text") {
+                    } else if (question.question_type === "text") {
                         return responses.length === 1;
-                    } else if (question.question_type.question_type === "radio") {
+                    } else if (question.question_type === "radio") {
                         return (
                             responses.length === 1 &&
                             question.options.some(({ option_text }) => option_text === responses[0])
                         );
-                    } else if (question.question_type.question_type === "score") {
-                        return responses.length === 1 && Number.isInteger(responses[0]);
+                    } else if (question.question_type === "score") {
+                        return responses.length === 1 && /^\d+$/.test(responses[0]);
                     }
                     return false;
                 })

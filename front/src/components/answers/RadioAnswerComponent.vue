@@ -63,7 +63,7 @@
                     v-model="selectedRadio"
                     :value="index"
                     :disabled="!answerable"
-                    @click="$emit('selected-radio', radio.option_text, question)"
+                    @click="$emit('selected-radio', [radio.option_text], question)"
                     class="size-4 border border-neutral-300 focus:ring-none focus:outline-offset-4 focus:outline-2 focus:outline-efrei-blue-700"
                 />
                 <input
