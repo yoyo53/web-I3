@@ -23,19 +23,24 @@ async function getAllTemplates(request, response) {
 async function getTemplateByID(request, response) {
     const templateID = parseInt(request.params.id);
     const template = await templatesQueries.getTemplateByID(templateID);
-    if (template != null) {
+    if (template !== null) {
         response.status(200).json(template);
     } else {
-        response.status(404).json({ error: "template not found" });
+        response.status(500).json({ error: "getting template failed" });
     }
 }
 
 async function createTemplate(request, response) {
-    const templateID = await templatesQueries.createTemplate(request.body.name, request.body.questions);
-    if (response !== null) {
-        response.status(200).json({ templateID: templateID });
+    const { name, questions } = request.body;
+    if (name && questions) {
+        const templateID = await templatesQueries.createTemplate(name, questions);
+        if (response !== null) {
+            response.status(200).json({ templateID: templateID });
+        } else {
+            response.status(500).json({ error: "creating template failed" });
+        }
     } else {
-        response.status(500).json({ error: "creating template failed" });
+        response.status(400).json({ error: "missing fields" });
     }
 }
 
@@ -64,17 +69,21 @@ async function getSurveyByID(request, response) {
     if (survey !== null) {
         response.status(200).json(survey);
     } else {
-        response.status(500).send("Error");
+        response.status(500).json({ error: "getting survey failed" });
     }
 }
 
 async function createSurveyFromTemplate(request, response) {
     const { moduleID, templateID } = request.body;
-    const surveyID = await surveysQueries.createSurvey(moduleID, templateID);
-    if (surveyID !== null) {
-        response.status(200).json({ surveyID: surveyID });
+    if (moduleID && templateID) {
+        const surveyID = await surveysQueries.createSurvey(moduleID, templateID);
+        if (surveyID !== null) {
+            response.status(200).json({ surveyID: surveyID });
+        } else {
+            response.status(500).json({ error: "creating survey failed" });
+        }
     } else {
-        response.status(500).json({ error: "creating survey failed" });
+        response.status(400).json({ error: "missing fields" });
     }
 }
 

@@ -23,7 +23,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use((err, req, res, next) => {
     if (err instanceof SyntaxError && err.status === 400 && "body" in err) {
         console.error("Bad JSON format:", err.message);
-        return res.status(400).send({ error: "Bad JSON format" });
+        return res.status(400).json({ error: "Bad JSON format" });
     }
     next();
 });

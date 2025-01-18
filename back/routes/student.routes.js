@@ -14,12 +14,13 @@ const studentController = require("../controllers/student.controller");
  * /student/surveys:
  *   get:
  *     summary: Get all surveys for a student
- *     tags: [Student]
+ *     tags:
+ *       - Student
  *     security:
- *       - bearerAuth: []
+ *       - studentToken: []
  *     responses:
  *       200:
- *         description: A list of surveys assigned to the student
+ *         description: Get all surveys for a student
  *         content:
  *           application/json:
  *             schema:
@@ -29,25 +30,35 @@ const studentController = require("../controllers/student.controller");
  *                 properties:
  *                   surveyID:
  *                     type: integer
- *                     description: The unique identifier of the survey.
- *                   subject:
- *                     type: string
- *                     description: The subject of the survey.
- *                   group:
- *                     type: string
- *                     description: The group to which the survey is assigned.
+ *                     description: Survey ID
  *                   teacher:
  *                     type: object
- *                     description: Information about the teacher.
  *                     properties:
  *                       firstname:
  *                         type: string
- *                         description: Teacher's first name.
+ *                         description: Teacher first name
  *                       lastname:
  *                         type: string
- *                         description: Teacher's last name.
+ *                         description: Teacher last name
+ *                   subject:
+ *                     type: string
+ *                     description: Survey subject
+ *                   group:
+ *                     type: string
+ *                     description: Survey group
+ *                 example:
+ *                   surveyID: 1
+ *                   teacher:
+ *                     firstname: "John"
+ *                     lastname: "Doe"
+ *                   subject: "Math"
+ *                   group: "A"
+ *       401:
+ *         description: Unauthorized - Invalid or missing token
+ *       403:
+ *         description: Forbidden - User is not a student
  *       500:
- *         description: Error while fetching surveys.
+ *         description: Internal server error
  */
 router.get("/surveys", studentController.getStudentSurveys);
 
@@ -55,37 +66,109 @@ router.get("/surveys", studentController.getStudentSurveys);
  * @swagger
  * /student/surveys/{id}:
  *   get:
- *     summary: Get a specific survey by ID
- *     tags: [Student]
+ *     summary: Get a survey by ID
+ *     tags:
+ *       - Student
  *     security:
- *       - bearerAuth: []
+ *       - studentToken: []
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
- *         description: ID of the survey to fetch
+ *         description: Survey ID
  *         schema:
  *           type: integer
  *     responses:
  *       200:
- *         description: Details of the specific survey
+ *         description: Get a survey by ID
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/SurveyByID'
+ *               type: object
+ *               properties:
+ *                 surveyID:
+ *                   type: integer
+ *                   description: Survey ID
+ *                 template_name:
+ *                   type: string
+ *                   description: Template name
+ *                 questions:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       questionID:
+ *                         type: integer
+ *                         description: Question ID
+ *                       question_text:
+ *                         type: string
+ *                         description: Question text
+ *                       question_type:
+ *                         type: string
+ *                         description: Question type
+ *                       options:
+ *                         type: array
+ *                         items:
+ *                           type: object
+ *                           properties:
+ *                             option_text:
+ *                               type: string
+ *                               description: Option text
+ *                 teacher:
+ *                   type: object
+ *                   properties:
+ *                     firstname:
+ *                       type: string
+ *                       description: Teacher first name
+ *                     lastname:
+ *                       type: string
+ *                       description: Teacher last name
+ *                 subject:
+ *                   type: string
+ *                   description: Survey subject
+ *                 group:
+ *                   type: string
+ *                   description: Survey group
+ *             example:
+ *               surveyID: 1
+ *               template_name: "Template 1"
+ *               questions:
+ *                 - questionID: 1
+ *                   question_text: "Was the teacher clear in explaining the subject?"
+ *                   question_type: "radio"
+ *                   options:
+ *                     - option_text: "Yes"
+ *                     - option_text: "No"
+ *               teacher:
+ *                 firstname: "John"
+ *                 lastname: "Doe"
+ *               subject: "Math"
+ *               group: "A"
+ *       401:
+ *         description: Unauthorized - Invalid or missing token
+ *       403:
+ *         description: Forbidden - User is not a student
  *       500:
- *         description: Error while fetching survey.
+ *          description: Internal server error
  */
 router.get("/surveys/:id", studentController.getSurveyByID);
 
 /**
  * @swagger
- * /student/answertosurvey:
+ * /student/surveys/{id}/answer:
  *   post:
- *     summary: Submit answers to a survey
- *     tags: [Student]
+ *     summary: Answer a survey
+ *     tags:
+ *       - Student
  *     security:
- *       - bearerAuth: []
+ *       - studentToken: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: Survey ID
+ *         schema:
+ *           type: integer
  *     requestBody:
  *       required: true
  *       content:
@@ -93,28 +176,41 @@ router.get("/surveys/:id", studentController.getSurveyByID);
  *           schema:
  *             type: object
  *             properties:
- *               surveyID:
- *                 type: integer
- *                 description: The ID of the survey being answered.
  *               answers:
- *                 type: array
- *                 description: A list of answers provided by the student.
- *                 items:
- *                   type: object
- *                   properties:
- *                     questionID:
- *                       type: integer
- *                       description: The ID of the question being answered.
- *                     answer_text:
- *                       type: string
- *                       description: The answer provided by the student.
+ *                 type: object
+ *                 description: The answers to the survey questions
+ *                 additionalProperties:
+ *                   type: array
+ *                   description: The answers to a question
+ *                   items:
+ *                     type: string
+ *                     description: The answer to a question
+ *             example:
+ *               answers:
+ *                 "1": ["Yes"]
+ *             required:
+ *               - answers
  *     responses:
  *       200:
- *         description: Survey answered successfully.
+ *         description: Answer a survey
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 answerID:
+ *                   type: integer
+ *                   description: The unique identifier of the answer
+ *               example:
+ *                 answerID: 1
  *       400:
- *         description: Missing required parameters (surveyID, studentID, answers).
+ *         description: Bad request - Invalid or missing answers
+ *       401:
+ *         description: Unauthorized - Invalid or missing token
+ *       403:
+ *         description: Forbidden - User is not a student
  *       500:
- *         description: Error while answering survey.
+ *         description: Internal server error
  */
 router.post("/surveys/:id/answer", studentController.answerSurvey);
 

@@ -6,7 +6,7 @@ async function getStudentSurveys(request, response) {
     if (surveys !== null) {
         response.status(200).json(surveys);
     } else {
-        response.status(500).send("error getting surveys");
+        response.status(500).json({ error: "getting surveys failed" });
     }
 }
 
@@ -16,7 +16,7 @@ async function getSurveyByID(request, response) {
     if (survey !== null) {
         response.status(200).json(survey);
     } else {
-        response.status(404).json({ error: "survey not found" });
+        response.status(500).json({ error: "getting survey failed" });
     }
 }
 
@@ -25,7 +25,7 @@ async function answerSurvey(request, response) {
     const { answers } = request.body;
     if (answers) {
         const survey = await surveysQueries.getStudentSurveyByID(surveyID, request.user_id);
-        if (survey) {
+        if (survey !== null) {
             if (
                 Object.keys(answers).length === survey.questions.length &&
                 Object.keys(answers).every((questionID) =>
@@ -67,7 +67,7 @@ async function answerSurvey(request, response) {
                 response.status(400).json({ error: "invalid answers" });
             }
         } else {
-            response.status(404).json({ error: "survey not found" });
+            response.status(500).json({ error: "getting survey failed" });
         }
     } else {
         response.status(400).json({ error: "missing fields" });

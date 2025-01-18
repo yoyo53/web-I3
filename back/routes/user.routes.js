@@ -4,13 +4,25 @@ const userController = require("../controllers/user.controller");
 
 /**
  * @swagger
+ * tags:
+ *   name: User
+ *   description: Routes for user operations
+ */
+
+/**
+ * @swagger
  * /user/data:
  *   get:
- *     summary: Retrieve user data
- *     tags: [User]
+ *     summary: Get user data
+ *     tags:
+ *       - User
+ *     security:
+ *       - adminToken: []
+ *       - teacherToken: []
+ *       - studentToken: []
  *     responses:
  *       200:
- *         description: User data retrieved successfully
+ *         description: Get user data
  *         content:
  *           application/json:
  *             schema:
@@ -18,12 +30,27 @@ const userController = require("../controllers/user.controller");
  *               properties:
  *                 id:
  *                   type: string
+ *                   description: Student / Teacher number (Absent for admins)
  *                 firstname:
  *                   type: string
+ *                   description: User first name
  *                 lastname:
  *                   type: string
+ *                   description: User last name
  *                 email:
  *                   type: string
+ *                   description: User email
+ *               required:
+ *                 - firstname
+ *                 - lastname
+ *                 - email
+ *               example:
+ *                 id: "123456"
+ *                 firstname: "John"
+ *                 lastname: "Doe"
+ *                 email: "john.doe@mail.com"
+ *       401:
+ *         description: Unauthorized - Invalid or missing token
  *       500:
  *         description: Internal server error
  */

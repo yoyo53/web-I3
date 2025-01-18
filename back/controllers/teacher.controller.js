@@ -15,7 +15,7 @@ async function getSurveyByID(request, response) {
     if (survey !== null) {
         response.status(200).json(survey);
     } else {
-        response.status(404).json({ error: "survey not found" });
+        response.status(500).json({ error: "error getting survey" });
     }
 }
 

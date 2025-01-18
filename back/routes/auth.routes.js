@@ -5,10 +5,18 @@ const securityMiddleware = require("../middlewares/security");
 
 /**
  * @swagger
+ * tags:
+ *   name: Auth
+ *   description: Routes for authentication operations
+ */
+
+/**
+ * @swagger
  * /auth/register:
  *   post:
- *     summary: Register a new user
- *     tags: [Auth]
+ *     summary: Create a new user
+ *     tags:
+ *       - Auth
  *     security:
  *       - adminToken: []
  *     requestBody:
@@ -16,14 +24,55 @@ const securityMiddleware = require("../middlewares/security");
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/User'
+ *             type: object
+ *             properties:
+ *               firstname:
+ *                 type: string
+ *                 description: User first name
+ *               lastname:
+ *                 type: string
+ *                 description: User last name
+ *               email:
+ *                 type: string
+ *                 description: User email
+ *               account_number:
+ *                 type: string
+ *                 description: User account number
+ *               account_type:
+ *                 type: string
+ *                 description: User account type
+ *                 enum:
+ *                   - Teacher
+ *                   - Student
+ *             required:
+ *               - firstname
+ *               - lastname
+ *               - email
+ *               - account_number
+ *               - account_type
+ *             example:
+ *               firstname: "John"
+ *               lastname: "Doe"
+ *               email: "john.doe@mail.com"
+ *               account_number: "123456"
+ *               account_type: "Teacher"
  *     responses:
  *       200:
- *         description: User created successfully
+ *         description: Create a new user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user_id:
+ *                   type: integer
+ *                   description: User ID
  *       400:
- *         description: Bad request
+ *         description: Bad request - Invalid or missing required fields
  *       401:
- *         description: Unauthorized
+ *         description: Unauthorized - Invalid or missing token
+ *       403:
+ *         description: Forbidden - User is not an admin
  *       500:
  *         description: Internal server error
  */
@@ -33,8 +82,9 @@ router.post("/register", securityMiddleware.verifyAdminToken, authController.cre
  * @swagger
  * /auth/login:
  *   post:
- *     summary: Login a user
- *     tags: [Auth]
+ *     summary: Log in a user
+ *     tags:
+ *       - Auth
  *     requestBody:
  *       required: true
  *       content:
@@ -44,19 +94,43 @@ router.post("/register", securityMiddleware.verifyAdminToken, authController.cre
  *             properties:
  *               email:
  *                 type: string
+ *                 description: User email
  *               password:
  *                 type: string
+ *                 description: User password
  *             example:
  *               email: "john.doe@mail.com"
  *               password: "password"
  *             required:
- *             - email
- *             - password
+ *               - email
+ *               - password
  *     responses:
  *       200:
- *         description: User logged in successfully
+ *         description: Log in a user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *                   description: User token
+ *                 user_id:
+ *                   type: integer
+ *                   description: User ID
+ *                 user_type:
+ *                   type: string
+ *                   description: User type
+ *                   enum:
+ *                     - Admin
+ *                     - Teacher
+ *                     - Student
+ *               example:
+ *                 token: "token"
+ *                 user_id: 1
+ *                 user_type: "Teacher"
  *       400:
- *         description: Bad request
+ *         description: Bad request - Invalid or missing email or password
  *       500:
  *         description: Internal server error
  */
@@ -67,16 +141,35 @@ router.post("/login", authController.loginUserAction);
  * /auth/verifyToken:
  *   get:
  *     summary: Verify user token
- *     tags: [Auth]
+ *     tags:
+ *       - Auth
  *     security:
- *       - bearerAuth: []
+ *       - adminToken: []
+ *       - teacherToken: []
+ *       - studentToken: []
  *     responses:
  *       200:
- *         description: Token is valid
+ *         description: Verify user token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user_id:
+ *                   type: integer
+ *                   description: User ID
+ *                 user_type:
+ *                   type: string
+ *                   description: User type
+ *                   enum:
+ *                     - Admin
+ *                     - Teacher
+ *                     - Student
+ *               example:
+ *                 user_id: 1
+ *                 user_type: "Teacher"
  *       401:
- *         description: Token is invalid
- *       500:
- *         description: Internal server error
+ *         description: Unauthorized - Invalid or missing token
  */
 router.get("/verifyToken", securityMiddleware.verifyToken, authController.verifyTokenAction);
 

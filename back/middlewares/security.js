@@ -22,7 +22,7 @@ async function verifyAdminToken(request, response, next) {
         if (request.user_type === "Admin") {
             next();
         } else {
-            return response.status(401).json({ error: "not an admin" });
+            return response.status(403).json({ error: "not an admin" });
         }
     });
 }
@@ -32,7 +32,7 @@ async function verifyTeacherToken(request, response, next) {
         if (request.user_type === "Teacher") {
             next();
         } else {
-            return response.status(401).json({ error: "not a teacher" });
+            return response.status(403).json({ error: "not a teacher" });
         }
     });
 }
@@ -42,7 +42,7 @@ async function verifyStudentToken(request, response, next) {
         if (request.user_type === "Student") {
             next();
         } else {
-            return response.status(401).json({ error: "not a student" });
+            return response.status(403).json({ error: "not a student" });
         }
     });
 }
