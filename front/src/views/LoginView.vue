@@ -24,7 +24,7 @@
                         }),
                     });
 
-                    if (response.status === 400) {
+                    if (response.status === 401) {
                         toaster.error("Incorrect email or password");
                     } else if (!response.ok) {
                         throw new Error(response.statusText);
@@ -71,7 +71,7 @@
                                 type="email"
                                 v-model="email"
                                 autocomplete="email"
-                                placeholder="john.doe@email.com"
+                                placeholder="john.doe@mail.com"
                                 required
                                 class="block w-full rounded-md px-3 py-1.5 shadow-sm border border-gray-300 sm:text-sm/6 focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-efrei-blue-700 placeholder-neutral-400"
                             />

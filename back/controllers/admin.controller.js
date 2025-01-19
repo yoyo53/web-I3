@@ -4,115 +4,95 @@ const surveysQueries = require("../database/queries/surveys.queries");
 
 async function getAllModules(request, response) {
     const modules = await modulesQueries.getAllModules();
-    if (modules != null) {
-        response.status(200).json(modules);
-    } else {
-        response.status(500).json({ error: "getting modules failed" });
-    }
+    response.status(200).json(modules);
 }
 
 async function getAllTemplates(request, response) {
     const surveys = await templatesQueries.getAllTemplates();
-    if (surveys !== null) {
-        response.status(200).json(surveys);
-    } else {
-        response.status(500).json({ error: "getting templates failed" });
-    }
+    response.status(200).json(surveys);
 }
 
 async function getTemplateByID(request, response) {
     const templateID = parseInt(request.params.id);
-    const template = await templatesQueries.getTemplateByID(templateID);
-    if (template !== null) {
-        response.status(200).json(template);
+    if (Number.isInteger(templateID)) {
+        const template = await templatesQueries.getTemplateByID(templateID);
+        if (template !== null) {
+            response.status(200).json(template);
+        } else {
+            response.status(404).json({ error: "template not found" });
+        }
     } else {
-        response.status(500).json({ error: "getting template failed" });
+        response.status(400).json({ error: "invalid or missing template ID" });
     }
 }
 
 async function createTemplate(request, response) {
     const { name, questions } = request.body;
-    if (name && questions) {
+    if (typeof name === "string" && questions instanceof Array) {
         const templateID = await templatesQueries.createTemplate(name, questions);
-        if (response !== null) {
-            response.status(200).json({ templateID: templateID });
-        } else {
-            response.status(500).json({ error: "creating template failed" });
-        }
+        response.status(201).json({ templateID: templateID });
     } else {
-        response.status(400).json({ error: "missing fields" });
+        response.status(400).json({ error: "invalid or missing required fields" });
     }
 }
 
 async function deleteTemplateByID(request, response) {
     const templateID = parseInt(request.params.id);
-    const deletedTemplateID = await templatesQueries.deleteTemplateByID(templateID);
-    if (deletedTemplateID !== null) {
-        response.status(200).json({ templateID: deletedTemplateID });
+    if (Number.isInteger(templateID)) {
+        await templatesQueries.deleteTemplateByID(templateID);
+        response.status(204).end();
     } else {
-        response.status(500).json({ error: "deleting template failed" });
+        response.status(400).json({ error: "invalid or missing template ID" });
     }
 }
 
 async function getAdminSurveys(request, response) {
     const surveys = await surveysQueries.getAllSurveys();
-    if (surveys !== null) {
-        response.status(200).json(surveys);
-    } else {
-        response.status(500).json({ error: "getting surveys failed" });
-    }
+    response.status(200).json(surveys);
 }
 
 async function getSurveyByID(request, response) {
     const surveyID = parseInt(request.params.id);
-    const survey = await surveysQueries.getAdminSurveyByID(surveyID);
-    if (survey !== null) {
-        response.status(200).json(survey);
+    if (Number.isInteger(surveyID)) {
+        const survey = await surveysQueries.getAdminSurveyByID(surveyID);
+        if (survey !== null) {
+            response.status(200).json(survey);
+        } else {
+            response.status(404).json({ error: "survey not found" });
+        }
     } else {
-        response.status(500).json({ error: "getting survey failed" });
+        response.status(400).json({ error: "invalid or missing survey ID" });
     }
 }
 
 async function createSurveyFromTemplate(request, response) {
     const { moduleID, templateID } = request.body;
-    if (moduleID && templateID) {
+    if (Number.isInteger(moduleID) && Number.isInteger(templateID)) {
         const surveyID = await surveysQueries.createSurvey(moduleID, templateID);
-        if (surveyID !== null) {
-            response.status(200).json({ surveyID: surveyID });
-        } else {
-            response.status(500).json({ error: "creating survey failed" });
-        }
+        response.status(201).json({ surveyID: surveyID });
     } else {
-        response.status(400).json({ error: "missing fields" });
+        response.status(400).json({ error: "invalid or missing required fields" });
     }
 }
 
 async function createSurveyFromNothing(request, response) {
-    const { name, moduleID, questions } = request.body;
-    if (name && moduleID && questions) {
+    const { name, questions, moduleID } = request.body;
+    if (typeof name === "string" && questions instanceof Array && Number.isInteger(moduleID)) {
         const templateID = await templatesQueries.createTemplate(name, questions);
-        if (templateID !== null) {
-            const surveyID = await surveysQueries.createSurvey(moduleID, templateID);
-            if (surveyID !== null) {
-                response.status(200).json({ surveyID: surveyID });
-            } else {
-                response.status(500).json({ error: "creating survey failed" });
-            }
-        } else {
-            response.status(500).json({ error: "creating template failed" });
-        }
+        const surveyID = await surveysQueries.createSurvey(moduleID, templateID);
+        response.status(201).json({ surveyID: surveyID });
     } else {
-        response.status(400).json({ error: "missing fields" });
+        response.status(400).json({ error: "invalid or missing required fields" });
     }
 }
 
 async function deleteSurveyByID(request, response) {
     const surveyID = parseInt(request.params.id);
-    const deletedSurveyID = await surveysQueries.deleteSurveyByID(surveyID);
-    if (deletedSurveyID !== null) {
-        response.status(200).json({ surveyID: deletedSurveyID });
+    if (Number.isInteger(surveyID)) {
+        await surveysQueries.deleteSurveyByID(surveyID);
+        response.status(204).end();
     } else {
-        response.status(500).json({ error: "deleting survey failed" });
+        response.status(400).json({ error: "invalid or missing survey ID" });
     }
 }
 

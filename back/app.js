@@ -4,6 +4,7 @@ const cors = require("cors");
 const swaggerUi = require("swagger-ui-express");
 const swaggerSpecs = require("./swagger");
 const securityMiddleware = require("./middlewares/security");
+const { DatabaseError, ConnectionError, ValidationError } = require("./database/db.errors");
 
 const app = express();
 
@@ -15,16 +16,32 @@ app.use(
     }),
 );
 
-// Middleware for parsing application/json
 app.use(json());
 app.use(express.urlencoded({ extended: true }));
 
-// Middleware for handling JSON errors
-app.use((err, req, res, next) => {
-    if (err instanceof SyntaxError && err.status === 400 && "body" in err) {
-        console.error("Bad JSON format:", err.message);
-        return res.status(400).json({ error: "Bad JSON format" });
+app.use((error, request, response, next) => {
+    if (error instanceof SyntaxError && error.status === 400 && "body" in error) {
+        console.error("Invalid JSON:", error.message);
+        response.status(400).json({ error: "invalid JSON" });
+    } else if (error instanceof ConnectionError) {
+        console.error("Database connection error:", error.message);
+        response.status(500).json({ error: "database connection error" });
+    } else if (error instanceof ValidationError) {
+        console.error("Validation error:", error.message);
+        response.status(400).json({ error: "invalid or missing data" });
+    } else if (error instanceof DatabaseError) {
+        console.error("Database error:", error.message);
+        response.status(500).json({ error: "unknown database error" });
+    } else if (error instanceof Error) {
+        console.error("Unknown error:", error.message);
+        response.status(500).json({ error: "unknown error" });
+    } else {
+        next();
     }
+});
+
+app.use((req, res, next) => {
+    console.log(`${new Date().toISOString()} - ${req.ip} - ${req.method} ${req.url}`);
     next();
 });
 

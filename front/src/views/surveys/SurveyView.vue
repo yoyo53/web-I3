@@ -1,6 +1,7 @@
 <script>
     import SurveyStatisticsComponent from "@/components/surveys/SurveyStatisticsComponent.vue";
     import SurveyFormComponent from "@/components/surveys/SurveyFormComponent.vue";
+    import NotFoundView from "@/views/404View.vue";
     import { useToast } from "vue-toastification";
     const toaster = useToast();
 
@@ -15,12 +16,13 @@
         },
         data() {
             return {
-                survey: null,
+                survey: {},
             };
         },
         components: {
             SurveyStatisticsComponent,
             SurveyFormComponent,
+            NotFoundView,
         },
         methods: {
             async getSurvey(surveyID) {
@@ -41,6 +43,9 @@
                         },
                     });
 
+                    if (response.status === 400 || response.status === 404) {
+                        this.survey = null;
+                    }
                     if (!response.ok) {
                         throw new Error(response.statusText);
                     }
@@ -59,8 +64,12 @@
 </script>
 
 <template>
-    <div class="flex justify-center items-center">
-        <section v-if="!survey">
+    <div class="flex justify-center items-center" v-if="survey === null">
+        <NotFoundView />
+    </div>
+
+    <div class="flex justify-center items-center" v-else>
+        <section v-if="Object.keys(survey).length === 0">
             <p class="text-2xl font-semibold">Loading survey details...</p>
         </section>
 

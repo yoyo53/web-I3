@@ -1,15 +1,16 @@
 const { prisma } = require("../db.connection");
+const { handleErrors } = require("../db.errors");
 
 async function answerSurvey(surveyID, studentID, answers) {
-    try {
+    return await handleErrors(async () => {
         const result = await prisma.survey_answers.create({
             data: {
-                surveyID: surveyID,
-                studentID: studentID,
+                survey: { connect: { surveyID: surveyID } },
+                student: { connect: { studentID: studentID } },
                 answer_questions: {
                     create: Object.entries(answers).flatMap(([questionID, responses]) =>
                         responses.map((response) => ({
-                            questionID: parseInt(questionID),
+                            question: { connect: { questionID: parseInt(questionID) } },
                             answer_text: response,
                         })),
                     ),
@@ -18,10 +19,7 @@ async function answerSurvey(surveyID, studentID, answers) {
             select: { survey_answerID: true },
         });
         return result.survey_answerID;
-    } catch (error) {
-        console.error(error);
-        return null;
-    }
+    });
 }
 
 module.exports = {

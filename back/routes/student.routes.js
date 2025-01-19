@@ -53,6 +53,8 @@ const studentController = require("../controllers/student.controller");
  *                     lastname: "Doe"
  *                   subject: "Math"
  *                   group: "A"
+ *       400:
+ *         description: Bad request - Invalid or missing data
  *       401:
  *         description: Unauthorized - Invalid or missing token
  *       403:
@@ -106,6 +108,11 @@ router.get("/surveys", studentController.getStudentSurveys);
  *                       question_type:
  *                         type: string
  *                         description: Question type
+ *                         enum:
+ *                           - text
+ *                           - radio
+ *                           - checkbox
+ *                           - score
  *                       options:
  *                         type: array
  *                         items:
@@ -144,10 +151,14 @@ router.get("/surveys", studentController.getStudentSurveys);
  *                 lastname: "Doe"
  *               subject: "Math"
  *               group: "A"
+ *       400:
+ *         description: Bad request - Invalid or missing data
  *       401:
  *         description: Unauthorized - Invalid or missing token
  *       403:
  *         description: Forbidden - User is not a student
+ *       404:
+ *         description: Survey not found
  *       500:
  *          description: Internal server error
  */
@@ -191,7 +202,7 @@ router.get("/surveys/:id", studentController.getSurveyByID);
  *             required:
  *               - answers
  *     responses:
- *       200:
+ *       201:
  *         description: Answer a survey
  *         content:
  *           application/json:
@@ -209,6 +220,8 @@ router.get("/surveys/:id", studentController.getSurveyByID);
  *         description: Unauthorized - Invalid or missing token
  *       403:
  *         description: Forbidden - User is not a student
+ *       404:
+ *         description: Survey not found
  *       500:
  *         description: Internal server error
  */

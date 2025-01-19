@@ -1,11 +1,12 @@
 const { prisma } = require("../db.connection");
+const { handleErrors } = require("../db.errors");
 
 async function getAllModules() {
-    try {
+    return await handleErrors(async () => {
         const result = await prisma.modules.findMany({
             select: {
                 moduleID: true,
-                teacher: { select: { teacherID: true, user: { select: { firstname: true, lastname: true } } } },
+                teacher: { select: { user: { select: { firstname: true, lastname: true } } } },
                 subject: { select: { name: true } },
                 group: { select: { name: true } },
             },
@@ -19,10 +20,7 @@ async function getAllModules() {
             subject: module.subject.name,
             group: module.group.name,
         }));
-    } catch (error) {
-        console.error(error);
-        return null;
-    }
+    });
 }
 
 module.exports = {

@@ -103,7 +103,6 @@ router.beforeEach(async (to, from, next) => {
     const publicPages = ["home", "about", "login"];
     const token = localStorage.getItem("token");
     userState.userType = null;
-    userState.userId = null;
     if (token) {
         try {
             const response = await fetch(import.meta.env.VITE_API_URL + "auth/verifyToken", {
@@ -119,7 +118,6 @@ router.beforeEach(async (to, from, next) => {
             }
             const data = await response.json();
             userState.userType = data.user_type;
-            userState.userId = data.user_id;
         } catch (error) {
             console.error(error);
             window.localStorage.removeItem("token");

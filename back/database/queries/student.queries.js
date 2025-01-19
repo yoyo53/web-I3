@@ -1,34 +1,29 @@
 const { prisma } = require("../db.connection");
+const { handleErrors } = require("../db.errors");
 
 async function checkExistsStudent(studentID) {
-    try {
+    return await handleErrors(async () => {
         const result = await prisma.students.findFirst({
             where: { studentID: studentID },
             select: { studentID: true },
         });
         return result !== null;
-    } catch (error) {
-        console.error(error);
-        return false;
-    }
+    });
 }
 
 async function checkExistsStudentNumber(student_number) {
-    try {
+    return await handleErrors(async () => {
         const result = await prisma.students.findFirst({
             where: { student_number: student_number },
             select: { studentID: true },
         });
         return result !== null;
-    } catch (error) {
-        console.error(error);
-        return false;
-    }
+    });
 }
 
 async function getUserByStudentID(studentID) {
-    try {
-        return await prisma.students.findUnique({
+    return await handleErrors(async () => {
+        const result = await prisma.students.findUnique({
             where: { studentID: studentID },
             select: {
                 studentID: true,
@@ -36,14 +31,12 @@ async function getUserByStudentID(studentID) {
                 user: { select: { userID: true, firstname: true, lastname: true, email: true } },
             },
         });
-    } catch (error) {
-        console.error(error);
-        return null;
-    }
+        return result;
+    });
 }
 
 async function createStudent(student_number, firstname, lastname, email, hashed_password) {
-    try {
+    return await handleErrors(async () => {
         const result = await prisma.students.create({
             data: {
                 student_number: student_number,
@@ -59,10 +52,7 @@ async function createStudent(student_number, firstname, lastname, email, hashed_
             select: { studentID: true },
         });
         return result.studentID;
-    } catch (error) {
-        console.error(error);
-        return null;
-    }
+    });
 }
 
 module.exports = {

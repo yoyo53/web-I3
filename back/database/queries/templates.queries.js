@@ -1,7 +1,8 @@
 const { prisma } = require("../db.connection");
+const { handleErrors } = require("../db.errors");
 
 async function getAllTemplates() {
-    try {
+    return await handleErrors(async () => {
         const result = await prisma.survey_templates.findMany({
             select: { survey_templateID: true, name: true },
         });
@@ -9,14 +10,11 @@ async function getAllTemplates() {
             templateID: template.survey_templateID,
             name: template.name,
         }));
-    } catch (error) {
-        console.error(error);
-        return null;
-    }
+    });
 }
 
 async function getTemplateByID(templateID) {
-    try {
+    return await handleErrors(async () => {
         const result = await prisma.survey_templates.findUnique({
             where: { survey_templateID: templateID },
             select: {
@@ -32,6 +30,7 @@ async function getTemplateByID(templateID) {
                 },
             },
         });
+        if (result === null) return null;
         return {
             templateID: result.survey_templateID,
             name: result.name,
@@ -41,14 +40,11 @@ async function getTemplateByID(templateID) {
                 options: question.options.map(({ option_text }) => ({ option_text })),
             })),
         };
-    } catch (error) {
-        console.error(error);
-        return null;
-    }
+    });
 }
 
 async function createTemplate(name, questions) {
-    try {
+    return await handleErrors(async () => {
         const result = await prisma.survey_templates.create({
             data: {
                 name: name,
@@ -63,23 +59,17 @@ async function createTemplate(name, questions) {
             select: { survey_templateID: true },
         });
         return result.survey_templateID;
-    } catch (error) {
-        console.error(error);
-        return null;
-    }
+    });
 }
 
 async function deleteTemplateByID(survey_templateID) {
-    try {
+    return await handleErrors(async () => {
         const result = await prisma.survey_templates.delete({
             where: { survey_templateID: survey_templateID },
             select: { survey_templateID: true },
         });
         return result.survey_templateID;
-    } catch (error) {
-        console.error(error);
-        return null;
-    }
+    });
 }
 
 module.exports = {

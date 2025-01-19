@@ -9,62 +9,56 @@ require("dotenv").config();
 
 async function createUserAction(request, response) {
     const { email, firstname, lastname, account_number, account_type } = request.body;
-    if (email && firstname && lastname && account_number && account_type) {
+    if (
+        typeof email === "string" &&
+        typeof firstname === "string" &&
+        typeof lastname === "string" &&
+        Number.isInteger(account_number) &&
+        typeof account_type === "string"
+    ) {
         if (!(await userQueries.checkExistsUser(email))) {
             const hashed_password = await hash(process.env.DEFAULT_PASSWORD, 10);
             if (account_type === "Teacher") {
-                const teacher_number = parseInt(account_number);
-                if (!(await teacherQueries.checkExistsTeacherNumber(teacher_number))) {
+                if (!(await teacherQueries.checkExistsTeacherNumber(account_number))) {
                     const userID = await teacherQueries.createTeacher(
-                        teacher_number,
+                        account_number,
                         firstname,
                         lastname,
                         email,
                         hashed_password,
                     );
-                    if (userID !== null) {
-                        response.status(200).json({ user_id: userID });
-                    } else {
-                        response.status(500).json({ error: "teacher creation failed" });
-                    }
+                    response.status(201).json({ userID: userID });
                 } else {
-                    response.status(400).json({ error: "teacher number already taken" });
+                    response.status(409).json({ error: "teacher number already taken" });
                 }
             } else if (account_type === "Student") {
-                const student_number = parseInt(account_number);
-                if (!(await studentQueries.checkExistsStudentNumber(student_number))) {
+                if (!(await studentQueries.checkExistsStudentNumber(account_number))) {
                     const userID = await studentQueries.createStudent(
-                        student_number,
+                        account_number,
                         firstname,
                         lastname,
                         email,
                         hashed_password,
                     );
-                    if (userID !== null) {
-                        response.status(200).json({ user_id: userID });
-                    } else {
-                        response.status(500).json({ error: "student creation failed" });
-                    }
+                    response.status(201).json({ userID: userID });
                 } else {
-                    response.status(400).json({ error: "student number already taken" });
+                    response.status(409).json({ error: "student number already taken" });
                 }
             } else {
                 response.status(400).json({ error: "invalid account type" });
             }
         } else {
-            response.status(400).json({ error: "email already taken" });
+            response.status(409).json({ error: "email already taken" });
         }
     } else {
-        response.status(400).json({ error: "missing fields" });
+        response.status(400).json({ error: "invalid or missing required fields" });
     }
 }
 
 async function loginUserAction(request, response) {
     const { email, password } = request.body;
-    if (email && password) {
+    if (typeof email === "string" && typeof password === "string") {
         const user = await userQueries.getUserByEmailwithPassword(email);
-        console.log(user);
-        console.log(password);
         if (user !== null && (await compare(password, user.hashed_password))) {
             let user_type;
             if (await adminQueries.checkExistsAdmin(user.userID)) {
@@ -81,17 +75,17 @@ async function loginUserAction(request, response) {
             const token = jwt.sign({ user_id: user.userID, user_type: user_type }, process.env.SECRET_KEY, {
                 expiresIn: process.env.TOKEN_EXPIRATION || "1h",
             });
-            response.status(200).json({ token: token, user_id: user.userID, user_type: user_type });
+            response.status(200).json({ token: token, user_type: user_type });
         } else {
-            response.status(400).json({ error: "invalid email or password" });
+            response.status(401).json({ error: "invalid email or password" });
         }
     } else {
-        response.status(400).json({ error: "missing fields" });
+        response.status(400).json({ error: "invalid or missing required fields" });
     }
 }
 
 async function verifyTokenAction(request, response) {
-    return response.status(200).json({ user_id: request.user_id, user_type: request.user_type });
+    return response.status(200).json({ user_type: request.user_type });
 }
 
 module.exports = {

@@ -1,12 +1,13 @@
 const { prisma } = require("../../../../database/db.connection");
 const teacherQueries = require("../../../../database/queries/teacher.queries");
+const { DatabaseError } = require("../../../../database/db.errors");
 
 const teacher1 = {
     teacher_number: -1,
     user: {
         userID: -1,
-        firstname: "john",
-        lastname: "doe",
+        firstname: "John",
+        lastname: "Doe",
         email: "john.doe@mail.com",
         hashed_password: "password1",
     },
@@ -15,8 +16,8 @@ const teacher1 = {
 const teacher2 = {
     teacher_number: -2,
     user: {
-        firstname: "jane",
-        lastname: "doe",
+        firstname: "Jane",
+        lastname: "Doe",
         email: "jane.doe@mail.com",
         hashed_password: "password2",
     },
@@ -94,14 +95,15 @@ describe("Create teacher", () => {
         expect(response).not.toBeNull();
     });
 
-    it("should return null if teacher does exist", async () => {
-        const response = await teacherQueries.createTeacher(
-            teacher1.teacher_number,
-            teacher1.user.firstname,
-            teacher1.user.lastname,
-            teacher1.user.email,
-            teacher1.user.hashed_password,
-        );
-        expect(response).toBeNull();
+    it("should throw DatabaseError if teacher does exist", async () => {
+        await expect(
+            teacherQueries.createTeacher(
+                teacher1.teacher_number,
+                teacher1.user.firstname,
+                teacher1.user.lastname,
+                teacher1.user.email,
+                teacher1.user.hashed_password,
+            ),
+        ).rejects.toThrow(DatabaseError);
     });
 });

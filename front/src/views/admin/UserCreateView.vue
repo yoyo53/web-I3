@@ -26,7 +26,7 @@
                             email: this.email,
                             firstname: this.firstname,
                             lastname: this.lastname,
-                            account_number: this.accountNumber,
+                            account_number: parseInt(this.accountNumber),
                             account_type: this.accountType,
                         }),
                     });
@@ -63,7 +63,7 @@
                         id="email"
                         v-model="email"
                         autocomplete="email"
-                        placeholder="john.doe@email.com"
+                        placeholder="john.doe@mail.com"
                         class="block w-full p-2.5 text-sm rounded-lg border border-gray-300 focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-efrei-blue-700 placeholder-neutral-400"
                         required
                     />

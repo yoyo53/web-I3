@@ -29,7 +29,7 @@ const userController = require("../controllers/user.controller");
  *               type: object
  *               properties:
  *                 id:
- *                   type: string
+ *                   type: integer
  *                   description: Student / Teacher number (Absent for admins)
  *                 firstname:
  *                   type: string
@@ -45,10 +45,12 @@ const userController = require("../controllers/user.controller");
  *                 - lastname
  *                 - email
  *               example:
- *                 id: "123456"
+ *                 id: 123456
  *                 firstname: "John"
  *                 lastname: "Doe"
  *                 email: "john.doe@mail.com"
+ *       400:
+ *         description: Bad request - Invalid or missing data
  *       401:
  *         description: Unauthorized - Invalid or missing token
  *       500:

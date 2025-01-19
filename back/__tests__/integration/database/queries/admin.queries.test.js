@@ -3,8 +3,8 @@ const adminQueries = require("../../../../database/queries/admin.queries");
 
 const user = {
     userID: -1,
-    firstname: "john",
-    lastname: "doe",
+    firstname: "John",
+    lastname: "Doe",
     email: "john.doe@mail.com",
     hashed_password: "password",
 };

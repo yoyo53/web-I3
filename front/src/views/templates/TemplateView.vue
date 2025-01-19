@@ -2,6 +2,7 @@
     import RadioAnswerComponent from "@/components/answers/RadioAnswerComponent.vue";
     import CheckboxAnswerComponent from "@/components/answers/CheckboxAnswerComponent.vue";
     import PopupComponent from "@/components/popup/PopupComponent.vue";
+    import NotFoundView from "@/views/404View.vue";
     import { useToast } from "vue-toastification";
     const toaster = useToast();
 
@@ -15,7 +16,7 @@
         },
         data() {
             return {
-                template: null,
+                template: {},
                 showPopup: false,
             };
         },
@@ -23,6 +24,7 @@
             RadioAnswerComponent,
             CheckboxAnswerComponent,
             PopupComponent,
+            NotFoundView,
         },
         methods: {
             async getTemplate(templateID) {
@@ -35,6 +37,9 @@
                         },
                     });
 
+                    if (response.status === 400 || response.status === 404) {
+                        this.template = null;
+                    }
                     if (!response.ok) {
                         throw new Error(response.statusText);
                     }
@@ -80,8 +85,12 @@
 </script>
 
 <template>
-    <div class="flex justify-center items-center">
-        <section v-if="!template">
+    <div class="flex justify-center items-center" v-if="template === null">
+        <NotFoundView />
+    </div>
+
+    <div class="flex justify-center items-center" v-else>
+        <section v-if="Object.keys(template).length === 0">
             <p class="text-2xl font-semibold">Loading template details...</p>
         </section>
         <section v-else class="w-full max-w-7xl mx-auto">

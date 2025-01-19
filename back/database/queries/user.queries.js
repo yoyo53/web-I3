@@ -1,40 +1,34 @@
 const { prisma } = require("../db.connection");
+const { handleErrors } = require("../db.errors");
 
 async function checkExistsUser(email) {
-    try {
+    return await handleErrors(async () => {
         const result = await prisma.users.findFirst({
             where: { email: email },
             select: { userID: true },
         });
         return result !== null;
-    } catch (error) {
-        console.error(error);
-        return false;
-    }
+    });
 }
 
 async function getUserByEmailwithPassword(email) {
-    try {
-        return await prisma.users.findUnique({
+    return await handleErrors(async () => {
+        const result = prisma.users.findUnique({
             where: { email: email },
             select: { userID: true, firstname: true, lastname: true, email: true, hashed_password: true },
         });
-    } catch (error) {
-        console.error(error);
-        return null;
-    }
+        return result;
+    });
 }
 
 async function getUserById(userID) {
-    try {
-        return await prisma.users.findUnique({
+    return await handleErrors(async () => {
+        const result = await prisma.users.findUnique({
             where: { userID: userID },
             select: { userID: true, firstname: true, lastname: true, email: true },
         });
-    } catch (error) {
-        console.error(error);
-        return null;
-    }
+        return result;
+    });
 }
 
 module.exports = {

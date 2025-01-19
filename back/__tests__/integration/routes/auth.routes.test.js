@@ -8,8 +8,8 @@ async function hashPassword(password) {
 }
 
 const user = {
-    firstname: "john",
-    lastname: "doe",
+    firstname: "John",
+    lastname: "Doe",
     email: "john.doe@mail.com",
     password: "password",
 };
@@ -51,8 +51,6 @@ describe("POST /auth/login", () => {
             .expect((res) => {
                 expect(res.body).toHaveProperty("token");
                 expect(res.body.token).toEqual(expect.any(String));
-                expect(res.body).toHaveProperty("user_id");
-                expect(res.body.user_id).toEqual(expect.any(Number));
                 expect(res.body).toHaveProperty("user_type", "Admin");
             });
     });

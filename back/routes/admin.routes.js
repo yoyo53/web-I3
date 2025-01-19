@@ -53,6 +53,8 @@ const adminController = require("../controllers/admin.controller");
  *                     lastname: "Doe"
  *                   subject: "Math"
  *                   group: "A"
+ *       400:
+ *         description: Bad request - Invalid or missing data
  *       401:
  *         description: Unauthorized - Invalid or missing token
  *       403:
@@ -90,6 +92,8 @@ router.get("/modules", adminController.getAllModules);
  *                 example:
  *                   templateID: 1
  *                   name: "Template 1"
+ *       400:
+ *         description: Bad request - Invalid or missing data
  *       401:
  *         description: Unauthorized - Invalid or missing token
  *       403:
@@ -140,6 +144,11 @@ router.get("/templates", adminController.getAllTemplates);
  *                       question_type:
  *                         type: string
  *                         description: Question type
+ *                         enum:
+ *                           - text
+ *                           - radio
+ *                           - checkbox
+ *                           - score
  *                       options:
  *                         type: array
  *                         items:
@@ -157,10 +166,14 @@ router.get("/templates", adminController.getAllTemplates);
  *                   options:
  *                     - option_text: "Yes"
  *                     - option_text: "No"
+ *       400:
+ *         description: Bad request - Invalid or missing data
  *       401:
  *         description: Unauthorized - Invalid or missing token
  *       403:
  *         description: Forbidden - User is not an admin
+ *       404:
+ *         description: Template not found
  *       500:
  *          description: Internal server error
  */
@@ -196,6 +209,11 @@ router.get("/templates/:id", adminController.getTemplateByID);
  *                     question_type:
  *                       type: string
  *                       description: Question type
+ *                       enum:
+ *                         - text
+ *                         - radio
+ *                         - checkbox
+ *                         - score
  *                     options:
  *                       type: array
  *                       items:
@@ -216,7 +234,7 @@ router.get("/templates/:id", adminController.getTemplateByID);
  *               - name
  *               - questions
  *     responses:
- *       200:
+ *       201:
  *         description: Create a template
  *         content:
  *           application/json:
@@ -229,7 +247,7 @@ router.get("/templates/:id", adminController.getTemplateByID);
  *               example:
  *                 templateID: 1
  *       400:
- *        description: Bad request - Invalid or missing required fields
+ *         description: Bad request - Invalid or missing data
  *       401:
  *         description: Unauthorized - Invalid or missing token
  *       403:
@@ -256,18 +274,10 @@ router.post("/templates/create", adminController.createTemplate);
  *         schema:
  *           type: integer
  *     responses:
- *       200:
+ *       204:
  *         description: Delete a template by ID
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 templateID:
- *                   type: integer
- *                   description: Template ID
- *             example:
- *               templateID: 1
+ *       400:
+ *         description: Bad request - Invalid or missing data
  *       401:
  *         description: Unauthorized - Invalid or missing token
  *       403:
@@ -321,6 +331,8 @@ router.delete("/templates/:id", adminController.deleteTemplateByID);
  *                     lastname: "Doe"
  *                   subject: "Math"
  *                   group: "A"
+ *       400:
+ *         description: Bad request - Invalid or missing data
  *       401:
  *         description: Unauthorized - Invalid or missing token
  *       403:
@@ -374,6 +386,11 @@ router.get("/surveys", adminController.getAdminSurveys);
  *                       question_type:
  *                         type: string
  *                         description: Question type
+ *                         enum:
+ *                           - text
+ *                           - radio
+ *                           - checkbox
+ *                           - score
  *                       options:
  *                         type: array
  *                         items:
@@ -437,10 +454,14 @@ router.get("/surveys", adminController.getAdminSurveys);
  *                 lastname: "Doe"
  *               subject: "Math"
  *               group: "A"
+ *       400:
+ *         description: Bad request - Invalid or missing data
  *       401:
  *         description: Unauthorized - Invalid or missing token
  *       403:
  *         description: Forbidden - User is not an admin
+ *       404:
+ *         description: Survey not found
  *       500:
  *          description: Internal server error
  */
@@ -475,7 +496,7 @@ router.get("/surveys/:id", adminController.getSurveyByID);
  *               - moduleID
  *               - templateID
  *     responses:
- *       200:
+ *       201:
  *         description: Create a survey from a template
  *         content:
  *           application/json:
@@ -488,7 +509,7 @@ router.get("/surveys/:id", adminController.getSurveyByID);
  *               example:
  *                 surveyID: 1
  *       400:
- *         description: Bad request - Invalid or missing required fields
+ *         description: Bad request - Invalid or missing data
  *       401:
  *         description: Unauthorized - Invalid or missing token
  *       403:
@@ -531,6 +552,11 @@ router.post("/surveys/create", adminController.createSurveyFromTemplate);
  *                     question_type:
  *                       type: string
  *                       description: Question type
+ *                       enum:
+ *                         - text
+ *                         - radio
+ *                         - checkbox
+ *                         - score
  *                     options:
  *                       type: array
  *                       items:
@@ -553,7 +579,7 @@ router.post("/surveys/create", adminController.createSurveyFromTemplate);
  *               - moduleID
  *               - questions
  *     responses:
- *       200:
+ *       201:
  *         description: Survey created successfully
  *         content:
  *           application/json:
@@ -566,7 +592,7 @@ router.post("/surveys/create", adminController.createSurveyFromTemplate);
  *               example:
  *                 surveyID: 1
  *       400:
- *         description: Bad request - Invalid or missing required fields
+ *         description: Bad request - Invalid or missing data
  *       401:
  *         description: Unauthorized - Invalid or missing token
  *       403:
@@ -593,18 +619,10 @@ router.post("/surveys/create/custom", adminController.createSurveyFromNothing);
  *         schema:
  *           type: integer
  *     responses:
- *       200:
+ *       204:
  *         description: Delete a survey by ID
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 surveyID:
- *                   type: integer
- *                   description: Survey ID
- *             example:
- *               surveyID: 1
+ *       400:
+ *         description: Bad request - Invalid or missing data
  *       401:
  *         description: Unauthorized - Invalid or missing token
  *       403:

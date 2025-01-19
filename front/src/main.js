@@ -23,7 +23,6 @@ app.use(Toast, {
 
 const userState = reactive({
     userType: null,
-    userId: null,
 });
 
 app.provide("userState", userState);

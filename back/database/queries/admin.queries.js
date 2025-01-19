@@ -1,16 +1,14 @@
 const { prisma } = require("../db.connection");
+const { handleErrors } = require("../db.errors");
 
 async function checkExistsAdmin(adminID) {
-    try {
+    return await handleErrors(async () => {
         const result = await prisma.admins.findFirst({
             where: { adminID: adminID },
             select: { adminID: true },
         });
         return result !== null;
-    } catch (error) {
-        console.error(error);
-        return false;
-    }
+    });
 }
 
 module.exports = {

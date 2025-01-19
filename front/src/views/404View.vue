@@ -1,4 +1,22 @@
-<script></script>
+<script>
+    export default {
+        name: "NotFoundView",
+        inject: ["userState"],
+        computed: {
+            getDashboardRoute() {
+                if (this.userState.userType === "Admin") {
+                    return { name: "admin" };
+                } else if (this.userState.userType === "Teacher") {
+                    return { name: "teacher" };
+                } else if (this.userState.userType === "Student") {
+                    return { name: "student" };
+                } else {
+                    return { name: "home" };
+                }
+            },
+        },
+    };
+</script>
 
 <template>
     <div class="flex flex-col items-center justify-center">
@@ -12,7 +30,7 @@
                     Sorry, we can't find that page. You'll find lots to explore on the home page.
                 </p>
                 <RouterLink
-                    :to="{ name: 'home' }"
+                    :to="getDashboardRoute"
                     class="inline-flex my-4 px-5 py-2.5 text-sm font-medium text-center rounded-lg text-white bg-efrei-blue-500 hover:bg-efrei-blue-950 focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-efrei-blue-700"
                 >
                     Back to Homepage

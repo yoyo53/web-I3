@@ -1,7 +1,8 @@
 const { prisma } = require("../db.connection");
+const { handleErrors } = require("../db.errors");
 
 async function getAllSurveys() {
-    try {
+    return await handleErrors(async () => {
         const surveys = await prisma.surveys.findMany({
             select: {
                 surveyID: true,
@@ -23,14 +24,11 @@ async function getAllSurveys() {
             subject: survey.module.subject.name,
             group: survey.module.group.name,
         }));
-    } catch (error) {
-        console.error(error);
-        return null;
-    }
+    });
 }
 
 async function getSurveysByTeacherID(teacherID) {
-    try {
+    return await handleErrors(async () => {
         const surveys = await prisma.surveys.findMany({
             where: { module: { teacherID: teacherID } },
             select: {
@@ -53,14 +51,11 @@ async function getSurveysByTeacherID(teacherID) {
             subject: survey.module.subject.name,
             group: survey.module.group.name,
         }));
-    } catch (error) {
-        console.error(error);
-        return null;
-    }
+    });
 }
 
 async function getSurveysByStudentID(studentID) {
-    try {
+    return await handleErrors(async () => {
         const surveys = await prisma.surveys.findMany({
             where: {
                 module: { group: { students: { some: { studentID: studentID } } } },
@@ -86,14 +81,11 @@ async function getSurveysByStudentID(studentID) {
             subject: survey.module.subject.name,
             group: survey.module.group.name,
         }));
-    } catch (error) {
-        console.error(error);
-        return null;
-    }
+    });
 }
 
 async function getAdminSurveyByID(surveyID) {
-    try {
+    return await handleErrors(async () => {
         const result = await prisma.surveys.findUnique({
             where: { surveyID: surveyID },
             select: {
@@ -133,6 +125,7 @@ async function getAdminSurveyByID(surveyID) {
                 },
             },
         });
+        if (result === null) return null;
         return {
             surveyID: result.surveyID,
             template_name: result.survey_template.name,
@@ -156,14 +149,11 @@ async function getAdminSurveyByID(surveyID) {
             subject: result.module.subject.name,
             group: result.module.group.name,
         };
-    } catch (error) {
-        console.error(error);
-        return null;
-    }
+    });
 }
 
 async function getTeacherSurveyByID(surveyID, teacherID) {
-    try {
+    return await handleErrors(async () => {
         const result = await prisma.surveys.findUnique({
             where: { surveyID: surveyID, module: { teacherID: teacherID } },
             select: {
@@ -194,6 +184,7 @@ async function getTeacherSurveyByID(surveyID, teacherID) {
                 },
             },
         });
+        if (result === null) return null;
         return {
             surveyID: result.surveyID,
             template_name: result.survey_template.name,
@@ -211,14 +202,11 @@ async function getTeacherSurveyByID(surveyID, teacherID) {
             subject: result.module.subject.name,
             group: result.module.group.name,
         };
-    } catch (error) {
-        console.error(error);
-        return null;
-    }
+    });
 }
 
 async function getStudentSurveyByID(surveyID, studentID) {
-    try {
+    return await handleErrors(async () => {
         const result = await prisma.surveys.findUnique({
             where: { surveyID: surveyID, module: { group: { students: { some: { studentID: studentID } } } } },
             select: {
@@ -245,7 +233,8 @@ async function getStudentSurveyByID(surveyID, studentID) {
                 },
             },
         });
-        const transformedData = {
+        if (result === null) return null;
+        return {
             surveyID: result.surveyID,
             template_name: result.survey_template.name,
             questions: result.survey_template.questions.map((question) => ({
@@ -261,38 +250,30 @@ async function getStudentSurveyByID(surveyID, studentID) {
             subject: result.module.subject.name,
             group: result.module.group.name,
         };
-        return transformedData;
-    } catch (error) {
-        console.error(error);
-        return null;
-    }
+    });
 }
 
-async function createSurvey(moduleID, survey_templateID) {
-    try {
-        return await prisma.surveys.create({
+async function createSurvey(moduleID, templateID) {
+    return await handleErrors(async () => {
+        const result = await prisma.surveys.create({
             data: {
-                module: { connect: { moduleID } },
-                survey_template: { connect: { survey_templateID } },
+                module: { connect: { moduleID: moduleID } },
+                survey_template: { connect: { survey_templateID: templateID } },
             },
             select: { surveyID: true },
         });
-    } catch (error) {
-        console.error(error);
-        return null;
-    }
+        return result.surveyID;
+    });
 }
 
 async function deleteSurveyByID(surveyID) {
-    try {
-        return await prisma.surveys.delete({
+    return await handleErrors(async () => {
+        const result = await prisma.surveys.delete({
             where: { surveyID: surveyID },
             select: { surveyID: true },
         });
-    } catch (error) {
-        console.error(error);
-        return null;
-    }
+        return result.surveyID;
+    });
 }
 
 module.exports = {
