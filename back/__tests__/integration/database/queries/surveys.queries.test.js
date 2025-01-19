@@ -1,7 +1,7 @@
 const { prisma } = require("../../../../database/db.connection");
 const surveysQueries = require("../../../../database/queries/surveys.queries");
 
-beforeEach(async () => {
+beforeAll(async () => {
     await prisma.students.create({
         data: {
             student_number: -1,
@@ -44,17 +44,17 @@ beforeEach(async () => {
             },
         },
     });
+    await prisma.subjects.create({
+        data: {
+            subjectID: -1,
+            name: "Subject 1",
+        },
+    });
     await prisma.groups.create({
         data: {
             groupID: -1,
             name: "Group 1",
             students: { connect: [{ student_number: -1 }, { student_number: -2 }] },
-        },
-    });
-    await prisma.subjects.create({
-        data: {
-            subjectID: -1,
-            name: "Subject 1",
         },
     });
     await prisma.modules.createMany({
@@ -65,16 +65,16 @@ beforeEach(async () => {
             groupID: -1,
         },
     });
-    await prisma.survey_templates.create({
-        data: {
-            survey_templateID: -1,
-            name: "Template 1",
-        },
-    });
     await prisma.question_types.create({
         data: {
             question_typeID: -1,
             question_type: "Type 1",
+        },
+    });
+    await prisma.survey_templates.create({
+        data: {
+            survey_templateID: -1,
+            name: "Template 1",
         },
     });
     await prisma.questions.createMany({
@@ -91,6 +91,9 @@ beforeEach(async () => {
             { optionID: -2, option_text: "Option 2", questionID: -1 },
         ],
     });
+}, 10000);
+
+beforeEach(async () => {
     await prisma.surveys.createMany({
         data: {
             surveyID: -1,
@@ -113,17 +116,19 @@ beforeEach(async () => {
             answer_text: "Option 1",
         },
     });
-}, 10000);
+});
 
 afterEach(async () => {
-    await prisma.question_types.delete({ where: { question_typeID: -1 } });
+    await prisma.surveys.deleteMany({ where: { moduleID: -1, survey_templateID: -1 } });
+});
+
+afterAll(async () => {
     await prisma.survey_templates.delete({ where: { survey_templateID: -1 } });
+    await prisma.question_types.delete({ where: { question_typeID: -1 } });
     await prisma.modules.delete({ where: { moduleID: -1 } });
-    await prisma.subjects.delete({ where: { subjectID: -1 } });
     await prisma.groups.delete({ where: { groupID: -1 } });
-    await prisma.users.delete({ where: { userID: -1 } });
-    await prisma.users.delete({ where: { userID: -2 } });
-    await prisma.users.delete({ where: { userID: -3 } });
+    await prisma.subjects.delete({ where: { subjectID: -1 } });
+    await prisma.users.deleteMany({ where: { userID: { in: [-1, -2, -3] } } });
 });
 
 describe("Get all surveys", () => {

@@ -1,7 +1,7 @@
 const { prisma } = require("../../../../database/db.connection");
 const answersQueries = require("../../../../database/queries/answers.queries");
 
-beforeEach(async () => {
+beforeAll(async () => {
     await prisma.students.create({
         data: {
             student_number: -1,
@@ -30,17 +30,17 @@ beforeEach(async () => {
             },
         },
     });
+    await prisma.subjects.create({
+        data: {
+            subjectID: -1,
+            name: "Subject 1",
+        },
+    });
     await prisma.groups.create({
         data: {
             groupID: -1,
             name: "Group 1",
             students: { connect: { student_number: -1 } },
-        },
-    });
-    await prisma.subjects.create({
-        data: {
-            subjectID: -1,
-            name: "Subject 1",
         },
     });
     await prisma.modules.createMany({
@@ -51,16 +51,16 @@ beforeEach(async () => {
             groupID: -1,
         },
     });
-    await prisma.survey_templates.create({
-        data: {
-            survey_templateID: -1,
-            name: "Template 1",
-        },
-    });
     await prisma.question_types.create({
         data: {
             question_typeID: -1,
             question_type: "Type 1",
+        },
+    });
+    await prisma.survey_templates.create({
+        data: {
+            survey_templateID: -1,
+            name: "Template 1",
         },
     });
     await prisma.questions.createMany({
@@ -87,13 +87,17 @@ beforeEach(async () => {
 }, 10000);
 
 afterEach(async () => {
-    await prisma.question_types.delete({ where: { question_typeID: -1 } });
+    await prisma.survey_answers.deleteMany({ where: { surveyID: -1 } });
+});
+
+afterAll(async () => {
     await prisma.survey_templates.delete({ where: { survey_templateID: -1 } });
+    await prisma.question_types.delete({ where: { question_typeID: -1 } });
     await prisma.modules.delete({ where: { moduleID: -1 } });
     await prisma.subjects.delete({ where: { subjectID: -1 } });
     await prisma.groups.delete({ where: { groupID: -1 } });
-    await prisma.users.delete({ where: { userID: -1 } });
-    await prisma.users.delete({ where: { userID: -2 } });
+    await prisma.users.deleteMany({ where: { userID: { in: [-1, -2] } } });
+    await prisma.$disconnect();
 }, 10000);
 
 describe("Answer survey", () => {

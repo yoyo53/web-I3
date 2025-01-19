@@ -1,7 +1,7 @@
 const { prisma } = require("../../../../database/db.connection");
 const modulesQueries = require("../../../../database/queries/modules.queries");
 
-beforeEach(async () => {
+beforeAll(async () => {
     await prisma.students.create({
         data: {
             student_number: -1,
@@ -30,17 +30,17 @@ beforeEach(async () => {
             },
         },
     });
+    await prisma.subjects.create({
+        data: {
+            subjectID: -1,
+            name: "Subject 1",
+        },
+    });
     await prisma.groups.create({
         data: {
             groupID: -1,
             name: "Group 1",
             students: { connect: { student_number: -1 } },
-        },
-    });
-    await prisma.subjects.create({
-        data: {
-            subjectID: -1,
-            name: "Subject 1",
         },
     });
     await prisma.modules.createMany({
@@ -53,12 +53,12 @@ beforeEach(async () => {
     });
 });
 
-afterEach(async () => {
+afterAll(async () => {
     await prisma.modules.delete({ where: { moduleID: -1 } });
-    await prisma.subjects.delete({ where: { subjectID: -1 } });
     await prisma.groups.delete({ where: { groupID: -1 } });
-    await prisma.users.delete({ where: { userID: -1 } });
-    await prisma.users.delete({ where: { userID: -2 } });
+    await prisma.subjects.delete({ where: { subjectID: -1 } });
+    await prisma.users.deleteMany({ where: { userID: { in: [-1, -2] } } });
+    await prisma.$disconnect();
 });
 
 describe("Get all modules", () => {

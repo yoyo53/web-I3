@@ -23,31 +23,19 @@ const student2 = {
     },
 };
 
-beforeEach(async () => {
+beforeAll(async () => {
     await prisma.students.create({
         data: { student_number: student1.student_number, user: { create: student1.user } },
     });
 });
 
 afterEach(async () => {
-    await prisma.users.delete({ where: student1.user });
-    await prisma.users.delete({ where: student2.user }).catch(() => {});
+    await prisma.users.delete({ where: { email: student2.user.email } }).catch(() => {});
 });
 
 afterAll(async () => {
+    await prisma.users.delete({ where: { userID: student1.user.userID } });
     await prisma.$disconnect();
-});
-
-describe("Check exists student", () => {
-    it("should return true if student exists", async () => {
-        const response = await studentQueries.checkExistsStudent(student1.user.userID);
-        expect(response).toBe(true);
-    });
-
-    it("should return false if student does not exist", async () => {
-        const response = await studentQueries.checkExistsStudent(0);
-        expect(response).toBe(false);
-    });
 });
 
 describe("Check exists student number", () => {

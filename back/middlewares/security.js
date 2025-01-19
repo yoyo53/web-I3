@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const userQueries = require("../database/queries/user.queries");
 
 async function verifyToken(request, response, next) {
     let token = request.get("Authorization");
@@ -6,9 +7,19 @@ async function verifyToken(request, response, next) {
         token = token.slice(7);
         try {
             const decoded = jwt.verify(token, process.env.SECRET_KEY);
-            request.user_id = decoded.user_id;
-            request.user_type = decoded.user_type;
-            next();
+            const hashed_password = await userQueries.getUserPasswordById(decoded.user_id);
+            if (hashed_password !== null && hashed_password === decoded.hashed_password) {
+                const userType = await userQueries.getUserTypeById(decoded.user_id);
+                if (userType !== null && userType === decoded.user_type) {
+                    request.user_id = decoded.user_id;
+                    request.user_type = decoded.user_type;
+                    next();
+                } else {
+                    return response.status(401).json({ error: "invalid token" });
+                }
+            } else {
+                return response.status(401).json({ error: "invalid token" });
+            }
         } catch {
             return response.status(401).json({ error: "invalid token" });
         }

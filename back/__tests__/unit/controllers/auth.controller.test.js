@@ -1,5 +1,4 @@
 const userQueries = require("../../../database/queries/user.queries");
-const adminQueries = require("../../../database/queries/admin.queries");
 const teacherQueries = require("../../../database/queries/teacher.queries");
 const studentQueries = require("../../../database/queries/student.queries");
 const { hash, compare } = require("bcrypt");
@@ -7,7 +6,6 @@ const jwt = require("jsonwebtoken");
 const authController = require("../../../controllers/auth.controller");
 
 jest.mock("../../../database/queries/user.queries");
-jest.mock("../../../database/queries/admin.queries");
 jest.mock("../../../database/queries/teacher.queries");
 jest.mock("../../../database/queries/student.queries");
 jest.mock("bcrypt");
@@ -174,7 +172,7 @@ describe("Login user action", () => {
         });
         compare.mockResolvedValue(true);
         jwt.sign.mockReturnValue("token");
-        adminQueries.checkExistsAdmin.mockResolvedValue(true);
+        userQueries.getUserTypeById.mockResolvedValue("Admin");
 
         const request = { body: { email: "john.doe@mail.com", password: "password" } };
         const response = { status: jest.fn().mockReturnThis(), json: jest.fn() };
@@ -194,8 +192,7 @@ describe("Login user action", () => {
         });
         compare.mockResolvedValue(true);
         jwt.sign.mockReturnValue("token");
-        adminQueries.checkExistsAdmin.mockResolvedValue(false);
-        teacherQueries.checkExistsTeacher.mockResolvedValue(true);
+        userQueries.getUserTypeById.mockResolvedValue("Teacher");
 
         const request = { body: { email: "john.doe@mail.com", password: "password" } };
         const response = { status: jest.fn().mockReturnThis(), json: jest.fn() };
@@ -215,9 +212,7 @@ describe("Login user action", () => {
         });
         compare.mockResolvedValue(true);
         jwt.sign.mockReturnValue("token");
-        adminQueries.checkExistsAdmin.mockResolvedValue(false);
-        teacherQueries.checkExistsTeacher.mockResolvedValue(false);
-        studentQueries.checkExistsStudent.mockResolvedValue(true);
+        userQueries.getUserTypeById.mockResolvedValue("Student");
 
         const request = { body: { email: "john.doe@mail.com", password: "password" } };
         const response = { status: jest.fn().mockReturnThis(), json: jest.fn() };
@@ -275,9 +270,7 @@ describe("Login user action", () => {
         });
         compare.mockResolvedValue(true);
         jwt.sign.mockReturnValue("token");
-        adminQueries.checkExistsAdmin.mockResolvedValue(false);
-        teacherQueries.checkExistsTeacher.mockResolvedValue(false);
-        studentQueries.checkExistsStudent.mockResolvedValue(false);
+        userQueries.getUserTypeById.mockResolvedValue(null);
 
         const request = { body: { email: "john.doe@mail.com", password: "password" } };
         const response = { status: jest.fn().mockReturnThis(), json: jest.fn() };

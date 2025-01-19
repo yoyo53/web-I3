@@ -1,16 +1,6 @@
 const { prisma } = require("../db.connection");
 const { handleErrors } = require("../db.errors");
 
-async function checkExistsStudent(studentID) {
-    return await handleErrors(async () => {
-        const result = await prisma.students.findFirst({
-            where: { studentID: studentID },
-            select: { studentID: true },
-        });
-        return result !== null;
-    });
-}
-
 async function checkExistsStudentNumber(student_number) {
     return await handleErrors(async () => {
         const result = await prisma.students.findFirst({
@@ -56,7 +46,6 @@ async function createStudent(student_number, firstname, lastname, email, hashed_
 }
 
 module.exports = {
-    checkExistsStudent,
     checkExistsStudentNumber,
     getUserByStudentID,
     createStudent,

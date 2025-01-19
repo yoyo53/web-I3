@@ -1,5 +1,4 @@
 const userQueries = require("../database/queries/user.queries");
-const adminQueries = require("../database/queries/admin.queries");
 const teacherQueries = require("../database/queries/teacher.queries");
 const studentQueries = require("../database/queries/student.queries");
 const { hash, compare } = require("bcrypt");
@@ -60,22 +59,17 @@ async function loginUserAction(request, response) {
     if (typeof email === "string" && typeof password === "string") {
         const user = await userQueries.getUserByEmailwithPassword(email);
         if (user !== null && (await compare(password, user.hashed_password))) {
-            let user_type;
-            if (await adminQueries.checkExistsAdmin(user.userID)) {
-                user_type = "Admin";
-            } else if (await teacherQueries.checkExistsTeacher(user.userID)) {
-                user_type = "Teacher";
-            } else if (await studentQueries.checkExistsStudent(user.userID)) {
-                user_type = "Student";
+            const userType = await userQueries.getUserTypeById(user.userID);
+            if (userType !== null) {
+                const token = jwt.sign(
+                    { user_id: user.userID, user_type: userType, hashed_password: user.hashed_password },
+                    process.env.SECRET_KEY,
+                    { expiresIn: process.env.TOKEN_EXPIRATION || "1h" },
+                );
+                response.status(200).json({ token: token, user_type: userType });
             } else {
                 response.status(500).json({ error: "invalid user account" });
-                return;
             }
-
-            const token = jwt.sign({ user_id: user.userID, user_type: user_type }, process.env.SECRET_KEY, {
-                expiresIn: process.env.TOKEN_EXPIRATION || "1h",
-            });
-            response.status(200).json({ token: token, user_type: user_type });
         } else {
             response.status(401).json({ error: "invalid email or password" });
         }

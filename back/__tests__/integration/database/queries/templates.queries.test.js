@@ -1,17 +1,20 @@
 const { prisma } = require("../../../../database/db.connection");
 const templatesQueries = require("../../../../database/queries/templates.queries");
 
+beforeAll(async () => {
+    await prisma.question_types.create({
+        data: {
+            question_typeID: -1,
+            question_type: "Type 1",
+        },
+    });
+});
+
 beforeEach(async () => {
     await prisma.survey_templates.create({
         data: {
             survey_templateID: -1,
             name: "Template 1",
-        },
-    });
-    await prisma.question_types.create({
-        data: {
-            question_typeID: -1,
-            question_type: "Type 1",
         },
     });
     await prisma.questions.createMany({
@@ -31,9 +34,12 @@ beforeEach(async () => {
 });
 
 afterEach(async () => {
+    await prisma.survey_templates.deleteMany({ where: { name: { in: ["Template 1", "Template 2"] } } });
+});
+
+afterAll(async () => {
     await prisma.question_types.delete({ where: { question_typeID: -1 } });
-    await prisma.survey_templates.delete({ where: { survey_templateID: -1 } }).catch(() => {});
-    await prisma.survey_templates.delete({ where: { survey_templateID: -2 } }).catch(() => {});
+    await prisma.$disconnect();
 });
 
 describe("Get all templates", () => {
