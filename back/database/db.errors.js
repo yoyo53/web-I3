@@ -29,14 +29,14 @@ async function handleErrors(callback) {
             error instanceof Prisma.PrismaClientInitializationError ||
             error instanceof Prisma.PrismaClientRustPanicError
         ) {
-            throw new ConnectionError("Database connection failed");
+            throw new ConnectionError(error.message);
         } else if (error instanceof Prisma.PrismaClientValidationError || error.code === "P2025") {
-            throw new ValidationError("Invalid data");
+            throw new ValidationError(error.message);
         } else if (
             error instanceof Prisma.PrismaClientKnownRequestError ||
             error instanceof Prisma.PrismaClientUnknownRequestError
         ) {
-            throw new DatabaseError("Database error");
+            throw new DatabaseError(error.message);
         }
         throw error;
     }
