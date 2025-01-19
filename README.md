@@ -16,152 +16,153 @@
 [![](https://img.shields.io/badge/GitHub%20Pages-222222?style=for-the-badge&logo=github%20Pages&logoColor=white)](https://pages.github.com/)
 
 
-## Démonstration
+## Demonstration
 
-Afin de démontrer la viabilité de cette solution, une version de démonstration a été déployée depuis ce dépôt GitHub.  
-La base de données PostgreSQL est déployée sur [neon.tech](https://neon.tech/), le back-end sur [Fly.io](https://fly.io/) et le front-end sur [GitHub Pages](https://pages.github.com/).  
-URL de l'API (back-end) : <https://web-i3-back.fly.dev/>  
-URL du site web (front-end) : <https://yoyo53.github.io/web-I3/>
+To demonstrate the viability of this solution, a demo version has been deployed from this GitHub repository.  
+The PostgreSQL database is deployed on [neon.tech](https://neon.tech/), the back-end on [Fly.io](https://fly.io/), and the front-end on [GitHub Pages](https://pages.github.com/).  
+API URL (back-end): <https://web-i3-back.fly.dev/>  
+Website URL (front-end): <https://yoyo53.github.io/web-I3/>
 
 
 ## Installation
 
-Cette application web ayant été réalisée en mode n-tier, cela signifie qu’elle est constituée de trois parties distinctes pouvant ainsi être déployée de manière indépendante (possiblement sur des serveurs différents) :
-- La bases de données utilisée par l’application (Postgres)
+This web application has been developed in an n-tier architecture, meaning it consists of three distinct parts that can be deployed independently (potentially on different servers):
+- The database used by the application (PostgreSQL)
 
-- Le back-end (API Express.js pour interagir avec les bases de données)
+- The back-end (an Express.js API to interact with the database)
 
-- Le front-end (site web statique qui interagit avec l’API)
-
-
-### Création de la base de données PostgreSQL
-
-1. Créez une nouvelle instance PostgreSQL sur l’hébergeur de votre choix (ou votre propre serveur).
-
-2. Dans cette instance, créez une nouvelle base de données ainsi qu’un nouvel utilisateur ayant tous les droits sur cette base de données.
-
-3. Conservez l'url de connexion à la base de données PostgreSQL pour les étapes suivantes.
+- The front-end (a static website that interacts with the API)
 
 
-### Déploiement du back-end
+### Setting Up the PostgreSQL Database
 
-Assurez-vous d'avoir Node.js et Git installés sur votre machine avant de commencer.
+1. Create a new PostgreSQL instance on your preferred hosting provider (or on your own server).
+
+2. In this instance, create a new database and a new user with full permissions on this database.
+
+3. Save the PostgreSQL connection URL for the following steps.
+
+
+### Deploying the Back-End
+
+Make sure you have Node.js and Git installed on your machine before starting.
 
 
 \
-**Étape 1 : Cloner le dépôt GitHub**
+**Step 1: Clone the GitHub Repository**
 
-1. Ouvrez une ligne de commande ou un terminal.
+1. Open a command line or terminal.
 
-2. Naviguez vers le répertoire où vous souhaitez cloner le projet.
+2. Navigate to the directory where you want to clone the project.
 
-3. Exécutez la commande suivante pour cloner le dépôt depuis GitHub :
+3. Run the following command to clone the repository from GitHub:
     ```bash
     git clone https://github.com/yoyo53/web-I3.git
     ```
 
 
 \
-**Étape 2 : Configuration du back-end**
+**Step 2: Configure the Back-End**
 
-1. Accédez au répertoire du back-end :
+1. Go to the back-end directory:
     ```bash
     cd web-I3/back
     ```
 
-2. Exécutez la commande suivante pour installer les dépendances :
+2. Run the following command to install dependencies:
     ```bash
     npm install
+    ```
 
-3. Exécutez la commande suivante pour initialiser l'ORM prisma :
+3. Run the following command to initialize the Prisma ORM:
     ```bash
     npm run build
     ```
 
 
 \
-**Étape 3 : Configuration des variables d'environnement**
+**Step 3: Configure Environment Variables**
 
-1. Dans le répertoire du back-end, recherchez un fichier `.env.example`.
+1. In the back-end directory, locate a file named `.env.example`.
 
-2. Dupliquez ce fichier et renommez la copie en `.env`.
+2. Duplicate this file and rename the copy to `.env`.
 
-3. Ouvrez le fichier `.env` dans un éditeur de texte.
+3. Open the `.env` file in a text editor.
 
-4. Configurez les variables d'environnement comme suit :
-    - POSTGRES_URL => l'url de la base de données créée précedemment
+4. Configure the environment variables as follows:
+    - POSTGRES_URL => the URL of the database created earlier
 
-    - SECRET_KEY => la clé de d'encryptage pour les tokens de connexion
+    - SECRET_KEY => the encryption key for authentication tokens
 
-    - DEFAULT_PASSWORD => le mot de passe par défaut des comptes nouvellement créés
+    - DEFAULT_PASSWORD => the default password for newly created accounts
 
 
 \
-**Étape 4 : Exécution du back-end**
+**Step 4: Run the Back-End**
 
-1. Exécutez la commande suivante pour démarrer le serveur :
+1. Run the following command to start the server:
     ```bash
     npm run start
     ```
 
-    Le serveur back-end est désormais en cours d'exécution. 
+    The back-end server is now running.
 
 
-### Déploiement du front-end
+### Deploying the Front-End
 
-Assurez-vous d'avoir Node.js et Git installés sur votre machine avant de commencer. Si le déploiement est fait sur la même machine que le back-end, commencez directement à l’étape 2.
+Make sure you have Node.js and Git installed on your machine before starting. If deploying on the same machine as the back-end, start directly at Step 2.
 
 
 \
-**Étape 1 : Cloner le dépôt GitHub**
+**Step 1: Clone the GitHub Repository**
 
-1. Ouvrez une ligne de commande ou un terminal.
+1. Open a command line or terminal.
 
-2. Naviguez vers le répertoire où vous souhaitez cloner le projet.
+2. Navigate to the directory where you want to clone the project.
 
-3. Exécutez la commande suivante pour cloner le dépôt depuis GitHub :
+3. Run the following command to clone the repository from GitHub:
     ```bash
     git clone https://github.com/yoyo53/web-I3.git
     ```
 
 
 \
-**Étape 2 : Configuration du front-end**
+**Step 2: Configure the Front-End**
 
-1. Accédez au répertoire du front-end :
+1. Go to the front-end directory:
     ```bash
     cd web-I3/front
     ```
 
-2. Exécutez la commande suivante pour installer les dépendances :
+2. Run the following command to install dependencies:
     ```bash
     npm install
     ```
 
 
 \
-**Étape 3 : Configuration des variables d'environnement**
+**Step 3: Configure Environment Variables**
 
-1. Dans le répertoire du front-end, recherchez un fichier `.env.example`.
+1. In the front-end directory, locate a file named `.env.example`.
 
-2. Dupliquez ce fichier et renommez la copie en `.env`.
+2. Duplicate this file and rename the copy to `.env`.
 
-3. Ouvrez le fichier `.env` dans un éditeur de texte.
+3. Open the `.env` file in a text editor.
 
-4. Configurez les variables d'environnement comme suit :
-    - VITE_BASE_PATH => le chemin de base de l'application front-end
+4. Configure the environment variables as follows:
+    - VITE_BASE_PATH => the base path of the front-end application
 
-    - VITE_API_URL => l'url du serveur back-end
+    - VITE_API_URL => the URL of the back-end server
 
-    - VITE_URL => l'url du site web front-end
+    - VITE_URL => the URL of the front-end website
 
 
 \
-**Étape 4 : Compilation du front-end**
+**Step 4: Compile the Front-End**
 
-1. Exécutez la commande suivante pour compiler le front-end en un site web statique :
+1. Run the following command to compile the front-end into a static website:
     ```bash
     npm run build
     ```
 
-    Le résultat de cette compilation sera disponible dans le dossier dist. Le contenu de ce dossier peut ensuite être déployé comme un site internet statique sur le fournisseur d’hébergement web de votre choix.
+   The result of this compilation will be available in the `dist` folder. The contents of this folder can then be deployed as a static website on your preferred web hosting provider.
