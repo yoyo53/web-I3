@@ -35,7 +35,8 @@
                         </svg>
                     </RouterLink>
                     <a
-                        href="https://youtube.com"
+                        href="https://1drv.ms/v/c/53b76f76f3453a1f/EdebsP9YyDZGrkvkyWIyyL4BE6xWfvGrvFD6RSokjbY2eg"
+                        target="_blank"
                         class="inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center rounded-lg border border-neutral-300 hover:bg-efrei-blue-50 focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-efrei-blue-700"
                     >
                         <svg
