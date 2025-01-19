@@ -38,7 +38,7 @@ beforeEach(async () => {
                     userID: -3,
                     firstname: "Jane",
                     lastname: "Doe",
-                    email: "jane.doe@mail.com",
+                    email: "jane.doe@email.com",
                     hashed_password: "password",
                 },
             },
