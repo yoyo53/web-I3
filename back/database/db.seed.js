@@ -242,6 +242,61 @@ async function main() {
         },
     });
 
+    const template1 = await prisma.survey_templates.upsert({
+        where: { survey_templateID: 1 },
+        update: {},
+        create: {
+            survey_templateID: 1,
+            name: "Default Template",
+            questions: {
+                create: [
+                    {
+                        question_text: "How would you rate the overall learning experience in this course?",
+                        question_type: { connect: { question_type: "score" } },
+                    },
+                    {
+                        question_text:
+                            "What resources provided in this course were most helpful to you? (Select all that apply)",
+                        question_type: { connect: { question_type: "checkbox" } },
+                        options: {
+                            create: [
+                                { option_text: "Lectures" },
+                                { option_text: "Assignments" },
+                                { option_text: "Textbook" },
+                                { option_text: "Online resources" },
+                                { option_text: "Other" },
+                            ],
+                        },
+                    },
+                    {
+                        question_text: "How challenging did you find the assessments",
+                        question_type: { connect: { question_type: "radio" } },
+                        options: {
+                            create: [
+                                { option_text: "Too easy" },
+                                { option_text: "Just right" },
+                                { option_text: "Too hard" },
+                            ],
+                        },
+                    },
+                    {
+                        question_text: "What did you like the most about this course?",
+                        question_type: { connect: { question_type: "text" } },
+                    },
+                    {
+                        question_text: "What aspects of the course could be improved?",
+                        question_type: { connect: { question_type: "text" } },
+                    },
+                    {
+                        question_text: "Are you satisfied with the course?",
+                        question_type: { connect: { question_type: "radio" } },
+                        options: { create: [{ option_text: "Yes" }, { option_text: "No" }] },
+                    },
+                ],
+            },
+        },
+    });
+
     console.log({
         questionTypes,
         user1,
@@ -269,6 +324,7 @@ async function main() {
         module1,
         module2,
         module3,
+        template1,
     });
 }
 
