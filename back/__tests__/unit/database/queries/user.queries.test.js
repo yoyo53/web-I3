@@ -231,7 +231,11 @@ describe("Get user type by ID", () => {
     });
 
     it("should return null if user is in multiple roles", async () => {
-        prismaMock.users.findUnique.mockResolvedValue({ admin: { adminID: 1 }, teacher: { teacherID: 1 }, student: null });
+        prismaMock.users.findUnique.mockResolvedValue({
+            admin: { adminID: 1 },
+            teacher: { teacherID: 1 },
+            student: null,
+        });
         const response = await userQueries.getUserTypeById(1);
         expect(response).toBeNull();
     });

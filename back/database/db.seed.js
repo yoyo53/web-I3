@@ -243,10 +243,10 @@ async function main() {
     });
 
     const template1 = await prisma.survey_templates.upsert({
-        where: { survey_templateID: 1 },
+        where: { survey_templateID: 0 },
         update: {},
         create: {
-            survey_templateID: 1,
+            survey_templateID: 0,
             name: "Default Template",
             questions: {
                 create: [
