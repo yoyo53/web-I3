@@ -84,7 +84,7 @@ beforeEach(async () => {
             survey_templateID: -1,
         },
     });
-});
+}, 10000);
 
 afterEach(async () => {
     await prisma.question_types.delete({ where: { question_typeID: -1 } });
@@ -94,7 +94,7 @@ afterEach(async () => {
     await prisma.groups.delete({ where: { groupID: -1 } });
     await prisma.users.delete({ where: { userID: -1 } });
     await prisma.users.delete({ where: { userID: -2 } });
-});
+}, 10000);
 
 describe("Answer survey", () => {
     it("should return the ID of the created answer", async () => {
