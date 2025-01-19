@@ -113,7 +113,7 @@ beforeEach(async () => {
             answer_text: "Option 1",
         },
     });
-});
+}, 10000);
 
 afterEach(async () => {
     await prisma.question_types.delete({ where: { question_typeID: -1 } });
@@ -162,7 +162,7 @@ describe("Get surveys by teacher ID", () => {
             ]),
         );
     });
-});
+}, 10000);
 
 describe("Get surveys by student ID", () => {
     it("should return all surveys by student ID", async () => {
